@@ -1,0 +1,53 @@
+body {
+	background: white;
+	color: black;
+}
+th {
+	background: #eeeeee;
+	color: black;
+	font-weight: bolder;
+}
+td {
+	background: white;
+	color: black;
+}
+label {
+	width: 100px;
+	display: inline-block;
+	text-align: right;
+}
+h3 {
+	text-align: center;
+}
+.login_form {
+	text-align: center;
+	line-height: 1.8em;
+}
+.err_message {
+	color: #800000;
+	font-weight: bolder;
+	text-align: center;
+}
+.info_message {
+	color: #000080;
+	font-weight: bolder;
+	font-style: normal;
+}
+.odd_row {
+	background: white;
+	color: black;
+}
+.even_row {
+	background: #eeeeee;
+	color: black;
+}
+a:link {
+	color: #000080;
+}
+a:visited {
+	color: #000080;
+}
+a:hover {
+	color: #800000;
+}
+
