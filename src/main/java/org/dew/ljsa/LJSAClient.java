@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.rpc.client.JsonRpcClient;
 import org.rpc.client.RpcClient;
+
+import org.json.rpc.client.JsonRpcClient;
 import org.soap.rpc.client.SoapRpcClient;
-import org.util.WUtil;
 import org.xml.rpc.client.XmlRpcClient;
+
+import org.util.WUtil;
 
 /**
  * Classe di accesso ai servizi LJSA.
