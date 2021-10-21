@@ -44,6 +44,21 @@ public class TestQuartz {
       
       scheduler.scheduleJob(triggerS);
       
+      /*
+        Cron expression examples:
+       
+        0/10 * * * * ?      = Ogni 10 sec a partire da 0 sec
+        0 0/5 * * * ?       = Ogni  5 min a partire da 0 min
+        0 0/15 20-22 * * ?  = Ogni 15 min, dalle 20 alle 22
+        0 30 19 * * ?       = Alle 19.30 di ogni giorno
+        0 0 13,20 * * ?     = Alle 13.00 e alle 20.00 di ogni giorno
+        0 0 21 15,20 * ?    = Alle 21.00 dei giorni 15 e 20 di ogni mese
+        0 45 21 15 3 ? 2008 = Il 15/03/2008 alle ore 21.45
+        0 0/30 7-19 ? * 2-7 = Ogni 30 min, dalle 7 alle 19, dal lun. al sab.
+        0 15 10 ? * 6#3     = Alle 10.15, il terzo venerdi' (6) di ogni mese
+        
+       */
+      
       Trigger triggerC = TriggerBuilder.newTrigger()
           .forJob(new JobKey("TestJob", "Group"))
           .withIdentity("Cron", "Group")
