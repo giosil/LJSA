@@ -4,7 +4,7 @@ A job scheduler configurable through RESTful web services.
 
 ## Build
 
-- `git clone https://github.com/giosil/ljsa.git`
+- `git clone https://github.com/giosil/LJSA.git`
 - `mvn clean install`
 
 ## Contributors
