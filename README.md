@@ -65,31 +65,31 @@ class ExampleLJSAJob extends ALJSAJob
 
 ### Define class
 
-![Classes](01_cls.png)
+![Classes](img/01_cls.png)
 
 ### Define activity
 
-![Activities](02_act.png)
+![Activities](img/02_act.png)
 
 ### Schedule activity
 
-![Schedule](03_jobs.png)
+![Schedule](img/03_jobs.png)
 
 ### View Job logs
 
-![Job Logs](04_jobs_log.png)
+![Job Logs](img/04_jobs_log.png)
 
 ### Check Scheduler
 
-![Scheduler](05_sched.png)
+![Scheduler](img/05_sched.png)
 
 ### Logs
 
-![Logs](06_logs.png)
+![Logs](img/06_logs.png)
 
 ### File Manager
 
-![File Manager](07_fm.png)
+![File Manager](img/07_fm.png)
 
 ## Contributors
 
