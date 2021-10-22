@@ -61,7 +61,7 @@ class ExampleLJSAJob extends ALJSAJob
 }
 ```
 
-## Run GUI (org.dew.swingup.main.Main) to manage services on http://localhost:8080/LJSA
+## Run LJSA GUI (org.dew.swingup.main.Main)
 
 ### Define class
 
