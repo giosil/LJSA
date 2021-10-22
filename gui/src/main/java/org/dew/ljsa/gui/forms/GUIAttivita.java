@@ -564,6 +564,8 @@ class GUIAttivita extends AEntityEditor implements IAttivita
   protected
   void checkActions(List<JButton> listDefActions, boolean boAllowEditing)
   {
+    removeButtonByActionCommand(listDefActions, sACTION_PRINT);
+    
     btnCopyFrom = GUIUtil.buildActionButton("C&opia da|Copia dall'elemento selezionato|" + IConstants.sICON_COPY, "copyFrom");
     btnCopyFrom.addActionListener(this);
     btnCopyFrom.setEnabled(false);
@@ -574,8 +576,6 @@ class GUIAttivita extends AEntityEditor implements IAttivita
     if(btnExit != null) {
       listDefActions.add(btnExit);
     }
-    
-    iMaxRowsActions++;
   }
   
   protected

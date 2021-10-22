@@ -8,6 +8,7 @@ import java.util.List;
 import org.dew.ljsa.gui.DataManager;
 
 import org.dew.swingup.impl.SimpleLookUpDialog;
+import org.dew.util.WUtil;
 
 public
 class LJSASimpleLookUpDialog extends SimpleLookUpDialog
@@ -35,13 +36,12 @@ class LJSASimpleLookUpDialog extends SimpleLookUpDialog
     return Color.black;
   }
   
-  @SuppressWarnings("unchecked")
   protected
   void onDoubleClick()
   {
     if(oLookUpFinder instanceof LUFServizi) {
       int iRow = oTableRecords.getSelectedRow();
-      List<Object> listItem = (List<Object>) oRecords.get(iRow);
+      List<Object> listItem = WUtil.toList(oRecords.get(iRow), Object.class, null);
       if(listItem != null && listItem.size() > 2) {
         String sCode = (String) listItem.get(0);
         String sDesc = (String) listItem.get(2);

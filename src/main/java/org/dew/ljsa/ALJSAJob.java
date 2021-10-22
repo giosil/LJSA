@@ -629,9 +629,7 @@ class ALJSAJob implements Job, InterruptableJob, ILJSARemoteJob
       if(outputSchedulazione.hasFiles()) {
         pstm.close();
         
-        sSQL = "INSERT INTO LJSA_LOG_FILES ";
-        sSQL += "(ID_LOG, TIPOLOGIA, NOME_FILE, URL_FILE) ";
-        sSQL += "VALUES (?, ?, ?, ?)";
+        sSQL = "INSERT INTO LJSA_LOG_FILES(ID_LOG,TIPOLOGIA,NOME_FILE,URL_FILE) VALUES (?,?,?,?)";
         pstm = conn.prepareStatement(sSQL);
         for(int i = 0; i < outputSchedulazione.getFilesCount(); i++) {
           String sType     = outputSchedulazione.getTypeFile(i);
