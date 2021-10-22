@@ -43,4 +43,4 @@ Example:
 - `show triggers;`
 - `show function status where db='ljsa';`
 - `show procedure status where db='ljsa';`
-- `source C:/prj/dew/ljsa/mysql/04_data.sql;`
+- `source C:/prj/dew/ljsa/mysql/05_data.sql;`
