@@ -15,6 +15,7 @@ class ExampleLJSAJob extends ALJSAJob
   protected String greeting;
   protected String name;
   
+  @Override
   public
   void init(Schedulazione sched, OutputSchedulazione out)
     throws Exception
@@ -31,6 +32,7 @@ class ExampleLJSAJob extends ALJSAJob
     psLog.println("name     = " + name);
   }
   
+  @Override
   public 
   void execute(Schedulazione sched, OutputSchedulazione out)
     throws Exception 
@@ -40,12 +42,14 @@ class ExampleLJSAJob extends ALJSAJob
     out.setReport("Job completed.");
   }
   
+  @Override
   public
   void destroy(Schedulazione sched, OutputSchedulazione out)
     throws Exception
   {
   }
   
+  @Override
   public
   void exceptionOccurred(Throwable throwable)
     throws Exception

@@ -22,6 +22,7 @@ class ExampleLJSAJob extends ALJSAJob
 {
   protected PrintStream psLog;
   
+  @Override
   public
   void init(Schedulazione sched, OutputSchedulazione out)
     throws Exception
@@ -32,6 +33,7 @@ class ExampleLJSAJob extends ALJSAJob
     psLog = new PrintStream(out.createReportFile("report.txt"), true);
   }
   
+  @Override
   public 
   void execute(Schedulazione sched, OutputSchedulazione out)
     throws Exception 
@@ -41,12 +43,14 @@ class ExampleLJSAJob extends ALJSAJob
     out.setReport("Job completed.");
   }
   
+  @Override
   public
   void destroy(Schedulazione sched, OutputSchedulazione out)
     throws Exception
   {
   }
   
+  @Override
   public
   void exceptionOccurred(Throwable throwable)
     throws Exception
