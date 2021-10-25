@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.transaction.UserTransaction;
 
@@ -36,6 +35,8 @@ import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.JobExecutionContextImpl;
 import org.quartz.spi.TriggerFiredBundle;
+
+import org.json.JSON;
 
 import org.util.WUtil;
 
@@ -426,14 +427,9 @@ class ALJSAJob implements Job, InterruptableJob, ILJSARemoteJob
   {
     List<String> listMailAddress = getListOfMailAddress(listDestination);
     
-    if(listMailAddress == null || listMailAddress.size() == 0) {
-      return;
-    }
-    
     String mailFrom = null;
     if(_schedulazione != null) {
-      LJSAMap parametri = _schedulazione.getParametri();
-      mailFrom = parametri.getString(BEConfig.sLJSA_CONF_MAIL_FROM);
+      mailFrom = _schedulazione.getParametri().getString(BEConfig.sLJSA_CONF_MAIL_FROM);
     }
     
     if(mailFrom != null && mailFrom.length() > 0) {
@@ -448,30 +444,8 @@ class ALJSAJob implements Job, InterruptableJob, ILJSARemoteJob
   void createFileInfo(Schedulazione sched, OutputSchedulazione out)
   {
     try {
-      PrintStream psInfo = new PrintStream(out.createInfoFile(), true);
-      psInfo.println("Schedulazione:");
-      psInfo.println();
-      psInfo.println("IdSchedulazione    = " + sched.getIdSchedulazione());
-      psInfo.println("IdServizio         = " + sched.getIdServizio());
-      psInfo.println("IdAttivita         = " + sched.getIdAttivita());
-      psInfo.println("Descrizione        = " + sched.getDescrizione());
-      psInfo.println("Schedulazione      = " + sched.getSchedulazione());
-      psInfo.println("InizioValidita     = " + sched.getInizioValidita());
-      psInfo.println("FineValidita       = " + sched.getFineValidita());
-      psInfo.println("IdCredenzialeIns   = " + sched.getIdCredenzialeIns());
-      psInfo.println("Data Inserimento   = " + sched.getDataInserimento());
-      psInfo.println("Ora Inserimento    = " + sched.getOraInserimento());
-      psInfo.println("IdCredenzialeAgg   = " + sched.getIdCredenzialeAgg());
-      psInfo.println("Data Aggiornamento = " + sched.getDataAggiornamento());
-      psInfo.println("Ora Aggiornamento  = " + sched.getOraAggiornamento());
-      psInfo.println();
-      psInfo.println("Configurazione:");
-      psInfo.println();
-      psInfo.println(sched.getConfigurazione().buildInfoString());
-      psInfo.println();
-      psInfo.println("Parametri:");
-      psInfo.println();
-      psInfo.println(sched.getParametri().buildInfoString());
+      PrintStream ps = new PrintStream(out.createInfoFile("info.json"), true);
+      ps.print(JSON.stringify(sched));
     }
     catch(Exception ex) {
       ex.printStackTrace();
@@ -502,11 +476,10 @@ class ALJSAJob implements Job, InterruptableJob, ILJSARemoteJob
     if(result == null || result.length() < 5) {
       return null;
     }
-    result = result.trim().toLowerCase();
     if(result.indexOf('@') <= 0 || result.indexOf('.') < 0) {
       return null;
     }
-    return result;
+    return result.trim().toLowerCase();
   }
   
   private static
@@ -528,8 +501,7 @@ class ALJSAJob implements Job, InterruptableJob, ILJSARemoteJob
       ut = ConnectionManager.getUserTransaction(conn);
       ut.begin();
       
-      String sSQL = "UPDATE LJSA_SCHEDULAZIONI SET STATO=? WHERE ID_SCHEDULAZIONE=?";
-      pstm = conn.prepareStatement(sSQL);
+      pstm = conn.prepareStatement("UPDATE LJSA_SCHEDULAZIONI SET STATO=? WHERE ID_SCHEDULAZIONE=?");
       pstm.setString(1, ISchedulazione.sSTATO_IN_ESECUZIONE);
       pstm.setInt(2, schedulazione.getIdSchedulazione());
       pstm.executeUpdate();
@@ -543,8 +515,7 @@ class ALJSAJob implements Job, InterruptableJob, ILJSARemoteJob
       
       idLog = ConnectionManager.nextVal(conn, "LJSA_SEQ_LOG");
       
-      sSQL = "INSERT INTO LJSA_LOG(ID_LOG,ID_SCHEDULAZIONE,DATA_INIZIO,ORA_INIZIO,STATO) VALUES(?,?,?,?,?)";
-      pstm = conn.prepareStatement(sSQL);
+      pstm = conn.prepareStatement("INSERT INTO LJSA_LOG(ID_LOG,ID_SCHEDULAZIONE,DATA_INIZIO,ORA_INIZIO,STATO) VALUES(?,?,?,?,?)");
       pstm.setInt(1,    idLog);
       pstm.setInt(2,    schedulazione.getIdSchedulazione());
       pstm.setInt(3,    iCurrentDate);
@@ -844,13 +815,6 @@ class ALJSAJob implements Job, InterruptableJob, ILJSARemoteJob
       }
     }
     return listResult;
-  }
-  
-  protected static
-  Properties getLJSAConfig()
-      throws Exception
-  {
-    return BEConfig.config;
   }
   
   protected

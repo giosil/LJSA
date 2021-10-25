@@ -11,7 +11,5 @@
     <p><strong>Status</strong>: <%= LJSAScheduler.getStatus() %></p>
     <br />
     <hr />
-    <div class="footer">
-    </div>
-</body>
+  </body>
 </html>

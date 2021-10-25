@@ -1,19 +1,23 @@
 package org.dew.test;
 
+import java.sql.Timestamp;
 import java.util.Properties;
 
 import org.dew.ljsa.backend.util.BEConfig;
 
 import org.quartz.CronScheduleBuilder;
+import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
-
+import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class TestQuartz {
@@ -73,5 +77,21 @@ public class TestQuartz {
     catch(Exception ex) {
       ex.printStackTrace();
     }
+  }
+  
+  class TestJob implements Job {
+    
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+      
+      Trigger trigger = context.getTrigger();
+      
+      TriggerKey triggerKey = trigger.getKey();
+      String triggerName = triggerKey.getName() + "," + triggerKey.getGroup();
+      
+      System.out.println(new Timestamp(System.currentTimeMillis()) + " TestJob.execute " + triggerName);
+      
+    }
+    
   }
 }

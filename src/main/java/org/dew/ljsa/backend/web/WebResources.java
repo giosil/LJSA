@@ -45,6 +45,7 @@ class WebResources
     mapMIME.put("xls",   "application/x-msexcel");
     mapMIME.put("xlsx",  "application/x-msexcel");
     mapMIME.put("pdf",   "application/pdf");
+    mapMIME.put("json",  "application/json");
     mapMIME.put("gif",   "image/gif");
     mapMIME.put("bmp",   "image/bmp");
     mapMIME.put("jpg",   "image/jpeg");
@@ -206,11 +207,7 @@ class WebResources
   void printFooter(Writer out, int level)
     throws IOException
   {
-    out.write("<br />\n");
-    out.write("<hr />\n");
-    out.write("<div class=\"footer\"></div>\n");
-    out.write("</body>\n");
-    out.write("</html>\n");
+    out.write("<br />\n<hr />\n</body>\n</html>\n");
   }
   
   public static
