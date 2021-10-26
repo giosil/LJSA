@@ -9,27 +9,15 @@ import org.dew.ljsa.OutputSchedulazione;
 import org.dew.ljsa.Schedulazione;
 
 public 
-class TestLJSAJob extends LJTest 
+class WrapperLJSAJob extends LJTest 
 {
-  public TestLJSAJob()
+  public WrapperLJSAJob()
   {
     Class<?> this_class  = this.getClass();
     Class<?> super_class = this_class.getSuperclass();
-    System.out.println("Test of " + super_class.getName());
+    System.out.println("Wrap of " + super_class.getName());
   }
-  
-  public
-  static void main(String[] args)
-  {
-    TestLJSAJob tester = new TestLJSAJob();
-    try {
-      tester.test();
-    }
-    catch (Exception ex) {
-        ex.printStackTrace();
-    }
-  }
-  
+   
   public
   Schedulazione getTestSchedulazione()
   {
@@ -47,7 +35,7 @@ class TestLJSAJob extends LJTest
   }
   
   public
-  void test()
+  void start()
     throws Exception
   {
     long lBegin = System.currentTimeMillis();

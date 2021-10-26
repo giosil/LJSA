@@ -33,12 +33,16 @@ public class TestQuartz {
       System.out.println("Create Scheduler instance...");
       Scheduler scheduler = schedulerFactory.getScheduler();
       
+      // Add Job
+      
       JobDetail jobDetail = JobBuilder.newJob(TestJob.class)
           .withIdentity("TestJob", "Group")
           .storeDurably(true)
           .build();
       
       scheduler.addJob(jobDetail, true);
+      
+      // Simple schedule
       
       Trigger triggerS = TriggerBuilder.newTrigger()
           .forJob(new JobKey("TestJob", "Group"))
@@ -47,6 +51,8 @@ public class TestQuartz {
           .build();
       
       scheduler.scheduleJob(triggerS);
+      
+      // Cron schedule
       
       /*
         Cron expression examples:

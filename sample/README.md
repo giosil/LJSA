@@ -1,5 +1,14 @@
-package org.dew.test;
+# LJSA - Sample
 
+A sample job for LJSA scheduler.
+
+## Build
+
+- `mvn clean install`
+
+## Job implementation
+
+```java
 import java.io.PrintStream;
 
 import org.dew.ljsa.ALJSAJob;
@@ -12,9 +21,6 @@ class ExampleLJSAJob extends ALJSAJob
 {
   protected PrintStream psLog;
   
-  protected String greeting;
-  protected String name;
-  
   @Override
   public
   void init(Schedulazione sched, OutputSchedulazione out)
@@ -24,12 +30,6 @@ class ExampleLJSAJob extends ALJSAJob
     LJSAMap parametri      = sched.getParametri();
     
     psLog = new PrintStream(out.createReportFile("report.txt"), true);
-    
-    greeting = configurazione.getString("greeting", "Hello");
-    name     = parametri.getString("name", "World");
-    
-    psLog.println("greeting = " + greeting);
-    psLog.println("name     = " + name);
   }
   
   @Override
@@ -37,7 +37,7 @@ class ExampleLJSAJob extends ALJSAJob
   void execute(Schedulazione sched, OutputSchedulazione out)
     throws Exception 
   {
-    psLog.println(greeting + " " + name);
+    psLog.println("Hello World.");
     
     out.setReport("Job completed.");
   }
@@ -58,3 +58,8 @@ class ExampleLJSAJob extends ALJSAJob
     psLog.println("Job aborted.");
   }
 }
+```
+
+## Contributors
+
+* [Giorgio Silvestris](https://github.com/giosil)
