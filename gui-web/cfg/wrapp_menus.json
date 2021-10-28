@@ -1,0 +1,12 @@
+{
+  "main": [
+    { "id": "app",     "text": "LJSA",              "icon": "fa-edit" },
+    { "id": "app.ser", "text": "Servizi",           "icon": null,     "link": "page/servizi"},
+    { "id": "app.cre", "text": "Credenziali",       "icon": null,     "link": "page/credenziali"},
+    { "id": "app.cls", "text": "Classi",            "icon": null,     "link": "page/classi"},
+    { "id": "app.att", "text": "Attivita'",         "icon": null,     "link": "page/attivita"},
+    { "id": "app.scn", "text": "Schedulazioni",     "icon": null,     "link": "page/schedulazioni"},
+    { "id": "app.log", "text": "Log Schedulazioni", "icon": null,     "link": "page/log"},
+    { "id": "app.scr", "text": "Schedulatore",      "icon": null,     "link": "page/schedulatore"}
+  ]
+}

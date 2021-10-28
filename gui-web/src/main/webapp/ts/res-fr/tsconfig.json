@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"module": "system",
+		"target": "es5",
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"outFile": "../../js/res-fr.js",
+		"sourceMap": true
+	},
+	"include": [
+		"../types/**/*",
+		"*"
+	]
+}

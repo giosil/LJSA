@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"module": "system",
+		"target": "es5",
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"outFile": "../../js/ljsa.js",
+		"sourceMap": true
+	},
+	"include": [
+		"../types/**/*",
+		"../../js/res-en.d.ts",
+		"*"
+	]
+}

@@ -1,0 +1,121 @@
+{
+  "servizi": {
+    "title": "Servizi",
+    "description": "Gestione servizi",
+    "layout": "default",
+    "modifier": "private",
+    "header": "",
+    "content": "",
+    "footer": "",
+    "script": "WuxDOM.render(new GUI.GUIServizi(), 'view-root');",
+    "css": [],
+    "scripts": [
+      "/wrapp/wux/js/wux.min.js",
+      "/ljsa/js/res-$language.min.js",
+      "/ljsa/js/ljsa.min.js"
+    ],
+    "attributes": {}
+  },
+  "credenziali": {
+    "title": "Credenziali",
+    "description": "Gestione credenziali",
+    "layout": "default",
+    "modifier": "private",
+    "header": "",
+    "content": "",
+    "footer": "",
+    "script": "WuxDOM.render(new GUI.GUICredenziali(), 'view-root');",
+    "css": [],
+    "scripts": [
+      "/wrapp/wux/js/wux.min.js",
+      "/ljsa/js/res-$language.min.js",
+      "/ljsa/js/ljsa.min.js"
+    ],
+    "attributes": {}
+  },
+  "classi": {
+    "title": "Classi",
+    "description": "Gestione classi",
+    "layout": "default",
+    "modifier": "private",
+    "header": "",
+    "content": "",
+    "footer": "",
+    "script": "WuxDOM.render(new GUI.GUIClassi(), 'view-root');",
+    "css": [],
+    "scripts": [
+      "/wrapp/wux/js/wux.min.js",
+      "/ljsa/js/res-$language.min.js",
+      "/ljsa/js/ljsa.min.js"
+    ],
+    "attributes": {}
+  },
+  "attivita": {
+    "title": "Attivita'",
+    "description": "Gestione attivita'",
+    "layout": "default",
+    "modifier": "private",
+    "header": "",
+    "content": "",
+    "footer": "",
+    "script": "WuxDOM.render(new GUI.GUIAttivita(), 'view-root');",
+    "css": [],
+    "scripts": [
+      "/wrapp/wux/js/wux.min.js",
+      "/ljsa/js/res-$language.min.js",
+      "/ljsa/js/ljsa.min.js"
+    ],
+    "attributes": {}
+  },
+  "schedulazioni": {
+    "title": "Schedulazioni",
+    "description": "Gestione schedulazioni",
+    "layout": "default",
+    "modifier": "private",
+    "header": "",
+    "content": "",
+    "footer": "",
+    "script": "WuxDOM.render(new GUI.GUISchedulazioni(), 'view-root');",
+    "css": [],
+    "scripts": [
+      "/wrapp/wux/js/wux.min.js",
+      "/ljsa/js/res-$language.min.js",
+      "/ljsa/js/ljsa.min.js"
+    ],
+    "attributes": {}
+  },
+  "log": {
+    "title": "Log Schedulazioni",
+    "description": "Gestione log schedulazioni",
+    "layout": "default",
+    "modifier": "private",
+    "header": "",
+    "content": "",
+    "footer": "",
+    "script": "WuxDOM.render(new GUI.GUILog(), 'view-root');",
+    "css": [],
+    "scripts": [
+      "/wrapp/wux/js/wux.min.js",
+      "/ljsa/js/res-$language.min.js",
+      "/ljsa/js/ljsa.min.js"
+    ],
+    "attributes": {}
+  },
+  "schedulatore": {
+    "title": "Log Schedulatore",
+    "description": "Gestione schedulatore",
+    "layout": "default",
+    "modifier": "private",
+    "header": "",
+    "content": "",
+    "footer": "",
+    "script": "WuxDOM.render(new GUI.GUISchedulatore(), 'view-root');",
+    "css": [],
+    "scripts": [
+      "/wrapp/wux/js/wux.min.js",
+      "/ljsa/js/res-$language.min.js",
+      "/ljsa/js/ljsa.min.js"
+    ],
+    "attributes": {}
+  }
+}

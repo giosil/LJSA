@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<project name="ljsa-ts" default="complete" basedir="./src/main/webapp">
+	<property name="out.dir" value="js" />
+
+	<!-- Targets di servizio -->
+	<target name="complete" depends="compilation" />
+	<target name="normal"   depends="compilation" />
+
+	<!-- Target di Compilazione -->
+	<target name="compilation">
+		<delete dir="${out.dir}" includeEmptyDirs="true" />
+		<mkdir  dir="${out.dir}" />
+		
+		<antcall target="compile_res_en" />
+		<antcall target="compile_res_it" />
+		<antcall target="compile_res_fr" />
+		<antcall target="compile_res_es" />
+		<antcall target="compile_ljsa" />
+	</target>
+	
+	<target name="compile_res_en">
+		<echo>Compile res-en...</echo>
+		<exec executable="tsc" vmlauncher="false">
+			<arg value="--noEmitHelpers" />
+			<arg value="--declaration" />
+			<arg value="--project" />
+			<arg value="./ts/res-en/tsconfig.json" />
+		</exec>
+		
+		<echo>Minify res-en...</echo>
+		<exec executable="minify" vmlauncher="false">
+			<arg value="${out.dir}/res-en.js" />
+		</exec>
+	</target>
+	
+	<target name="compile_res_it">
+		<echo>Compile res-it...</echo>
+		<exec executable="tsc" vmlauncher="false">
+			<arg value="--noEmitHelpers" />
+			<arg value="--declaration" />
+			<arg value="--project" />
+			<arg value="./ts/res-it/tsconfig.json" />
+		</exec>
+		
+		<echo>Minify res-it...</echo>
+		<exec executable="minify" vmlauncher="false">
+			<arg value="${out.dir}/res-it.js" />
+		</exec>
+	</target>
+	
+	<target name="compile_res_fr">
+		<echo>Compile res-fr...</echo>
+		<exec executable="tsc" vmlauncher="false">
+			<arg value="--noEmitHelpers" />
+			<arg value="--declaration" />
+			<arg value="--project" />
+			<arg value="./ts/res-fr/tsconfig.json" />
+		</exec>
+		
+		<echo>Minify res-fr...</echo>
+		<exec executable="minify" vmlauncher="false">
+			<arg value="${out.dir}/res-fr.js" />
+		</exec>
+	</target>
+	
+	<target name="compile_res_es">
+		<echo>Compile res-es...</echo>
+		<exec executable="tsc" vmlauncher="false">
+			<arg value="--noEmitHelpers" />
+			<arg value="--declaration" />
+			<arg value="--project" />
+			<arg value="./ts/res-es/tsconfig.json" />
+		</exec>
+		
+		<echo>Minify res-es...</echo>
+		<exec executable="minify" vmlauncher="false">
+			<arg value="${out.dir}/res-es.js" />
+		</exec>
+	</target>
+	
+	<target name="compile_ljsa">
+		<echo>Compile ljsa...</echo>
+		<exec executable="tsc" vmlauncher="false">
+			<arg value="--noEmitHelpers" />
+			<arg value="--declaration" />
+			<arg value="--project" />
+			<arg value="./ts/ljsa/tsconfig.json" />
+		</exec>
+		
+		<echo>Minify ljsa...</echo>
+		<exec executable="minify" vmlauncher="false">
+			<arg value="${out.dir}/ljsa.js" />
+		</exec>
+	</target>
+	
+</project>
