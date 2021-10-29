@@ -11,8 +11,8 @@
     "css": [],
     "scripts": [
       "/wrapp/wux/js/wux.min.js",
-      "/ljsa/js/res-$language.min.js",
-      "/ljsa/js/ljsa.min.js"
+      "/wljsa/js/res-$language.min.js",
+      "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
   },
@@ -28,8 +28,8 @@
     "css": [],
     "scripts": [
       "/wrapp/wux/js/wux.min.js",
-      "/ljsa/js/res-$language.min.js",
-      "/ljsa/js/ljsa.min.js"
+      "/wljsa/js/res-$language.min.js",
+      "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
   },
@@ -45,8 +45,8 @@
     "css": [],
     "scripts": [
       "/wrapp/wux/js/wux.min.js",
-      "/ljsa/js/res-$language.min.js",
-      "/ljsa/js/ljsa.min.js"
+      "/wljsa/js/res-$language.min.js",
+      "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
   },
@@ -62,8 +62,8 @@
     "css": [],
     "scripts": [
       "/wrapp/wux/js/wux.min.js",
-      "/ljsa/js/res-$language.min.js",
-      "/ljsa/js/ljsa.min.js"
+      "/wljsa/js/res-$language.min.js",
+      "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
   },
@@ -79,8 +79,8 @@
     "css": [],
     "scripts": [
       "/wrapp/wux/js/wux.min.js",
-      "/ljsa/js/res-$language.min.js",
-      "/ljsa/js/ljsa.min.js"
+      "/wljsa/js/res-$language.min.js",
+      "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
   },
@@ -96,8 +96,8 @@
     "css": [],
     "scripts": [
       "/wrapp/wux/js/wux.min.js",
-      "/ljsa/js/res-$language.min.js",
-      "/ljsa/js/ljsa.min.js"
+      "/wljsa/js/res-$language.min.js",
+      "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
   },
@@ -113,8 +113,8 @@
     "css": [],
     "scripts": [
       "/wrapp/wux/js/wux.min.js",
-      "/ljsa/js/res-$language.min.js",
-      "/ljsa/js/ljsa.min.js"
+      "/wljsa/js/res-$language.min.js",
+      "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
   }

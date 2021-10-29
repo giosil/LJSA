@@ -6,7 +6,7 @@
     "locale": "it"
   },
   "private": {
-    "logo": "<h1 class=\"logo-name\" style=\"margin-left: -165px;\">$app.name</h1>",
+    "logo": "<h1 class=\"logo-name\" style=\"margin-left: -20px;\">$app.name</h1>",
     "app": "org.dew.wrapp.impl.DefaultAppManager",
     "login": "org.dew.wrapp.impl.DefaultLoginManager",
     "menu": "org.dew.wrapp.impl.DefaultMenuManager"

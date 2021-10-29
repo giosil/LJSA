@@ -75,7 +75,29 @@ declare namespace GUI {
 }
 declare namespace GUI {
     class GUIServizi extends WUX.WComponent {
+        protected container: WUX.WContainer;
+        protected tagsFilter: WUX.WTags;
+        protected fpFilter: WUX.WFormPanel;
+        protected btnFind: WUX.WButton;
+        protected btnReset: WUX.WButton;
+        protected btnNew: WUX.WButton;
+        protected cntActions: AppTableActions;
+        protected btnOpen: WUX.WButton;
+        protected btnSave: WUX.WButton;
+        protected btnCancel: WUX.WButton;
+        protected btnDelete: WUX.WButton;
+        protected tabResult: WUX.WDXTable;
+        protected selId: any;
+        protected tcoDetail: WUX.WTab;
+        protected fpDetail: WUX.WFormPanel;
+        protected isNew: boolean;
+        protected status: number;
+        readonly iSTATUS_STARTUP = 0;
+        readonly iSTATUS_VIEW = 1;
+        readonly iSTATUS_EDITING = 2;
         constructor(id?: string);
-        protected render(): string;
+        protected render(): WUX.WContainer;
+        collapseHandler(e: JQueryEventObject): void;
+        protected onSelect(): void;
     }
 }

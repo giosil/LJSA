@@ -62,4 +62,5 @@ WUX.global.locale = GUI.getLocale();
 var jrpc = new JRPC("/LJSA/rpc");
 
 jrpc.setUserName(GUI.getUserLogged().userName);
+jrpc.setPassword(GUI.getUserLogged().tokenId);
 
