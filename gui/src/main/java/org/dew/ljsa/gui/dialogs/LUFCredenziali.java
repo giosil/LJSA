@@ -17,9 +17,8 @@ import org.dew.util.WUtil;
 public
 class LUFCredenziali implements ILookUpFinder, ICredenziale
 {
-  @SuppressWarnings("rawtypes")
   public
-  List<List<Object>> find(String sEntity, List oFilter)
+  List<List<Object>> find(String sEntity, List<Object> oFilter)
       throws Exception
   {
     Map<String, Object> mapFilter = new HashMap<String, Object>();

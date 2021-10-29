@@ -16,9 +16,8 @@ import org.dew.util.WUtil;
 public
 class LUFAttivita implements ILookUpFinder, IAttivita
 {
-  @SuppressWarnings("rawtypes")
   public
-  List<List<Object>> find(String sEntity, List oFilter)
+  List<List<Object>> find(String sEntity, List<Object> oFilter)
       throws Exception
   {
     Map<String, Object> mapFilter = new HashMap<String, Object>();
