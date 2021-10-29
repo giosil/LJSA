@@ -34,6 +34,7 @@ class BEConfig
   public final static String sLJSA_CONF_SLEEPING     = "ljsa.sleeping";
   public final static String sLJSA_CONF_USER         = "ljsa.user";
   public final static String sLJSA_CONF_PWD          = "ljsa.password";
+  public final static String sLJSA_CONF_RPC_AUTH     = "ljsa.rpc.auth";
   public final static String sLJSA_CONF_CONTEXT      = "ljsa.context";
   public final static String sLJSA_CONF_DOWNLOAD     = "ljsa.download";
   public final static String sLJSA_CONF_REFRESH      = "ljsa.refresh";
@@ -215,6 +216,12 @@ class BEConfig
   String getLJSAWebServices()
   {
     return getLJSAContext() + "/ws";
+  }
+  
+  public static
+  String getLJSARpcAuth()
+  {
+    return config.getProperty(BEConfig.sLJSA_CONF_RPC_AUTH);
   }
   
   public static

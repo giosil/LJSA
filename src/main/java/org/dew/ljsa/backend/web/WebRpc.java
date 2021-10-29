@@ -3,6 +3,7 @@ package org.dew.ljsa.backend.web;
 import java.security.Principal;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -12,7 +13,9 @@ import org.dew.ljsa.backend.rpc.WSCredenziali;
 import org.dew.ljsa.backend.rpc.WSSchedulatore;
 import org.dew.ljsa.backend.rpc.WSSchedulazioni;
 import org.dew.ljsa.backend.rpc.WSServizi;
-
+import org.dew.ljsa.backend.util.BEConfig;
+import org.dew.ljsa.backend.util.WHttp;
+import org.json.JSON;
 import org.rpc.util.SimplePrincipal;
 
 public
@@ -39,7 +42,7 @@ class WebRpc extends org.rpc.server.RpcServlet
     addWebService(new WSServizi(),       "SERVIZI",       "Gestione servizi");
     addWebService(new WSCredenziali(),   "CREDENZIALI",   "Gestione credenziali");
     addWebService(new WSClassi(),        "CLASSI",        "Gestione classi");
-    addWebService(new WSAttivita(),      "ATTIVITA",      "Gestione attivit\340");
+    addWebService(new WSAttivita(),      "ATTIVITA",      "Gestione attivita");
     addWebService(new WSSchedulazioni(), "SCHEDULAZIONI", "Gestione schedulazioni");
     addWebService(new WSSchedulatore(),  "SCHEDULATORE",  "Gestione schedulatore");
   }
@@ -55,6 +58,25 @@ class WebRpc extends org.rpc.server.RpcServlet
     catch(Exception ex) {
       ex.printStackTrace();
     }
+    
+    if(services == null || services.size() == 0) {
+      String rpcAuth = BEConfig.getLJSARpcAuth();
+      if(rpcAuth != null && rpcAuth.length() > 7) {
+        try {
+          WHttp whttp = new WHttp(rpcAuth);
+          whttp.setBearer(password);
+          
+          Map<String, Object> mapUser = JSON.parseObj(whttp.get());
+          if(mapUser != null && !mapUser.isEmpty()) {
+            return new SimplePrincipal(username);
+          }
+        }
+        catch(Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+    
     if(services != null && services.size() > 0) {
       return new SimplePrincipal(username);
     }
