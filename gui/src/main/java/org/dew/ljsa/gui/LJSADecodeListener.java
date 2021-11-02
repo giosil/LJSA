@@ -37,9 +37,8 @@ class LJSADecodeListener implements IDecodeListener
   {
   }
   
-  @SuppressWarnings({ "rawtypes", "unchecked" })
   public
-  void beforeFind(List list)
+  void beforeFind(List<Object> list)
   {
     if(idServizio != null && idServizio.length() > 0) {
       list.add(idServizio);

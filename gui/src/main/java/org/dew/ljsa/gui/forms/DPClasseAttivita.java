@@ -17,7 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.dew.ljsa.IAttivita;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 
 import org.dew.swingup.util.ADataPanel;
 import org.dew.swingup.util.ATableModelForSorter;
@@ -50,11 +50,11 @@ class DPClasseAttivita extends ADataPanel implements IAttivita
     oRecords = new ArrayList<Map<String, Object>>();
     if(oData instanceof List) {
       List<Map<String, Object>> listData = WUtil.toListOfMapObject(oData);
-      if(DataManager.vServiziAbilitati != null && DataManager.vServiziAbilitati.size() > 0) {
+      if(AppUtil.vServiziAbilitati != null && AppUtil.vServiziAbilitati.size() > 0) {
         for(int i = 0; i < listData.size(); i++) {
           Map<String, Object> mapRecord = listData.get(i);
           String sIdServizio = (String) mapRecord.get(sID_SERVIZIO);
-          if(sIdServizio != null && DataManager.vServiziAbilitati.contains(sIdServizio)) {
+          if(sIdServizio != null && AppUtil.vServiziAbilitati.contains(sIdServizio)) {
             oRecords.add(mapRecord);
           }
         }

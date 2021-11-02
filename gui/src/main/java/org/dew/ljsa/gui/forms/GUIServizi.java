@@ -19,7 +19,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.dew.ljsa.IServizio;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 
 import org.dew.swingup.GUIMessage;
 import org.dew.swingup.ResourcesMgr;
@@ -192,7 +192,7 @@ class GUIServizi extends AEntityEditor implements IServizio
     IRPCClient oRPCClient = ResourcesMgr.getDefaultRPCClient();
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(DataNormalizer.normalize(oFilterValues));
-    parameters.add(DataManager.vServiziAbilitati);
+    parameters.add(AppUtil.vServiziAbilitati);
     oRecords = WUtil.toListOfMapObject(oRPCClient.execute("SERVIZI.find", parameters, true));
     
     oTableModel.setData(oRecords);
@@ -311,7 +311,7 @@ class GUIServizi extends AEntityEditor implements IServizio
       oRecords.add(mapResult);
       iRowToSelect = oRecords.size() - 1;
       
-      DataManager.addServizioAbilitato(mapResult);
+      AppUtil.addServizioAbilitato(mapResult);
     }
     else {
       Map<String, Object> mapResult = WUtil.toMapObject(oRPCClient.execute("SERVIZI.update", parameters));

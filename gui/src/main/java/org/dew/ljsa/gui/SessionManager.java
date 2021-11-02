@@ -48,7 +48,7 @@ class SessionManager implements ISessionManager
       throws Exception
   {
     user = null;
-    DataManager.clear();
+    AppUtil.clear();
     
     Map<String, Object> headers = new HashMap<String, Object>();
     headers.put("Authorization", "Basic " + Base64Coder.encodeString(sUserName + ":" + sPassword));
@@ -88,7 +88,7 @@ class SessionManager implements ISessionManager
     user.setDateLastAccess(new Date());
     user.setCurrentIdClient(sIdClient);
     
-    DataManager.setServiziAbilitati(services);
+    AppUtil.setServiziAbilitati(services);
   }
   
   @Override
@@ -97,7 +97,7 @@ class SessionManager implements ISessionManager
       throws Exception
   {
     user = null;
-    DataManager.clear();
+    AppUtil.clear();
   }
   
   @Override
@@ -105,7 +105,7 @@ class SessionManager implements ISessionManager
   void logout()
   {
     user = null;
-    DataManager.clear();
+    AppUtil.clear();
   }
   
   @Override

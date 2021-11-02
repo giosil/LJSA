@@ -80,6 +80,49 @@ class WSServizi implements IServizio
   }
   
   public
+  List<List<Object>> lookup(List<String> listServices)
+    throws Exception
+  {
+    List<List<Object>> listResult = new ArrayList<List<Object>>();
+    
+    String sSQL = "SELECT ID_SERVIZIO,DESCRIZIONE FROM LJSA_SERVIZI ";
+    sSQL += "WHERE ATTIVO='" + QueryBuilder.decodeBoolean(true) + "'";
+    if(listServices != null && listServices.size() > 0) {
+      sSQL += " AND ID_SERVIZIO IN (" + DataUtil.buildInSet(listServices) + ")";
+    }
+    sSQL += " ORDER BY ID_SERVIZIO";
+    
+    Connection conn = null;
+    Statement stm = null;
+    ResultSet rs = null;
+    try {
+      conn = ConnectionManager.getDefaultConnection();
+      stm = conn.createStatement();
+      rs = stm.executeQuery(sSQL);
+      while(rs.next()) {
+        String sIdServizio  = rs.getString("ID_SERVIZIO");
+        String sDescrizione = rs.getString("DESCRIZIONE");
+        
+        List<Object> record = new ArrayList<Object>();
+        record.add(sIdServizio);
+        record.add(sIdServizio);
+        record.add(sDescrizione);
+        record.add(0); // marker: 0 = Normal (Attivo)
+        
+        listResult.add(record);
+      }
+    }
+    catch(Exception ex) {
+      logger.error("Exception in WSServizi.lookup(" + listServices + ")", ex);
+      throw ex;
+    }
+    finally {
+      ConnectionManager.close(rs, stm, conn);
+    }
+    return listResult;
+  }
+  
+  public
   List<List<Object>> lookup(Map<String, Object> mapFilter, List<String> listServices)
     throws Exception
   {
@@ -106,9 +149,7 @@ class WSServizi implements IServizio
     try {
       conn = ConnectionManager.getDefaultConnection();
       stm = conn.createStatement();
-      
       rs = stm.executeQuery(sSQL);
-      
       while(rs.next()) {
         String sIdServizio  = rs.getString("ID_SERVIZIO");
         String sDescrizione = rs.getString("DESCRIZIONE");
@@ -133,7 +174,6 @@ class WSServizi implements IServizio
     finally {
       ConnectionManager.close(rs, stm, conn);
     }
-    
     return listResult;
   }
   
@@ -173,7 +213,6 @@ class WSServizi implements IServizio
     finally {
       ConnectionManager.close(rs, pstm, conn);
     }
-    
     return result.toMapObject();
   }
   

@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 
 import org.dew.swingup.impl.SimpleLookUpDialog;
 import org.dew.util.WUtil;
@@ -52,7 +52,7 @@ class LJSASimpleLookUpDialog extends SimpleLookUpDialog
         defaultServizio.add(sCode);
         defaultServizio.add(sDesc);
         
-        DataManager.defaultServizio = defaultServizio;
+        AppUtil.defaultServizio = defaultServizio;
       }
     }
     super.onDoubleClick();

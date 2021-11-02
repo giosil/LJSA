@@ -35,7 +35,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.dew.ljsa.ILog;
 import org.dew.ljsa.ISchedulazione;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 import org.dew.ljsa.gui.DecodifiableFactory;
 import org.dew.ljsa.gui.LJSADecodeListener;
 
@@ -309,7 +309,7 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
     
     fpFilter.setMandatoryFields(oMandatoryFields);
     
-    fpFilter.setValue(sID_SERVIZIO, DataManager.getDefaultServizio());
+    fpFilter.setValue(sID_SERVIZIO, AppUtil.getDefaultServizio());
     
     return fpFilter;
   }

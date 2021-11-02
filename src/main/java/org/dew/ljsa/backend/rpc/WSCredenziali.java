@@ -246,18 +246,12 @@ class WSCredenziali implements ICredenziale
   {
     WMap result = new WMap();
     
-    QueryBuilder qb = new QueryBuilder();
-    qb.add("EMAIL");
-    qb.add("ATTIVO");
-    String sSQL = qb.select("LJSA_CREDENZIALI");
-    sSQL += "WHERE ID_SERVIZIO=? AND ID_CREDENZIALE=?";
-    
     Connection conn = null;
     PreparedStatement pstm = null;
     ResultSet rs = null;
     try {
       conn = ConnectionManager.getDefaultConnection();
-      pstm = conn.prepareStatement(sSQL);
+      pstm = conn.prepareStatement("SELECT EMAIL,ATTIVO FROM LJSA_CREDENZIALI WHERE ID_SERVIZIO=? AND ID_CREDENZIALE=?");
       pstm.setString(1, idServizio);
       pstm.setString(2, idCredenziale);
       rs = pstm.executeQuery();
@@ -350,7 +344,7 @@ class WSCredenziali implements ICredenziale
       
       ut.commit();
       
-      // Value can change (upper/lowe)
+      // Value can change (upper/lower)
       mapValues.put(sID_SERVIZIO, sIdServizio);
       mapValues.put(sEMAIL,       sEmail);
     }
@@ -438,7 +432,7 @@ class WSCredenziali implements ICredenziale
       ut.begin();
       
       pstm = conn.prepareStatement("DELETE FROM LJSA_CREDENZIALI WHERE ID_SERVIZIO=? AND ID_CREDENZIALE=?");
-      pstm.setString(1, idServizio.toUpperCase());
+      pstm.setString(1, idServizio.trim().toUpperCase());
       pstm.setString(2, idCredenziale);
       pstm.executeUpdate();
       
@@ -476,7 +470,7 @@ class WSCredenziali implements ICredenziale
       
       pstm = conn.prepareStatement("UPDATE LJSA_CREDENZIALI SET ATTIVO=? WHERE ID_SERVIZIO=? AND ID_CREDENZIALE=?");
       pstm.setString(1, QueryBuilder.decodeBoolean(boEnabled));
-      pstm.setString(2, idServizio);
+      pstm.setString(2, idServizio.trim().toUpperCase());
       pstm.setString(3, idCredenziale);
       pstm.executeUpdate();
       

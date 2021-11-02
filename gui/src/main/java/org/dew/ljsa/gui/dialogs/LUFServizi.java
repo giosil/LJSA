@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.dew.ljsa.IServizio;
 
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 
 import org.dew.swingup.ResourcesMgr;
 import org.dew.swingup.components.ILookUpFinder;
@@ -33,7 +33,7 @@ class LUFServizi implements ILookUpFinder, IServizio
     
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(mapFilter);
-    parameters.add(DataManager.vServiziAbilitati);
+    parameters.add(AppUtil.vServiziAbilitati);
     
     List<List<Object>> listResult = WUtil.toListOfListObject(oRPCClient.execute("SERVIZI.lookup", parameters));
     
@@ -51,7 +51,7 @@ class LUFServizi implements ILookUpFinder, IServizio
         defaultServizio.add(sCode);
         defaultServizio.add(sDesc);
         
-        DataManager.defaultServizio = defaultServizio;
+        AppUtil.defaultServizio = defaultServizio;
       }
     }
     

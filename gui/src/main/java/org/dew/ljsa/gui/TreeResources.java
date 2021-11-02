@@ -40,8 +40,8 @@ class TreeResources
         String sToken = st.nextToken().trim();
         
         if(sToken.equals(sDESCRIPTION)) continue;
-        if(sToken.equals(sINDEX)) continue;
-        if(sToken.equals(sREFERENCE)) continue;
+        if(sToken.equals(sINDEX))       continue;
+        if(sToken.equals(sREFERENCE))   continue;
         if(sIdNode == null) {
           sIdNode = sToken;
         }

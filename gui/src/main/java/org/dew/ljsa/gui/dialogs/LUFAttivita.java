@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dew.ljsa.IAttivita;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 import org.dew.swingup.ResourcesMgr;
 import org.dew.swingup.components.ILookUpFinder;
 import org.dew.swingup.rpc.IRPCClient;
@@ -34,7 +34,7 @@ class LUFAttivita implements ILookUpFinder, IAttivita
     
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(mapFilter);
-    parameters.add(DataManager.vServiziAbilitati);
+    parameters.add(AppUtil.vServiziAbilitati);
     
     return WUtil.toListOfListObject(oRPCClient.execute("ATTIVITA.lookup", parameters));
   }

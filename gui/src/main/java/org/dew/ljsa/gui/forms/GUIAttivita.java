@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.dew.ljsa.IAttivita;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 import org.dew.ljsa.gui.DecodifiableFactory;
 
 import org.dew.swingup.GUIMessage;
@@ -86,7 +86,7 @@ class GUIAttivita extends AEntityEditor implements IAttivita
     super.onOpened();
     
     FormPanel fpFilter = (FormPanel) getFilterContainer();
-    fpFilter.setValue(sID_SERVIZIO, DataManager.getDefaultServizio());
+    fpFilter.setValue(sID_SERVIZIO, AppUtil.getDefaultServizio());
   }
   
   public
@@ -331,7 +331,7 @@ class GUIAttivita extends AEntityEditor implements IAttivita
     IRPCClient oRPCClient = ResourcesMgr.getDefaultRPCClient();
     List<Object> vParameters = new ArrayList<Object>();
     vParameters.add(DataNormalizer.normalize(oFilterValues));
-    vParameters.add(DataManager.vServiziAbilitati);
+    vParameters.add(AppUtil.vServiziAbilitati);
     oRecords = WUtil.toListOfMapObject(oRPCClient.execute("ATTIVITA.find", vParameters, true));
     
     oTableModel.setData(oRecords);
@@ -462,7 +462,7 @@ class GUIAttivita extends AEntityEditor implements IAttivita
     
     IRPCClient oRPCClient = ResourcesMgr.getDefaultRPCClient();
     Map<String, Object> oDetailValues = fpDetail.getValues();
-    DataManager.putUserLog(oDetailValues);
+    AppUtil.putUserLog(oDetailValues);
     Vector<Object> vParameters = new Vector<Object>();
     vParameters.add(DataNormalizer.normalize(oDetailValues));
     
@@ -550,7 +550,7 @@ class GUIAttivita extends AEntityEditor implements IAttivita
     }
     
     // Cancellazione
-    parameters.add(DataManager.getUserLog());
+    parameters.add(AppUtil.getUserLog());
     oRPCClient.execute("ATTIVITA.delete", parameters);
     
     oRecords.remove(iRow);
@@ -648,7 +648,7 @@ class GUIAttivita extends AEntityEditor implements IAttivita
       parameters.add(sIdServizio);
       parameters.add(sIdAttivita);
       parameters.add(new Boolean(boNuovoStato));
-      parameters.add(DataManager.getUserLog());
+      parameters.add(AppUtil.getUserLog());
       oResult = WUtil.toBooleanObj(oRPCClient.execute("ATTIVITA.setEnabled", parameters), false);
     }
     catch(Exception ex) {

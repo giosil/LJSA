@@ -19,7 +19,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.dew.ljsa.ICredenziale;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 import org.dew.ljsa.gui.DecodifiableFactory;
 import org.dew.swingup.GUIMessage;
 import org.dew.swingup.ResourcesMgr;
@@ -70,7 +70,7 @@ class GUICredenziali extends AEntityEditor implements ICredenziale
     fp.addTab("Filtro");
     fp.addRow();
     fp.addComponent(sID_SERVIZIO,    "Servizio", DecodifiableFactory.buildDCServizio());
-    fp.addTextField(sID_CREDENZIALE, "Id Credenziale", 50);
+    fp.addTextField(sID_CREDENZIALE, "Credenziale", 50);
     fp.addTextField(sEMAIL,          "Email", 100);
     fp.build();
     
@@ -83,8 +83,8 @@ class GUICredenziali extends AEntityEditor implements ICredenziale
     FormPanel fp = new FormPanel("Dettaglio");
     fp.addTab("Attributi");
     fp.addRow();
-    fp.addComponent(sID_SERVIZIO,    "Servizio", DecodifiableFactory.buildDCServizio());
-    fp.addTextField(sID_CREDENZIALE, "Id Credenziale", 50);
+    fp.addComponent(sID_SERVIZIO,     "Servizio", DecodifiableFactory.buildDCServizio());
+    fp.addTextField(sID_CREDENZIALE,  "Credenziale", 50);
     fp.addRow();
     fp.addPasswordField(sCREDENZIALI, "Password");
     fp.addTextField(sEMAIL,           "Email", 100);
@@ -114,8 +114,8 @@ class GUICredenziali extends AEntityEditor implements ICredenziale
   protected
   Container buildGUIResult()
   {
-    String[] asCOLUMNS   = {"Id Servizio", "Id Credenziale", "Email"};
-    String[] asSYMBOLICS = {sID_SERVIZIO,  sID_CREDENZIALE,  sEMAIL};
+    String[] asCOLUMNS   = {"Servizio",   "Credenziale",   "Email"};
+    String[] asSYMBOLICS = {sID_SERVIZIO, sID_CREDENZIALE, sEMAIL};
     
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
     
@@ -196,7 +196,7 @@ class GUICredenziali extends AEntityEditor implements ICredenziale
     IRPCClient oRPCClient = ResourcesMgr.getDefaultRPCClient();
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(DataNormalizer.normalize(oFilterValues));
-    parameters.add(DataManager.vServiziAbilitati);
+    parameters.add(AppUtil.vServiziAbilitati);
     oRecords = WUtil.toListOfMapObject(oRPCClient.execute("CREDENZIALI.find", parameters, true));
     
     oTableModel.setData(oRecords);
@@ -308,7 +308,7 @@ class GUICredenziali extends AEntityEditor implements ICredenziale
     if(boNew) {
       boolean exists = WUtil.toBoolean(oRPCClient.execute("CREDENZIALI.exists", parameters), false);
       if(exists) {
-        GUIMessage.showWarning("Servizio gi\340 presente in archivio.");
+        GUIMessage.showWarning("Credenziale gi\340 presente in archivio.");
         return false;
       }
       

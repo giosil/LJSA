@@ -28,4 +28,29 @@
         }
     }
 
+    export class LJSASelServizi extends WUX.WSelect2 {
+        constructor(id?: string, multiple?: boolean) {
+            super(id);
+            this.multiple = multiple;
+            this.name = 'CFSelServizi';
+        }
+
+        protected componentDidMount(): void {
+            let user = GUI.getUserLogged();
+            jrpc.execute('SERVIZI.lookup', [user.groups], (result) => {
+                let data = [];
+                for (var i = 0; i < result.length; i++) {
+                    var r = result[i];
+                    var d = { id: r[0], text: r[2] };
+                    data.push(d);
+                }
+                let options: Select2Options = {
+                    data: data,
+                    placeholder: "",
+                    allowClear: true,
+                };
+                this.init(options);
+            });
+        }
+    }
 }

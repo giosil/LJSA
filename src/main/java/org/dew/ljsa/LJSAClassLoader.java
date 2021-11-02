@@ -22,7 +22,11 @@ class LJSAClassLoader extends ClassLoader
   {
     Class<?> result = loadClass(name);
     
-    return (Class<? extends Job>) result;
+    if(result.isInstance(Job.class)) {
+      return (Class<? extends Job>) result;
+    }
+    
+    return null;
   }
   
   public
@@ -32,12 +36,15 @@ class LJSAClassLoader extends ClassLoader
     String sFilePath = BEConfig.getLJSAClassesFolder() + File.separator + name.replace('.', File.separatorChar) + ".class";
     File file = new File(sFilePath);
     if(!file.exists() || !file.isFile()) {
+      
       try {
         result = Class.forName(name);
       }
       catch(Exception ex) {
+        ex.printStackTrace();
         return null;
       }
+      
       return result;
     }
     byte[] b = loadClassData(sFilePath);
@@ -56,6 +63,7 @@ class LJSAClassLoader extends ClassLoader
         url = file.toURI().toURL();
       }
       catch(Exception ex) {
+        ex.printStackTrace();
       }
       return url;
     }
@@ -63,14 +71,14 @@ class LJSAClassLoader extends ClassLoader
   }
   
   private
-  byte[] loadClassData(String sFilePath)
+  byte[] loadClassData(String filePath)
   {
     byte[] result = null;
     FileInputStream fis = null;
     try {
-      fis = new FileInputStream(sFilePath);
-      int iAvailable = fis.available();
-      result = new byte[iAvailable];
+      fis = new FileInputStream(filePath);
+      int available = fis.available();
+      result = new byte[available];
       fis.read(result);
     }
     catch(Exception ex) {

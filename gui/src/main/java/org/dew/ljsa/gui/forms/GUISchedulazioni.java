@@ -36,7 +36,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.dew.ljsa.ILog;
 import org.dew.ljsa.ISchedulazione;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 import org.dew.ljsa.gui.DecodifiableFactory;
 import org.dew.ljsa.gui.LJSADecodeListener;
 
@@ -116,7 +116,7 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     super.onOpened();
     
     FormPanel fpFilter = (FormPanel) getFilterContainer();
-    fpFilter.setValue(sID_SERVIZIO, DataManager.getDefaultServizio());
+    fpFilter.setValue(sID_SERVIZIO, AppUtil.getDefaultServizio());
   }
   
   public
@@ -855,7 +855,7 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     IRPCClient oRPCClient = ResourcesMgr.getDefaultRPCClient();
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(DataNormalizer.normalize(oFilterValues));
-    parameters.add(DataManager.vServiziAbilitati);
+    parameters.add(AppUtil.vServiziAbilitati);
     oRecords = WUtil.toListOfMapObject(oRPCClient.execute("SCHEDULAZIONI.find", parameters, true));
     
     oTableModel.setData(oRecords);
@@ -1015,7 +1015,7 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     
     IRPCClient oRPCClient = ResourcesMgr.getDefaultRPCClient();
     Map<String, Object> oDetailValues = fpDetail.getValues();
-    DataManager.putUserLog(oDetailValues);
+    AppUtil.putUserLog(oDetailValues);
     
     // Si ottiene lo stato attuale della schedulazione prima dell'aggiornamento.
     // In tal modo se una schedulazione e' disattivata rimane tale anche in aggiornamento.
@@ -1122,7 +1122,7 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(sIdServizio);
     parameters.add(idSchedulazione);
-    parameters.add(DataManager.getUserLog());
+    parameters.add(AppUtil.getUserLog());
     oRPCClient.execute("SCHEDULAZIONI.delete", parameters);
     
     oRecords.remove(iRow);
@@ -1219,7 +1219,7 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     vParameters.add(sIdServizio);
     vParameters.add(oIdSchedulazione);
     vParameters.add(new Boolean(boNuovoStato));
-    vParameters.add(DataManager.getUserLog());
+    vParameters.add(AppUtil.getUserLog());
     oRPCClient.execute("SCHEDULAZIONI.setEnabled", vParameters, true);
     
     readExecInfo(oRecord);

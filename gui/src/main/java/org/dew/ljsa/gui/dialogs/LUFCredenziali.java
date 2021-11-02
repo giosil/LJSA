@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dew.ljsa.ICredenziale;
-import org.dew.ljsa.gui.DataManager;
+import org.dew.ljsa.gui.AppUtil;
 
 import org.dew.swingup.ResourcesMgr;
 import org.dew.swingup.components.ILookUpFinder;
@@ -32,7 +32,7 @@ class LUFCredenziali implements ILookUpFinder, ICredenziale
     
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(mapFilter);
-    parameters.add(DataManager.vServiziAbilitati);
+    parameters.add(AppUtil.vServiziAbilitati);
     
     return WUtil.toListOfListObject(oRPCClient.execute("CREDENZIALI.lookup", parameters));
   }
