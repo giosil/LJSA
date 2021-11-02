@@ -85,6 +85,67 @@ class WSAttivita implements IAttivita
   }
   
   public
+  List<List<Object>> lookup(String idServizio, String idAttivita)
+    throws Exception
+  {
+    List<List<Object>> listResult = new ArrayList<List<Object>>();
+    
+    if(idServizio == null || idServizio.length() == 0) {
+      return listResult;
+    }
+    
+    if(idAttivita != null) {
+      idAttivita = idAttivita.trim().toUpperCase();
+      if(idAttivita.length() == 1) {
+        char c0 = idAttivita.charAt(0);
+        if(!Character.isLetterOrDigit(c0)) idAttivita = "";
+      }
+    }
+    
+    
+    String sSQL = "SELECT ID_ATTIVITA,DESCRIZIONE ";
+    sSQL += "FROM LJSA_ATTIVITA ";
+    sSQL += "WHERE ID_SERVIZIO=? AND ATTIVO=? ";
+    if(idAttivita != null && idAttivita.length() > 0) {
+      sSQL += "AND ID_ATTIVITA LIKE ? ";
+    }
+    sSQL += "ORDER BY ID_ATTIVITA";
+    
+    Connection conn = null;
+    PreparedStatement pstm = null;
+    ResultSet rs = null;
+    try {
+      conn = ConnectionManager.getDefaultConnection();
+      pstm = conn.prepareStatement(sSQL);
+      pstm.setString(1, idServizio.trim().toUpperCase());
+      pstm.setString(2, QueryBuilder.decodeBoolean(true));
+      if(idAttivita != null && idAttivita.length() > 0) {
+        pstm.setString(3, "%" + idAttivita + "%");
+      }
+      rs = pstm.executeQuery();
+      while(rs.next()) {
+        String sIdAttivita  = rs.getString("ID_ATTIVITA");
+        String sDescrizione = rs.getString("DESCRIZIONE");
+        
+        List<Object> record = new ArrayList<Object>(3);
+        record.add(sIdAttivita);
+        record.add(sIdAttivita);
+        record.add(sDescrizione);
+        
+        listResult.add(record);
+      }
+    }
+    catch(Exception ex) {
+      logger.error("Exception in WSAttivita.lookUp(" + idServizio + ")", ex);
+      throw ex;
+    }
+    finally {
+      ConnectionManager.close(rs, pstm, conn);
+    }
+    return listResult;
+  }
+  
+  public
   List<Map<String, Object>> find(Map<String, Object> mapFilter, List<String> listServices)
     throws Exception
   {

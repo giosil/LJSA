@@ -1,5 +1,7 @@
 ﻿namespace GUI {
 
+    import WUtil = WUX.WUtil;
+
     export class AppTableActions extends WUX.WComponent {
         left: WUX.WContainer;
         right: WUX.WContainer;
@@ -35,6 +37,13 @@
             this.name = 'CFSelServizi';
         }
 
+        protected updateState(nextState: any): void {
+            super.updateState(nextState);
+            // Servizio di default
+            let s = WUtil.toString(nextState);
+            if(!s) _defService = s;
+        }
+
         protected componentDidMount(): void {
             let user = GUI.getUserLogged();
             jrpc.execute('SERVIZI.lookup', [user.groups], (result) => {
@@ -51,6 +60,66 @@
                 };
                 this.init(options);
             });
+        }
+    }
+
+    export class LJSASelClassi extends WUX.WSelect2 {
+
+        constructor(id?: string, multiple?: boolean) {
+            super(id, [], multiple);
+            this.name = 'LJSASelClassi';
+        }
+
+        protected componentDidMount(): void {
+            let options: Select2Options = {
+                ajax: {
+                    dataType: "json",
+                    delay: 400,
+                    processResults: function (result, params) {
+                        return {
+                            results: result
+                        };
+                    },
+                    transport: function (params: JQueryAjaxSettings, success?: (data: any) => null, failure?: () => null): JQueryXHR {
+                        jrpc.execute("CLASSI.lookup", [params.data], success);
+                        return undefined;
+                    }
+                },
+                placeholder: "",
+                allowClear: true,
+                minimumInputLength: 3
+            };
+            this.init(options);
+        }
+    }
+
+    export class LJSASelAttivita extends WUX.WSelect2 {
+
+        constructor(id?: string, multiple?: boolean) {
+            super(id, [], multiple);
+            this.name = 'LJSASelAttivita';
+        }
+
+        protected componentDidMount(): void {
+            let options: Select2Options = {
+                ajax: {
+                    dataType: "json",
+                    delay: 400,
+                    processResults: function (result, params) {
+                        return {
+                            results: result
+                        };
+                    },
+                    transport: function (params: JQueryAjaxSettings, success?: (data: any) => null, failure?: () => null): JQueryXHR {
+                        jrpc.execute("ATTIVITA.lookup", [_defService, params.data], success);
+                        return undefined;
+                    }
+                },
+                placeholder: "",
+                allowClear: true,
+                minimumInputLength: 3
+            };
+            this.init(options);
         }
     }
 }

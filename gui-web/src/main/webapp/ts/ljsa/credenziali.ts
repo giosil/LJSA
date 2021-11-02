@@ -23,6 +23,7 @@ namespace GUI {
         protected tcoDetail: WUX.WTab;
         // Dettaglio attributi
         protected fpDetail: WUX.WFormPanel;
+        protected selSerDet: LJSASelServizi;
         // Stati
         protected isNew: boolean;
         protected status: number;
@@ -90,9 +91,11 @@ namespace GUI {
             this.fpFilter.addTextField(ICredenziale.sID_CREDENZIALE, 'Credenziale');
             this.fpFilter.addTextField(ICredenziale.sEMAIL, 'Email');
 
+            this.selSerDet = new LJSASelServizi();
+
             this.fpDetail = new WUX.WFormPanel(this.subId('fpd'));
             this.fpDetail.addRow();
-            this.fpDetail.addComponent(ICredenziale.sID_SERVIZIO, 'Servizio', new LJSASelServizi());
+            this.fpDetail.addComponent(ICredenziale.sID_SERVIZIO, 'Servizio', this.selSerDet);
             this.fpDetail.addTextField(ICredenziale.sID_CREDENZIALE, 'Credenziale');
             this.fpDetail.addRow();
             this.fpDetail.addPasswordField(ICredenziale.sCREDENZIALI, 'Password');
@@ -119,6 +122,7 @@ namespace GUI {
                 this.fpDetail.enabled = true;
 
                 this.fpDetail.clear();
+                this.selSerDet.setState(_defService);
 
                 setTimeout(() => { this.fpDetail.focus(); }, 100);
             });

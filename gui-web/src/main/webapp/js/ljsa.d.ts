@@ -6,6 +6,7 @@ declare namespace GUI {
 }
 declare namespace GUI {
     let LJSA_SERVICE: string;
+    let _defService: string;
     interface User {
         id: number;
         userName: string;
@@ -85,6 +86,15 @@ declare namespace GUI {
     }
     class LJSASelServizi extends WUX.WSelect2 {
         constructor(id?: string, multiple?: boolean);
+        protected updateState(nextState: any): void;
+        protected componentDidMount(): void;
+    }
+    class LJSASelClassi extends WUX.WSelect2 {
+        constructor(id?: string, multiple?: boolean);
+        protected componentDidMount(): void;
+    }
+    class LJSASelAttivita extends WUX.WSelect2 {
+        constructor(id?: string, multiple?: boolean);
         protected componentDidMount(): void;
     }
 }
@@ -105,6 +115,7 @@ declare namespace GUI {
         protected selId: any;
         protected tcoDetail: WUX.WTab;
         protected fpDetail: WUX.WFormPanel;
+        protected selSerDet: LJSASelServizi;
         protected isNew: boolean;
         protected status: number;
         readonly iSTATUS_STARTUP = 0;

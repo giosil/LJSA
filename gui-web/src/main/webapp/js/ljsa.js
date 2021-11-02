@@ -16,6 +16,7 @@ var GUI;
 (function (GUI) {
     var WUtil = WUX.WUtil;
     GUI.LJSA_SERVICE = 'LJSA';
+    GUI._defService = '';
     function getUserLogged() {
         var userLogged = window ? window['_userLogged'] : undefined;
         if (userLogged && typeof userLogged == 'object')
@@ -351,6 +352,7 @@ var GUI;
 })(GUI || (GUI = {}));
 var GUI;
 (function (GUI) {
+    var WUtil = WUX.WUtil;
     var AppTableActions = (function (_super) {
         __extends(AppTableActions, _super);
         function AppTableActions(id) {
@@ -382,6 +384,12 @@ var GUI;
             _this.name = 'CFSelServizi';
             return _this;
         }
+        LJSASelServizi.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            var s = WUtil.toString(nextState);
+            if (!s)
+                GUI._defService = s;
+        };
         LJSASelServizi.prototype.componentDidMount = function () {
             var _this = this;
             var user = GUI.getUserLogged();
@@ -403,6 +411,68 @@ var GUI;
         return LJSASelServizi;
     }(WUX.WSelect2));
     GUI.LJSASelServizi = LJSASelServizi;
+    var LJSASelClassi = (function (_super) {
+        __extends(LJSASelClassi, _super);
+        function LJSASelClassi(id, multiple) {
+            var _this = _super.call(this, id, [], multiple) || this;
+            _this.name = 'LJSASelClassi';
+            return _this;
+        }
+        LJSASelClassi.prototype.componentDidMount = function () {
+            var options = {
+                ajax: {
+                    dataType: "json",
+                    delay: 400,
+                    processResults: function (result, params) {
+                        return {
+                            results: result
+                        };
+                    },
+                    transport: function (params, success, failure) {
+                        jrpc.execute("CLASSI.lookup", [params.data], success);
+                        return undefined;
+                    }
+                },
+                placeholder: "",
+                allowClear: true,
+                minimumInputLength: 3
+            };
+            this.init(options);
+        };
+        return LJSASelClassi;
+    }(WUX.WSelect2));
+    GUI.LJSASelClassi = LJSASelClassi;
+    var LJSASelAttivita = (function (_super) {
+        __extends(LJSASelAttivita, _super);
+        function LJSASelAttivita(id, multiple) {
+            var _this = _super.call(this, id, [], multiple) || this;
+            _this.name = 'LJSASelAttivita';
+            return _this;
+        }
+        LJSASelAttivita.prototype.componentDidMount = function () {
+            var options = {
+                ajax: {
+                    dataType: "json",
+                    delay: 400,
+                    processResults: function (result, params) {
+                        return {
+                            results: result
+                        };
+                    },
+                    transport: function (params, success, failure) {
+                        jrpc.execute("ATTIVITA.lookup", [GUI._defService, params.data], success);
+                        return undefined;
+                    }
+                },
+                placeholder: "",
+                allowClear: true,
+                minimumInputLength: 3
+            };
+            this.init(options);
+        };
+        return LJSASelAttivita;
+    }(WUX.WSelect2));
+    GUI.LJSASelAttivita = LJSASelAttivita;
 })(GUI || (GUI = {}));
 var GUI;
 (function (GUI) {
@@ -468,9 +538,10 @@ var GUI;
             this.fpFilter.addComponent(GUI.ICredenziale.sID_SERVIZIO, 'Servizio', new GUI.LJSASelServizi());
             this.fpFilter.addTextField(GUI.ICredenziale.sID_CREDENZIALE, 'Credenziale');
             this.fpFilter.addTextField(GUI.ICredenziale.sEMAIL, 'Email');
+            this.selSerDet = new GUI.LJSASelServizi();
             this.fpDetail = new WUX.WFormPanel(this.subId('fpd'));
             this.fpDetail.addRow();
-            this.fpDetail.addComponent(GUI.ICredenziale.sID_SERVIZIO, 'Servizio', new GUI.LJSASelServizi());
+            this.fpDetail.addComponent(GUI.ICredenziale.sID_SERVIZIO, 'Servizio', this.selSerDet);
             this.fpDetail.addTextField(GUI.ICredenziale.sID_CREDENZIALE, 'Credenziale');
             this.fpDetail.addRow();
             this.fpDetail.addPasswordField(GUI.ICredenziale.sCREDENZIALI, 'Password');
@@ -491,6 +562,7 @@ var GUI;
                 _this.tabResult.clearSelection();
                 _this.fpDetail.enabled = true;
                 _this.fpDetail.clear();
+                _this.selSerDet.setState(GUI._defService);
                 setTimeout(function () { _this.fpDetail.focus(); }, 100);
             });
             this.btnOpen = new WUX.WButton(this.subId('bo'), GUI.TXT.OPEN, GUI.ICO.OPEN, WUX.BTN.ACT_OUTLINE_PRIMARY);

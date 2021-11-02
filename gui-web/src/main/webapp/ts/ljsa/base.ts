@@ -4,6 +4,8 @@
 
     export let LJSA_SERVICE = 'LJSA';
 
+    export let _defService = '';
+
     export interface User {
         id: number;
         userName: string;

@@ -28,6 +28,49 @@ class WSClassi implements IClasse
   protected transient Logger logger = Logger.getLogger(getClass());
   
   public
+  List<List<Object>> lookup(String term)
+    throws Exception
+  {
+    List<List<Object>> listResult = new ArrayList<List<Object>>();
+    
+    String sSQL = "SELECT CLASSE FROM LJSA_CLASSI";
+    if(term != null && term.length() > 0) {
+      sSQL += " WHERE CLASSE LIKE ?";
+    }
+    sSQL += " ORDER BY CLASSE";
+    
+    Connection conn = null;
+    PreparedStatement pstm = null;
+    ResultSet rs = null;
+    try {
+      conn = ConnectionManager.getDefaultConnection();
+      pstm = conn.prepareStatement(sSQL);
+      if(term != null && term.length() > 0) {
+        pstm.setString(1, "%" + term.replace(' ', '%') + "%");
+      }
+      rs = pstm.executeQuery();
+      while(rs.next()) {
+        String sClasse = rs.getString("CLASSE");
+        
+        List<Object> record = new ArrayList<Object>(3);
+        record.add(sClasse);
+        record.add(sClasse);
+        record.add(sClasse);
+        
+        listResult.add(record);
+      }
+    }
+    catch(Exception ex) {
+      logger.error("Exception in WSClassi.lookUp(" + term + ")", ex);
+      throw ex;
+    }
+    finally {
+      ConnectionManager.close(rs, pstm, conn);
+    }
+    return listResult;
+  }
+  
+  public
   List<List<Object>> lookup(Map<String, Object> mapFilter)
     throws Exception
   {
