@@ -18,6 +18,7 @@ import org.dew.swingup.AJDialog;
 import org.dew.swingup.GUIMessage;
 import org.dew.swingup.util.CollectionAutoCompleter;
 import org.dew.swingup.util.FormPanel;
+import org.dew.util.WUtil;
 
 public
 class GUISchedConfigurazione extends AJDialog implements ISchedulazione
@@ -83,7 +84,7 @@ class GUISchedConfigurazione extends AJDialog implements ISchedulazione
 	public
 	void setValues(Map<String, Object> mapValues, boolean boEditFlag)
 	{
-		Boolean oOverWrite = (Boolean) mapValues.get(sCONFIGURAZIONE_OVERWRITE);
+		Boolean oOverWrite = WUtil.toBooleanObj(mapValues.get(sCONF_OVERWRITE), false);
 		if(oOverWrite != null) {
 			boOverWrite = oOverWrite.booleanValue();
 		}
@@ -93,11 +94,11 @@ class GUISchedConfigurazione extends AJDialog implements ISchedulazione
 		
 		oFormPanel.setValues(mapValues);
 		
-		oFormPanel.setEnabled(IAttivita.sCONFIGURAZIONE_DESCRIZIONE, false);
-		oFormPanel.setEnabled(IAttivita.sCONFIGURAZIONE_VALORI, false);
+		oFormPanel.setEnabled(sCONF_DESCRIZIONE, false);
+		oFormPanel.setEnabled(sCONF_VALORI, false);
 		if(!boEditFlag) {
-			oFormPanel.setEnabled(sCONFIGURAZIONE_OPZIONE, false);
-			oFormPanel.setDefaultFocus(sCONFIGURAZIONE_VALORE);
+			oFormPanel.setEnabled(sCONF_OPZIONE, false);
+			oFormPanel.setDefaultFocus(sCONF_VALORE);
 		}
 	}
 	
@@ -110,8 +111,8 @@ class GUISchedConfigurazione extends AJDialog implements ISchedulazione
 	public
 	void hideDescrizioneValori()
 	{
-		oFormPanel.setVisible(IAttivita.sCONFIGURAZIONE_DESCRIZIONE, false);
-		oFormPanel.setVisible(IAttivita.sCONFIGURAZIONE_VALORI, false);
+		oFormPanel.setVisible(sCONF_DESCRIZIONE, false);
+		oFormPanel.setVisible(sCONF_VALORI,      false);
 		this.setSize(400, 200);
 	}
 	
@@ -121,27 +122,27 @@ class GUISchedConfigurazione extends AJDialog implements ISchedulazione
 	{
 		oFormPanel = new FormPanel("Opzione di configurazione");
 		oFormPanel.addRow();
-		oFormPanel.addTextField(sCONFIGURAZIONE_OPZIONE, "Opzione", 255);
+		oFormPanel.addTextField(sCONF_OPZIONE, "Opzione", 255);
 		oFormPanel.addRow();
-		oFormPanel.addNoteField(IAttivita.sCONFIGURAZIONE_DESCRIZIONE, "Descrizione", 3, 255);
+		oFormPanel.addNoteField(sCONF_DESCRIZIONE, "Descrizione", 3, 255);
 		oFormPanel.addRow();
-		oFormPanel.addNoteField(IAttivita.sCONFIGURAZIONE_VALORI, "Valori", 3, 255);
+		oFormPanel.addNoteField(sCONF_VALORI, "Valori", 3, 255);
 		oFormPanel.addRow();
-		oFormPanel.addNoteField(sCONFIGURAZIONE_VALORE, "Valore", 3, 1024);
-		oFormPanel.addHiddenField(IAttivita.sCONFIGURAZIONE_PREDEFINITO);
-		oFormPanel.addHiddenField(sCONFIGURAZIONE_DA_ATTIVITA);
-		oFormPanel.addHiddenField(sCONFIGURAZIONE_OVERWRITE);
+		oFormPanel.addNoteField(sCONF_VALORE, "Valore", 3, 1024);
+		oFormPanel.addHiddenField(sCONF_PREDEFINITO);
+		oFormPanel.addHiddenField(sCONF_DA_ATTIVITA);
+		oFormPanel.addHiddenField(sCONF_OVERWRITE);
 		
 		oFormPanel.build();
 		
-		oFormPanel.setEnabled(IAttivita.sCONFIGURAZIONE_DESCRIZIONE, false);
-		oFormPanel.setEnabled(IAttivita.sCONFIGURAZIONE_VALORI, false);
+		oFormPanel.setEnabled(sCONF_DESCRIZIONE, false);
+		oFormPanel.setEnabled(sCONF_VALORI, false);
 		
 		List<String> oMandatoryFields = new ArrayList<String>();
-		oMandatoryFields.add(sCONFIGURAZIONE_OPZIONE);
+		oMandatoryFields.add(sCONF_OPZIONE);
 		oFormPanel.setMandatoryFields(oMandatoryFields);
 		
-		Component compOpzione = oFormPanel.getComponent(sCONFIGURAZIONE_OPZIONE);
+		Component compOpzione = oFormPanel.getComponent(sCONF_OPZIONE);
 		if(compOpzione instanceof JTextField) {
 			buildHints();
 			
@@ -177,15 +178,15 @@ class GUISchedConfigurazione extends AJDialog implements ISchedulazione
 		}
 		
 		if(!boOverWrite) {
-			Boolean oDaAttivita = (Boolean) oFormPanel.getValue(sCONFIGURAZIONE_DA_ATTIVITA);
+			Boolean oDaAttivita = WUtil.toBooleanObj(oFormPanel.getValue(sCONF_DA_ATTIVITA), false);
 			if(oDaAttivita != null && oDaAttivita.booleanValue()) {
-				String sPredefinito = (String) oFormPanel.getValue(IAttivita.sCONFIGURAZIONE_PREDEFINITO);
+				String sPredefinito = (String) oFormPanel.getValue(IAttivita.sCONF_PREDEFINITO);
 				if(sPredefinito == null) {
-					oFormPanel.setValue(IAttivita.sCONFIGURAZIONE_PREDEFINITO, "");
+					oFormPanel.setValue(sCONF_PREDEFINITO, "");
 					sPredefinito = "";
 				}
-				String sValore = (String) oFormPanel.getValue(sCONFIGURAZIONE_VALORE);
-				oFormPanel.setValue(sPARAMETRI_OVERWRITE, new Boolean(!sPredefinito.equals(sValore)));
+				String sValore = (String) oFormPanel.getValue(sCONF_VALORE);
+				oFormPanel.setValue(sPAR_OVERWRITE, new Boolean(!sPredefinito.equals(sValore)));
 			}
 		}
 		

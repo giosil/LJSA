@@ -117,7 +117,7 @@ class DPAttivitaParametri extends ADataPanel implements IAttivita, ActionListene
     Map<String, Object> mapResult = GUIAttivitaParametro.showMe(null);
     if(mapResult == null) return;
     
-    String sParametro = (String) mapResult.get(sPARAMETRI_PARAMETRO);
+    String sParametro = (String) mapResult.get(sPAR_PARAMETRO);
     
     if(exist(sParametro)) {
       GUIMessage.showWarning("Parametro " + sParametro + " gi\340 presente.");
@@ -175,7 +175,7 @@ class DPAttivitaParametri extends ADataPanel implements IAttivita, ActionListene
     
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      String sId = (String) mapRecord.get(sPARAMETRI_PARAMETRO);
+      String sId = (String) mapRecord.get(sPAR_PARAMETRO);
       if(sItem.equalsIgnoreCase(sId)) {
         return true;
       }
@@ -197,8 +197,8 @@ class DPAttivitaParametri extends ADataPanel implements IAttivita, ActionListene
   protected
   Container buildTablePanel()
   {
-    String[] asCOLUMNS   = {"Parametro",          "Descrizione",          "Valori",          "Predefinito"};
-    String[] asSYMBOLICS = {sPARAMETRI_PARAMETRO, sPARAMETRI_DESCRIZIONE, sPARAMETRI_VALORI, sPARAMETRI_PREDEFINITO};
+    String[] asCOLUMNS   = {"Parametro",    "Descrizione",    "Valori",    "Predefinito"};
+    String[] asSYMBOLICS = {sPAR_PARAMETRO, sPAR_DESCRIZIONE, sPAR_VALORI, sPAR_PREDEFINITO};
     
     oRecords = new ArrayList<Map<String, Object>>();
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
@@ -248,7 +248,6 @@ class DPAttivitaParametri extends ADataPanel implements IAttivita, ActionListene
     
     JPanel oResult = new JPanel(new BorderLayout());
     oResult.add(oButtonsPanel, BorderLayout.NORTH);
-    
     return oResult;
   }
 }

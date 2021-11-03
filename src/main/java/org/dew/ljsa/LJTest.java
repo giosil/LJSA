@@ -2,8 +2,7 @@ package org.dew.ljsa;
 
 import java.io.PrintStream;
 
-import java.util.List;
-import java.util.Map;
+import org.json.JSON;
 
 /**
  * Implementazione test di ALJSAJob.
@@ -15,7 +14,6 @@ class LJTest extends ALJSAJob
   void execute(Schedulazione sched, OutputSchedulazione out)
     throws Exception
   {
-    LJSAMap config = sched.getConfigurazione();
     LJSAMap params = sched.getParametri();
     
     String exception = params.getString("exception");
@@ -36,31 +34,8 @@ class LJTest extends ALJSAJob
       return;
     }
     else {
-      PrintStream ps = new PrintStream(out.createOutputFile(), true);
-      ps.println("Schedulazione:");
-      ps.println();
-      ps.println("Id Schedulazione = " + sched.getIdSchedulazione());
-      ps.println("Id Servizio      = " + sched.getIdServizio());
-      ps.println("Id Attivita      = " + sched.getIdAttivita());
-      ps.println("Descrizione      = " + sched.getDescrizione());
-      ps.println("Schedulazione    = " + sched.getSchedulazione());
-      ps.println();
-      ps.println("Configurazione:");
-      ps.println();
-      ps.println(config.buildInfoString());
-      ps.println();
-      ps.println("Parametri:");
-      ps.println();
-      ps.println(params.buildInfoString());
-      ps.println();
-      ps.println("Notifica:");
-      ps.println();
-      List<Map<String, Object>> listNotifica = sched.getNotifica();
-      for(Map<String, Object> item : listNotifica) {
-        Object event = item.get(ISchedulazione.sNOTIFICA_EVENTO);
-        Object dest  = item.get(ISchedulazione.sNOTIFICA_DESTINAZIONE);
-        ps.println(event + " -> " + dest);
-      }
+      PrintStream ps = new PrintStream(out.createOutputFile("test.json"), true);
+      ps.println(JSON.stringify(sched));
       
       out.setReport("Test completed.");
     }

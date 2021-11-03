@@ -140,7 +140,7 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     Map<String, Object> mapResult = GUIAttivitaNotifica.showMe(null);
     if(mapResult == null) return;
     
-    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOTIFICA_EVENTO);
+    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOT_EVENTO);
     String sEvento = null;
     if(oEvento != null) {
       sEvento = (String) oEvento.getCode();
@@ -148,7 +148,7 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     else {
       return;
     }
-    String sDestinazione = (String) mapResult.get(sNOTIFICA_DESTINAZIONE);
+    String sDestinazione = (String) mapResult.get(sNOT_DESTINAZIONE);
     
     if(exist(sEvento, sDestinazione)) {
       GUIMessage.showWarning("Notifica " + sEvento + ", " + sDestinazione + " gi\340 presente.");
@@ -156,8 +156,8 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     }
     
     Map<String, Object> htRecord = new HashMap<String, Object>();
-    htRecord.put(sNOTIFICA_EVENTO,       sEvento);
-    htRecord.put(sNOTIFICA_DESTINAZIONE, sDestinazione);
+    htRecord.put(sNOT_EVENTO,       sEvento);
+    htRecord.put(sNOT_DESTINAZIONE, sDestinazione);
     
     oRecords.add(htRecord);
     oTableModel.notifyUpdates();
@@ -201,7 +201,7 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
       return;
     }
     
-    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOTIFICA_EVENTO);
+    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOT_EVENTO);
     String sEvento = null;
     if(oEvento != null) {
       sEvento = (String) oEvento.getCode();
@@ -209,11 +209,11 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     else {
       return;
     }
-    String sDestinazione = (String) mapResult.get(sNOTIFICA_DESTINAZIONE);
+    String sDestinazione = (String) mapResult.get(sNOT_DESTINAZIONE);
     
     Map<String, Object> htRecord = new HashMap<String, Object>();
-    htRecord.put(sNOTIFICA_EVENTO,       sEvento);
-    htRecord.put(sNOTIFICA_DESTINAZIONE, sDestinazione);
+    htRecord.put(sNOT_EVENTO,       sEvento);
+    htRecord.put(sNOT_DESTINAZIONE, sDestinazione);
     
     oRecords.set(iRow, htRecord);
     oTableModel.notifyUpdates();
@@ -230,8 +230,8 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      String sE = (String) mapRecord.get(sNOTIFICA_EVENTO);
-      String sD = (String) mapRecord.get(sNOTIFICA_DESTINAZIONE);
+      String sE = (String) mapRecord.get(sNOT_EVENTO);
+      String sD = (String) mapRecord.get(sNOT_DESTINAZIONE);
       if(sEvento.equals(sE) && sDestinazione.equals(sD)) {
         return true;
       }
@@ -247,8 +247,8 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     String sSelection = "";
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      String sE = (String) mapRecord.get(sNOTIFICA_EVENTO);
-      String sD = (String) mapRecord.get(sNOTIFICA_DESTINAZIONE);
+      String sE = (String) mapRecord.get(sNOT_EVENTO);
+      String sD = (String) mapRecord.get(sNOT_DESTINAZIONE);
       sSelection += sE + "\t" + sD + "\n";
       iRowsCopied++;
     }
@@ -295,8 +295,8 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
       }
       
       Map<String, Object> mapRecord = new HashMap<String, Object>();
-      mapRecord.put(sNOTIFICA_EVENTO,       sE);
-      mapRecord.put(sNOTIFICA_DESTINAZIONE, sD);
+      mapRecord.put(sNOT_EVENTO,       sE);
+      mapRecord.put(sNOT_DESTINAZIONE, sD);
       
       oRecordToPaste.add(mapRecord);
     }
@@ -315,8 +315,8 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     }
     for(int i = 0; i < iEnd; i++) {
       Map<String, Object> mapRecord = oRecordToPaste.get(i);
-      sMessage += mapRecord.get(sNOTIFICA_EVENTO);
-      sMessage += " - " + mapRecord.get(sNOTIFICA_DESTINAZIONE) + "\n";
+      sMessage += mapRecord.get(sNOT_EVENTO);
+      sMessage += " - " + mapRecord.get(sNOT_DESTINAZIONE) + "\n";
     }
     if(boCutted) {
       sMessage += " ...\n";
@@ -344,8 +344,8 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
   protected
   Container buildTablePanel()
   {
-    String[] asCOLUMNS   = {"Evento",         "Destinazione"};
-    String[] asSYMBOLICS = {sNOTIFICA_EVENTO, sNOTIFICA_DESTINAZIONE};
+    String[] asCOLUMNS   = {"Evento",    "Destinazione"};
+    String[] asSYMBOLICS = {sNOT_EVENTO, sNOT_DESTINAZIONE};
     
     oRecords = new ArrayList<Map<String, Object>>();
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
@@ -415,7 +415,6 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     
     JPanel oResult = new JPanel(new BorderLayout());
     oResult.add(oButtonsPanel, BorderLayout.NORTH);
-    
     return oResult;
   }
   

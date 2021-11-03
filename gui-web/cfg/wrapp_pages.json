@@ -83,39 +83,5 @@
       "/wljsa/js/ljsa.min.js"
     ],
     "attributes": {}
-  },
-  "log": {
-    "title": "Log Schedulazioni",
-    "description": "Gestione log schedulazioni",
-    "layout": "default",
-    "modifier": "private",
-    "header": "",
-    "content": "",
-    "footer": "",
-    "script": "WuxDOM.render(new GUI.GUILog(), 'view-root');",
-    "css": [],
-    "scripts": [
-      "/wrapp/wux/js/wux.min.js",
-      "/wljsa/js/res-$language.min.js",
-      "/wljsa/js/ljsa.min.js"
-    ],
-    "attributes": {}
-  },
-  "schedulatore": {
-    "title": "Log Schedulatore",
-    "description": "Gestione schedulatore",
-    "layout": "default",
-    "modifier": "private",
-    "header": "",
-    "content": "",
-    "footer": "",
-    "script": "WuxDOM.render(new GUI.GUISchedulatore(), 'view-root');",
-    "css": [],
-    "scripts": [
-      "/wrapp/wux/js/wux.min.js",
-      "/wljsa/js/res-$language.min.js",
-      "/wljsa/js/ljsa.min.js"
-    ],
-    "attributes": {}
   }
 }

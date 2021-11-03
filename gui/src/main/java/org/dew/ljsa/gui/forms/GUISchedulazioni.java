@@ -152,10 +152,10 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     mapCopy.remove(sID_SCHEDULAZIONE);
     mapCopy.remove(sSTATO);
     mapCopy.remove(sID_CREDENZIALE_INS);
-    mapCopy.remove(sDATA_INSERIMENTO);
-    mapCopy.remove(sORA_INSERIMENTO);
-    mapCopy.remove(sESECUZIONI_COMPLETATE);
-    mapCopy.remove(sESECUZIONI_INTERROTTE);
+    mapCopy.remove(sDATA_INS);
+    mapCopy.remove(sORA_INS);
+    mapCopy.remove(sESEC_COMPLETATE);
+    mapCopy.remove(sESEC_INTERROTTE);
     Integer oIdSchedulazione = (Integer) oLastRecordReaded.get(sID_SCHEDULAZIONE);
     String sMsgConfirm = "La nuova schedulazione avr\340 le stesse impostazioni della " + oIdSchedulazione + ". Procedere?";
     boolean boConfirm  = GUIMessage.getConfirmation(sMsgConfirm);
@@ -333,10 +333,10 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     fp.addHiddenField(sID_SCHEDULAZIONE);
     fp.addHiddenField(sSTATO);
     fp.addHiddenField(sID_CREDENZIALE_INS);
-    fp.addHiddenField(sDATA_INSERIMENTO);
-    fp.addHiddenField(sORA_INSERIMENTO);
-    fp.addHiddenField(sESECUZIONI_COMPLETATE);
-    fp.addHiddenField(sESECUZIONI_INTERROTTE);
+    fp.addHiddenField(sDATA_INS);
+    fp.addHiddenField(sORA_INS);
+    fp.addHiddenField(sESEC_COMPLETATE);
+    fp.addHiddenField(sESEC_INTERROTTE);
     fp.build();
     
     List<String> oMandatoryFields = new ArrayList<String>();
@@ -494,9 +494,9 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     
     if(listInfo == null || listInfo.size() < 3) return;
     
-    oRecord.put(sSTATO,                 listInfo.get(0));
-    oRecord.put(sESECUZIONI_COMPLETATE, listInfo.get(1));
-    oRecord.put(sESECUZIONI_INTERROTTE, listInfo.get(2));
+    oRecord.put(sSTATO,           listInfo.get(0));
+    oRecord.put(sESEC_COMPLETATE, listInfo.get(1));
+    oRecord.put(sESEC_INTERROTTE, listInfo.get(2));
     
     // In questo modo si obbliga il refresh quando si passa al tab dei log
     iIdSchedulazioneReadLog = 0;
@@ -640,12 +640,12 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
   protected
   Container buildSchedulazioniTable()
   {
-    String[] asCOLUMNS   = {"Id",              "Servizio",   "Attivita",   "Schedulazione", "Stato", "Descrizione", "Esec. Compl.",         "Esec. Int.",           "Id Cred. Ins.",     "Data Ins.",       "Ora Ins.",       "Id Cred. Agg.",     "Data Agg.",         "Ora Agg."};
-    String[] asSYMBOLICS = {sID_SCHEDULAZIONE, sID_SERVIZIO, sID_ATTIVITA, sSCHEDULAZIONE,  sSTATO,  sDESCRIZIONE,  sESECUZIONI_COMPLETATE, sESECUZIONI_INTERROTTE, sID_CREDENZIALE_INS, sDATA_INSERIMENTO, sORA_INSERIMENTO, sID_CREDENZIALE_AGG, sDATA_AGGIORNAMENTO, sORA_AGGIORNAMENTO};
+    String[] asCOLUMNS   = {"Id",              "Servizio",   "Attivita",   "Schedulazione", "Stato", "Descrizione", "Esec. Compl.",   "Esec. Int.",     "Id Cred. Ins.",     "Data Ins.", "Ora Ins.", "Id Cred. Agg.",     "Data Agg.", "Ora Agg."};
+    String[] asSYMBOLICS = {sID_SCHEDULAZIONE, sID_SERVIZIO, sID_ATTIVITA, sSCHEDULAZIONE,  sSTATO,  sDESCRIZIONE,  sESEC_COMPLETATE, sESEC_INTERROTTE, sID_CREDENZIALE_INS, sDATA_INS,   sORA_INS,   sID_CREDENZIALE_AGG, sDATA_AGG,   sORA_AGG};
     
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
-    oTableModel.addTimeField(sORA_INSERIMENTO);
-    oTableModel.addTimeField(sORA_AGGIORNAMENTO);
+    oTableModel.addTimeField(sORA_INS);
+    oTableModel.addTimeField(sORA_AGG);
     
     oTable = new JTable(oTableModel);
     oTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -1226,9 +1226,9 @@ class GUISchedulazioni extends AEntityEditor implements ISchedulazione
     
     // Aggiornamento del dettaglio
     FormPanel fpDetail = (FormPanel) getDetailContainer();
-    fpDetail.setValue(sSTATO, oRecord.get(sSTATO));
-    fpDetail.setValue(sESECUZIONI_COMPLETATE, oRecord.get(sESECUZIONI_COMPLETATE));
-    fpDetail.setValue(sESECUZIONI_INTERROTTE, oRecord.get(sESECUZIONI_INTERROTTE));
+    fpDetail.setValue(sSTATO,           oRecord.get(sSTATO));
+    fpDetail.setValue(sESEC_COMPLETATE, oRecord.get(sESEC_COMPLETATE));
+    fpDetail.setValue(sESEC_INTERROTTE, oRecord.get(sESEC_INTERROTTE));
     
     ListSelectionEvent lse = new ListSelectionEvent(this, iRow, iRow, false);
     oTable.valueChanged(lse);

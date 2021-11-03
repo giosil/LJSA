@@ -79,8 +79,8 @@ class GUIAttivitaConfigurazione extends AJDialog implements IAttivita
 		oFormPanel.setValues(mapValues);
 		
 		if(!boEditFlag) {
-			oFormPanel.setEnabled(sCONFIGURAZIONE_OPZIONE, false);
-			oFormPanel.setDefaultFocus(sCONFIGURAZIONE_DESCRIZIONE);
+			oFormPanel.setEnabled(sCONF_OPZIONE, false);
+			oFormPanel.setDefaultFocus(sCONF_DESCRIZIONE);
 		}
 	}
 	
@@ -96,28 +96,28 @@ class GUIAttivitaConfigurazione extends AJDialog implements IAttivita
 	{
 		oFormPanel = new FormPanel("Opzione di configurazione");
 		oFormPanel.addRow();
-		oFormPanel.addTextField(sCONFIGURAZIONE_OPZIONE, "Opzione", 255);
+		oFormPanel.addTextField(sCONF_OPZIONE, "Opzione", 255);
 		oFormPanel.addRow();
-		oFormPanel.addNoteField(sCONFIGURAZIONE_DESCRIZIONE, "Descrizione", 3, 255);
+		oFormPanel.addNoteField(sCONF_DESCRIZIONE, "Descrizione", 3, 255);
 		oFormPanel.addRow();
-		oFormPanel.addNoteField(sCONFIGURAZIONE_VALORI, "Valori", 3, 255);
+		oFormPanel.addNoteField(sCONF_VALORI, "Valori", 3, 255);
 		oFormPanel.addRow();
-		oFormPanel.addNoteField(sCONFIGURAZIONE_PREDEFINITO, "Predefinito", 3, 1024);
+		oFormPanel.addNoteField(sCONF_PREDEFINITO, "Predefinito", 3, 1024);
 		
 		oFormPanel.build();
 		
 		List<String> oMandatoryFields = new ArrayList<String>();
-		oMandatoryFields.add(sCONFIGURAZIONE_OPZIONE);
-		oMandatoryFields.add(sCONFIGURAZIONE_DESCRIZIONE);
+		oMandatoryFields.add(sCONF_OPZIONE);
+		oMandatoryFields.add(sCONF_DESCRIZIONE);
 		oFormPanel.setMandatoryFields(oMandatoryFields);
 		
-		Component compOpzione = oFormPanel.getComponent(sCONFIGURAZIONE_OPZIONE);
+		Component compOpzione = oFormPanel.getComponent(sCONF_OPZIONE);
 		if(compOpzione instanceof JTextField) {
 			buildHints();
 			
 			new CollectionAutoCompleter(compOpzione, listHints, true);
 			
-			Component compDescrizione = oFormPanel.getComponent(sCONFIGURAZIONE_DESCRIZIONE);
+			Component compDescrizione = oFormPanel.getComponent(sCONF_DESCRIZIONE);
 			compDescrizione.addFocusListener(new FocusAdapter() {
 				public void focusGained(FocusEvent e) {
 					setDescriptionHint();
@@ -189,8 +189,8 @@ class GUIAttivitaConfigurazione extends AJDialog implements IAttivita
 	{
 		String sDescHint = null;
 		
-		String sChiave      = (String) oFormPanel.getValue(sCONFIGURAZIONE_OPZIONE);
-		String sDescrizione = (String) oFormPanel.getValue(sCONFIGURAZIONE_DESCRIZIONE);
+		String sChiave      = (String) oFormPanel.getValue(sCONF_OPZIONE);
+		String sDescrizione = (String) oFormPanel.getValue(sCONF_DESCRIZIONE);
 		
 		if(sChiave == null || sChiave.length() == 0) {
 			sDescHint = null;
@@ -261,7 +261,7 @@ class GUIAttivitaConfigurazione extends AJDialog implements IAttivita
 		
 		if(sDescHint != null) {
 			if(sDescrizione == null || sDescrizione.length() == 0) {
-				oFormPanel.setValue(sCONFIGURAZIONE_DESCRIZIONE, sDescHint);
+				oFormPanel.setValue(sCONF_DESCRIZIONE, sDescHint);
 			}
 		}
 	}

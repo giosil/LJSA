@@ -158,11 +158,11 @@ class WSAttivita implements IAttivita
     qb.put("CLASSE",             sCLASSE);
     qb.put("ATTIVO",             sATTIVO);
     qb.put("ID_CREDENZIALE_INS", sID_CREDENZIALE_INS);
-    qb.put("DATA_INSERIMENTO",   sDATA_INSERIMENTO);
-    qb.put("ORA_INSERIMENTO",    sORA_INSERIMENTO);
+    qb.put("DATA_INSERIMENTO",   sDATA_INS);
+    qb.put("ORA_INSERIMENTO",    sORA_INS);
     qb.put("ID_CREDENZIALE_AGG", sID_CREDENZIALE_AGG);
-    qb.put("DATA_AGGIORNAMENTO", sDATA_AGGIORNAMENTO);
-    qb.put("ORA_AGGIORNAMENTO",  sORA_AGGIORNAMENTO);
+    qb.put("DATA_AGGIORNAMENTO", sDATA_AGG);
+    qb.put("ORA_AGGIORNAMENTO",  sORA_AGG);
     
     String sInClause = null;
     if(listServices != null && listServices.size() > 0) {
@@ -199,11 +199,11 @@ class WSAttivita implements IAttivita
         record.put(sCLASSE,                 sClasse);
         record.putBoolean(sATTIVO,          sAttivo);
         record.put(sID_CREDENZIALE_INS,     sIdCredenzialeIns);
-        record.putDate(sDATA_INSERIMENTO,   iDataInserimento);
-        record.put(sORA_INSERIMENTO,        iOraInserimento);
+        record.putDate(sDATA_INS,   iDataInserimento);
+        record.put(sORA_INS,        iOraInserimento);
         record.put(sID_CREDENZIALE_AGG,     sIdCredenzialeAgg);
-        record.putDate(sDATA_AGGIORNAMENTO, iDataAggiornamento);
-        record.put(sORA_AGGIORNAMENTO,      iOraAggiornamento);
+        record.putDate(sDATA_AGG, iDataAggiornamento);
+        record.put(sORA_AGG,      iOraAggiornamento);
         
         listResult.add(record.toMapObject());
       }
@@ -320,10 +320,10 @@ class WSAttivita implements IAttivita
       }
       
       Date currentDate = new Date();
-      mapValues.put(sDATA_INSERIMENTO,   currentDate);
-      mapValues.put(sORA_INSERIMENTO,    WUtil.timeToInt(currentDate));
-      mapValues.put(sDATA_AGGIORNAMENTO, currentDate);
-      mapValues.put(sORA_AGGIORNAMENTO,  WUtil.timeToInt(currentDate));
+      mapValues.put(sDATA_INS,   currentDate);
+      mapValues.put(sORA_INS,    WUtil.timeToInt(currentDate));
+      mapValues.put(sDATA_AGG, currentDate);
+      mapValues.put(sORA_AGG,  WUtil.timeToInt(currentDate));
       
       ut.commit();
     }
@@ -363,8 +363,8 @@ class WSAttivita implements IAttivita
       ljsaClient.updateAttivita(attivita);
       
       Date currentDate = new Date();
-      mapValues.put(sDATA_AGGIORNAMENTO, currentDate);
-      mapValues.put(sORA_AGGIORNAMENTO,  WUtil.timeToInt(currentDate));
+      mapValues.put(sDATA_AGG, currentDate);
+      mapValues.put(sORA_AGG,  WUtil.timeToInt(currentDate));
       
       ut.commit();
     }
@@ -493,11 +493,11 @@ class WSAttivita implements IAttivita
         result.put(sCLASSE,                 sClasse);
         result.putBoolean(sATTIVO,          sAttivo);
         result.put(sID_CREDENZIALE_INS,     sIdCredenzialeIns);
-        result.putDate(sDATA_INSERIMENTO,   iDataInserimento);
-        result.put(sORA_INSERIMENTO,        iOraInserimento);
+        result.putDate(sDATA_INS,   iDataInserimento);
+        result.put(sORA_INS,        iOraInserimento);
         result.put(sID_CREDENZIALE_AGG,     sIdCredenzialeAgg);
-        result.putDate(sDATA_AGGIORNAMENTO, iDataAggiornamento);
-        result.put(sORA_AGGIORNAMENTO,      iOraAggiornamento);
+        result.putDate(sDATA_AGG, iDataAggiornamento);
+        result.put(sORA_AGG,      iOraAggiornamento);
         
         result.put(sCONFIGURAZIONE,  readConfigurazione(conn, idServizio, idAttivita));
         result.put(sPARAMETRI,       readParametri(conn, idServizio, idAttivita));
@@ -533,10 +533,10 @@ class WSAttivita implements IAttivita
         String sPredefinito = rs.getString("PREDEFINITO");
         
         Map<String, Object> record = new HashMap<String, Object>();
-        record.put(sCONFIGURAZIONE_OPZIONE,     sOpzione);
-        record.put(sCONFIGURAZIONE_DESCRIZIONE, sDescrizione);
-        record.put(sCONFIGURAZIONE_VALORI,      sValori);
-        record.put(sCONFIGURAZIONE_PREDEFINITO, sPredefinito);
+        record.put(sCONF_OPZIONE,     sOpzione);
+        record.put(sCONF_DESCRIZIONE, sDescrizione);
+        record.put(sCONF_VALORI,      sValori);
+        record.put(sCONF_PREDEFINITO, sPredefinito);
         
         listResult.add(record);
       }
@@ -570,10 +570,10 @@ class WSAttivita implements IAttivita
         String sPredefinito = rs.getString("PREDEFINITO");
         
         Map<String, Object> record = new HashMap<String, Object>();
-        record.put(sPARAMETRI_PARAMETRO,   sParametro);
-        record.put(sPARAMETRI_DESCRIZIONE, sDescrizione);
-        record.put(sPARAMETRI_VALORI,      sValori);
-        record.put(sPARAMETRI_PREDEFINITO, sPredefinito);
+        record.put(sPAR_PARAMETRO,   sParametro);
+        record.put(sPAR_DESCRIZIONE, sDescrizione);
+        record.put(sPAR_VALORI,      sValori);
+        record.put(sPAR_PREDEFINITO, sPredefinito);
         
         listResult.add(record);
       }
@@ -607,9 +607,9 @@ class WSAttivita implements IAttivita
         if(destin == null || destin.length() == 0) continue;
         
         Map<String, Object> record = new HashMap<String, Object>();
-        record.put(ISchedulazione.sNOTIFICA_EVENTO,       evento);
-        record.put(ISchedulazione.sNOTIFICA_DESTINAZIONE, destin);
-        record.put(ISchedulazione.sFLAG_ATTIVO,           true);
+        record.put(ISchedulazione.sNOT_EVENTO,       evento);
+        record.put(ISchedulazione.sNOT_DESTINAZIONE, destin);
+        record.put(ISchedulazione.sATTIVO,           true);
         
         listResult.add(record);
       }

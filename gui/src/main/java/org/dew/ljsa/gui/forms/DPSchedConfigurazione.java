@@ -119,7 +119,7 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
     Map<String, Object> mapResult = GUISchedConfigurazione.showMe(null);
     if(mapResult == null) return;
     
-    String sOpzione = WUtil.toString(mapResult.get(sCONFIGURAZIONE_OPZIONE), null);
+    String sOpzione = WUtil.toString(mapResult.get(sCONF_OPZIONE), null);
     if(exists(sOpzione)) {
       GUIMessage.showWarning("Opzione " + sOpzione + " gi\340 presente.");
       return;
@@ -145,7 +145,7 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
     }
     
     Map<String, Object> oRecordToRemove = oRecords.get(iRow);
-    Boolean oDaAttivita = (Boolean) oRecordToRemove.get(sCONFIGURAZIONE_DA_ATTIVITA);
+    Boolean oDaAttivita = (Boolean) oRecordToRemove.get(sCONF_DA_ATTIVITA);
     if(oDaAttivita != null && oDaAttivita.booleanValue()) {
       GUIMessage.showWarning("Non \350 possibile rimuovere configurazioni di attivit\340. Sovrascriverne il valore.");
       return;
@@ -184,7 +184,7 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
     }
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      if(sItem.equals(mapRecord.get(sCONFIGURAZIONE_OPZIONE))) {
+      if(sItem.equals(mapRecord.get(sCONF_OPZIONE))) {
         return true;
       }
     }
@@ -204,8 +204,8 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
   protected
   Container buildTablePanel()
   {
-    String[] asCOLUMNS   = {"Opzione",               "Descrizione",               "Valore"};
-    String[] asSYMBOLICS = {sCONFIGURAZIONE_OPZIONE, sCONFIGURAZIONE_DESCRIZIONE, sCONFIGURAZIONE_VALORE};
+    String[] asCOLUMNS   = {"Opzione",     "Descrizione",     "Valore"};
+    String[] asSYMBOLICS = {sCONF_OPZIONE, sCONF_DESCRIZIONE, sCONF_VALORE};
     
     oRecords = new ArrayList<Map<String, Object>>();
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
@@ -233,8 +233,8 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
         super.getTableCellRendererComponent(table, value, selected, focus, row, col);
         
         Map<String, Object> oRecord = oRecords.get(row);
-        boolean boDaAttivita = WUtil.toBoolean(oRecord.get(sCONFIGURAZIONE_DA_ATTIVITA), false);
-        boolean boOverWrite  = WUtil.toBoolean(oRecord.get(sCONFIGURAZIONE_OVERWRITE), false);
+        boolean boDaAttivita = WUtil.toBoolean(oRecord.get(sCONF_DA_ATTIVITA), false);
+        boolean boOverWrite  = WUtil.toBoolean(oRecord.get(sCONF_OVERWRITE), false);
         
         if(boDaAttivita) {
           if(boOverWrite) {
@@ -280,7 +280,6 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
     
     JPanel oResult = new JPanel(new BorderLayout());
     oResult.add(oButtonsPanel, BorderLayout.NORTH);
-    
     return oResult;
   }
 }

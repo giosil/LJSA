@@ -586,12 +586,12 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
     if(mapSchedulazione == null || mapSchedulazione.isEmpty()) {
       return;
     }
-    Date   oDataIns = WUtil.toDate(mapSchedulazione.get(sDATA_INSERIMENTO), null);
+    Date   oDataIns = WUtil.toDate(mapSchedulazione.get(sDATA_INS), null);
     String sDataIns = ResourcesMgr.getDefaultDateFormat().format(oDataIns);
-    String sOraIns  = WUtil.formatTime(mapSchedulazione.get(sORA_INSERIMENTO), false, false);
-    Date   oDataAgg = WUtil.toDate(mapSchedulazione.get(sDATA_AGGIORNAMENTO), null);
+    String sOraIns  = WUtil.formatTime(mapSchedulazione.get(sORA_INS), false, false);
+    Date   oDataAgg = WUtil.toDate(mapSchedulazione.get(sDATA_AGG), null);
     String sDataAgg = ResourcesMgr.getDefaultDateFormat().format(oDataAgg);
-    String sOraAgg  = WUtil.formatTime(mapSchedulazione.get(sORA_AGGIORNAMENTO), false, false);
+    String sOraAgg  = WUtil.formatTime(mapSchedulazione.get(sORA_AGG), false, false);
     String sReport  = "Dati schedulazione:\n\n";
     sReport += "Descrizione   : " + mapSchedulazione.get(sDESCRIZIONE) + "\n";
     sReport += "Schedulazione : " + mapSchedulazione.get(sSCHEDULAZIONE) + "\n";
@@ -607,7 +607,7 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
       int iMaxLength = 0;
       for(int i = 0; i < listConfigurazione.size(); i++) {
         Map<String, Object> map = listConfigurazione.get(i);
-        String sOpzione = (String) map.get(sCONFIGURAZIONE_OPZIONE);
+        String sOpzione = (String) map.get(sCONF_OPZIONE);
         if(sOpzione.length() > iMaxLength) {
           iMaxLength = sOpzione.length();
         }
@@ -615,8 +615,8 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
       sReport += "\nConfigurazione:\n\n";
       for(int i = 0; i < listConfigurazione.size(); i++) {
         Map<String, Object> map = listConfigurazione.get(i);
-        Boolean oDaAttivita = (Boolean) map.get(sCONFIGURAZIONE_DA_ATTIVITA);
-        Boolean oOverWrite  = (Boolean) map.get(sCONFIGURAZIONE_OVERWRITE);
+        Boolean oDaAttivita = WUtil.toBooleanObj(map.get(sCONF_DA_ATTIVITA), false);
+        Boolean oOverWrite  = WUtil.toBooleanObj(map.get(sCONF_OVERWRITE),   false);
         String sNota = "";
         if(oDaAttivita != null && oDaAttivita.booleanValue()) {
           if(oOverWrite != null && oOverWrite.booleanValue()) {
@@ -626,8 +626,8 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
             sNota = " (*)";
           }
         }
-        String sOpzione = WUtil.rpad((String) map.get(sCONFIGURAZIONE_OPZIONE), ' ', iMaxLength);
-        Object oVal = map.get(sCONFIGURAZIONE_VALORE);
+        String sOpzione = WUtil.rpad((String) map.get(sCONF_OPZIONE), ' ', iMaxLength);
+        Object oVal = map.get(sCONF_VALORE);
         if(oVal == null) oVal = "";
         sReport += sOpzione + " = " + oVal + sNota + "\n";
       }
@@ -637,7 +637,7 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
       int iMaxLength = 0;
       for(int i = 0; i < listParametri.size(); i++) {
         Map<String, Object> map = listParametri.get(i);
-        String sParametro = (String) map.get(sPARAMETRI_PARAMETRO);
+        String sParametro = (String) map.get(sPAR_PARAMETRO);
         if(sParametro.length() > iMaxLength) {
           iMaxLength = sParametro.length();
         }
@@ -645,8 +645,8 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
       sReport += "\nParametri:\n\n";
       for(int i = 0; i < listParametri.size(); i++) {
         Map<String, Object> map = listParametri.get(i);
-        Boolean oDaAttivita = WUtil.toBooleanObj(map.get(sPARAMETRI_DA_ATTIVITA), null);
-        Boolean oOverWrite  = WUtil.toBooleanObj(map.get(sPARAMETRI_OVERWRITE), null);
+        Boolean oDaAttivita = WUtil.toBooleanObj(map.get(sPAR_DA_ATTIVITA), null);
+        Boolean oOverWrite  = WUtil.toBooleanObj(map.get(sPAR_OVERWRITE), null);
         String sNota = "";
         if(oDaAttivita != null && oDaAttivita.booleanValue()) {
           if(oOverWrite != null && oOverWrite.booleanValue()) {
@@ -656,8 +656,8 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
             sNota = " (*)";
           }
         }
-        String sParametro = WUtil.rpad((String) map.get(sPARAMETRI_PARAMETRO), ' ', iMaxLength);
-        Object oVal = map.get(sPARAMETRI_VALORE);
+        String sParametro = WUtil.rpad((String) map.get(sPAR_PARAMETRO), ' ', iMaxLength);
+        Object oVal = map.get(sPAR_VALORE);
         if(oVal == null) oVal = "";
         sReport += sParametro + " = " + oVal + sNota + "\n";
       }
@@ -667,16 +667,16 @@ class GUILogSchedulazioni extends JPanel implements ActionListener, ISchedulazio
       sReport += "\nNotifica:\n\n";
       for(int i = 0; i < listNotifica.size(); i++) {
         Map<String, Object> map = listNotifica.get(i);
-        Boolean oCancellata = WUtil.toBooleanObj(map.get(sNOTIFICA_CANCELLATA), null);
+        Boolean oCancellata = WUtil.toBooleanObj(map.get(sNOT_CANCELLATA), null);
         if(oCancellata != null && oCancellata.booleanValue()) {
           continue;
         }
-        Boolean oDaAttivita = WUtil.toBooleanObj(map.get(sNOTIFICA_DA_ATTIVITA), null);
+        Boolean oDaAttivita = WUtil.toBooleanObj(map.get(sNOT_DA_ATTIVITA), null);
         String sDaAttivita = "";
         if(oDaAttivita != null && oDaAttivita.booleanValue()) {
           sDaAttivita = " (*)";
         }
-        sReport += map.get(sNOTIFICA_EVENTO) + " -> " + map.get(sNOTIFICA_DESTINAZIONE) + sDaAttivita + "\n";
+        sReport += map.get(sNOT_EVENTO) + " -> " + map.get(sNOT_DESTINAZIONE) + sDaAttivita + "\n";
       }
     }
     sReport += "\n";

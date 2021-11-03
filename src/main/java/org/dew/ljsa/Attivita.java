@@ -81,11 +81,11 @@ class Attivita implements IAttivita, Serializable
       sIdCredenzialeAgg = sIdCredenzialeIns;
     }
     setIdCredenzialeIns(sIdCredenzialeIns);
-    setDataInserimento(wm.getIntDate(sDATA_INSERIMENTO));
-    setOraInserimento(wm.getIntTime(sORA_INSERIMENTO));
+    setDataInserimento(wm.getIntDate(sDATA_INS));
+    setOraInserimento(wm.getIntTime(sORA_INS));
     setIdCredenzialeAgg(sIdCredenzialeAgg);
-    setDataAggiornamento(wm.getIntDate(sDATA_AGGIORNAMENTO));
-    setOraAggiornamento(wm.getIntTime(sORA_AGGIORNAMENTO));
+    setDataAggiornamento(wm.getIntDate(sDATA_AGG));
+    setOraAggiornamento(wm.getIntTime(sORA_AGG));
     
     setConfigurazione(wm.getListOfMapObject(sCONFIGURAZIONE));
     setParametri(wm.getListOfMapObject(sPARAMETRI));
@@ -236,10 +236,10 @@ class Attivita implements IAttivita, Serializable
     if(sDescrizione == null) sDescrizione = sParametro;
     
     Map<String, Object> mapParametro = new HashMap<String, Object>();
-    mapParametro.put(sPARAMETRI_PARAMETRO,   sParametro);
-    mapParametro.put(sPARAMETRI_DESCRIZIONE, sDescrizione);
-    mapParametro.put(sPARAMETRI_VALORI,      sValori);
-    mapParametro.put(sPARAMETRI_PREDEFINITO, sPredefinito);
+    mapParametro.put(sPAR_PARAMETRO,   sParametro);
+    mapParametro.put(sPAR_DESCRIZIONE, sDescrizione);
+    mapParametro.put(sPAR_VALORI,      sValori);
+    mapParametro.put(sPAR_PREDEFINITO, sPredefinito);
     
     listParametri.add(mapParametro);
   }
@@ -254,10 +254,10 @@ class Attivita implements IAttivita, Serializable
     if(sDescrizione == null) sDescrizione = sOpzione;
     
     Map<String, Object> mapConfigurazione = new HashMap<String, Object>();
-    mapConfigurazione.put(sCONFIGURAZIONE_OPZIONE,     sOpzione);
-    mapConfigurazione.put(sCONFIGURAZIONE_DESCRIZIONE, sDescrizione);
-    mapConfigurazione.put(sCONFIGURAZIONE_VALORI,      sValori);
-    mapConfigurazione.put(sCONFIGURAZIONE_PREDEFINITO, sPredefinito);
+    mapConfigurazione.put(sCONF_OPZIONE,     sOpzione);
+    mapConfigurazione.put(sCONF_DESCRIZIONE, sDescrizione);
+    mapConfigurazione.put(sCONF_VALORI,      sValori);
+    mapConfigurazione.put(sCONF_PREDEFINITO, sPredefinito);
     
     listConfigurazione.add(mapConfigurazione);
   }
@@ -273,12 +273,12 @@ class Attivita implements IAttivita, Serializable
     }
     Map<String, Object> mapNotifica = new HashMap<String, Object>();
     if(sEvento != null && sEvento.length() > 0) {
-      mapNotifica.put(sNOTIFICA_EVENTO, sEvento);
+      mapNotifica.put(sNOT_EVENTO, sEvento);
     }
     else {
-      mapNotifica.put(sNOTIFICA_EVENTO, "R");
+      mapNotifica.put(sNOT_EVENTO, "R");
     }
-    mapNotifica.put(sNOTIFICA_DESTINAZIONE, sDestinazione);
+    mapNotifica.put(sNOT_DESTINAZIONE, sDestinazione);
     listNotifica.add(mapNotifica);
   }
   
@@ -312,11 +312,11 @@ class Attivita implements IAttivita, Serializable
     map.put(sATTIVO,             attivo);
     
     map.put(sID_CREDENZIALE_INS, idCredenzialeIns);
-    map.put(sDATA_INSERIMENTO,   dataInserimento);
-    map.put(sORA_INSERIMENTO,    oraInserimento);
+    map.put(sDATA_INS,   dataInserimento);
+    map.put(sORA_INS,    oraInserimento);
     map.put(sID_CREDENZIALE_AGG, idCredenzialeAgg);
-    map.put(sDATA_AGGIORNAMENTO, dataAggiornamento);
-    map.put(sORA_AGGIORNAMENTO,  oraAggiornamento);
+    map.put(sDATA_AGG, dataAggiornamento);
+    map.put(sORA_AGG,  oraAggiornamento);
     
     if(listConfigurazione == null) {
       map.put(sCONFIGURAZIONE,   new ArrayList<Map<String, Object>>());

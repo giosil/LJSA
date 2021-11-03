@@ -54,7 +54,7 @@ class GUIAttivitaNotifica extends AJDialog implements IAttivita
   void setValues(Map<String, Object> mapValues)
   {
     oFormPanel.setValues(mapValues);
-    oFormPanel.requestFocus(sNOTIFICA_EVENTO);
+    oFormPanel.requestFocus(sNOT_EVENTO);
   }
   
   public
@@ -74,21 +74,21 @@ class GUIAttivitaNotifica extends AJDialog implements IAttivita
     
     oFormPanel = new FormPanel("Notifica");
     oFormPanel.addRow();
-    oFormPanel.addOptionsField(sNOTIFICA_EVENTO, "Evento", vEventi);
+    oFormPanel.addOptionsField(sNOT_EVENTO, "Evento", vEventi);
     oFormPanel.addRow();
     oFormPanel.addBlankField();
     oFormPanel.addRow();
-    oFormPanel.addTextField(sNOTIFICA_DESTINAZIONE, "Destinaz. (email)", 255);
+    oFormPanel.addTextField(sNOT_DESTINAZIONE, "Destinaz. (email)", 255);
     
     Map<String, Object> mapDefaultValues = new HashMap<String, Object>();
-    mapDefaultValues.put(sNOTIFICA_EVENTO, "R");
+    mapDefaultValues.put(sNOT_EVENTO, "R");
     oFormPanel.setDefaultValues(mapDefaultValues);
     
     oFormPanel.build();
     
     List<String> oMandatoryFields = new ArrayList<String>();
-    oMandatoryFields.add(sNOTIFICA_EVENTO);
-    oMandatoryFields.add(sNOTIFICA_DESTINAZIONE);
+    oMandatoryFields.add(sNOT_EVENTO);
+    oMandatoryFields.add(sNOT_DESTINAZIONE);
     oFormPanel.setMandatoryFields(oMandatoryFields);
     
     return oFormPanel;

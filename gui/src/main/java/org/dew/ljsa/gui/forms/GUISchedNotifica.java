@@ -58,17 +58,17 @@ class GUISchedNotifica extends AJDialog implements ISchedulazione
   public
   void setValues(Map<String, Object> mapValues)
   {
-    sDestinazionePrec = (String) mapValues.get(sNOTIFICA_DESTINAZIONE);
+    sDestinazionePrec = (String) mapValues.get(sNOT_DESTINAZIONE);
     if(sDestinazionePrec == null) sDestinazionePrec = "";
     
-    Boolean oCancellata = WUtil.toBooleanObj(mapValues.get(sNOTIFICA_CANCELLATA), null);
+    Boolean oCancellata = WUtil.toBooleanObj(mapValues.get(sNOT_CANCELLATA), null);
     if(oCancellata != null && oCancellata.booleanValue()) {
-      String sDestinazione = (String) mapValues.get(sNOTIFICA_DESTINAZIONE);
-      mapValues.put(sNOTIFICA_DESTINAZIONE, "-" + sDestinazione);
+      String sDestinazione = (String) mapValues.get(sNOT_DESTINAZIONE);
+      mapValues.put(sNOT_DESTINAZIONE, "-" + sDestinazione);
     }
     
     oFormPanel.setValues(mapValues);
-    oFormPanel.requestFocus(sNOTIFICA_EVENTO);
+    oFormPanel.requestFocus(sNOT_EVENTO);
   }
   
   public
@@ -88,23 +88,23 @@ class GUISchedNotifica extends AJDialog implements ISchedulazione
     
     oFormPanel = new FormPanel("Notifica");
     oFormPanel.addRow();
-    oFormPanel.addOptionsField(sNOTIFICA_EVENTO, "Evento", vEventi);
+    oFormPanel.addOptionsField(sNOT_EVENTO, "Evento", vEventi);
     oFormPanel.addRow();
     oFormPanel.addBlankField();
     oFormPanel.addRow();
-    oFormPanel.addTextField(sNOTIFICA_DESTINAZIONE, "Destinaz. (email)", 255);
-    oFormPanel.addHiddenField(sNOTIFICA_DA_ATTIVITA);
-    oFormPanel.addHiddenField(sNOTIFICA_CANCELLATA);
+    oFormPanel.addTextField(sNOT_DESTINAZIONE, "Destinaz. (email)", 255);
+    oFormPanel.addHiddenField(sNOT_DA_ATTIVITA);
+    oFormPanel.addHiddenField(sNOT_CANCELLATA);
     
     Map<String, Object> mapDefaultValues = new HashMap<String, Object>();
-    mapDefaultValues.put(sNOTIFICA_EVENTO, "R");
+    mapDefaultValues.put(sNOT_EVENTO, "R");
     oFormPanel.setDefaultValues(mapDefaultValues);
     
     oFormPanel.build();
     
     List<String> oMandatoryFields = new ArrayList<String>();
-    oMandatoryFields.add(sNOTIFICA_EVENTO);
-    oMandatoryFields.add(sNOTIFICA_DESTINAZIONE);
+    oMandatoryFields.add(sNOT_EVENTO);
+    oMandatoryFields.add(sNOT_DESTINAZIONE);
     oFormPanel.setMandatoryFields(oMandatoryFields);
     
     return oFormPanel;
@@ -135,7 +135,7 @@ class GUISchedNotifica extends AJDialog implements ISchedulazione
       return false;
     }
     
-    String sDestinazione = (String) oFormPanel.getValue(sNOTIFICA_DESTINAZIONE);
+    String sDestinazione = (String) oFormPanel.getValue(sNOT_DESTINAZIONE);
     if(sDestinazione != null && sDestinazione.startsWith("-")) {
       if(sDestinazione.length() < 2) {
         GUIMessage.showWarning("Destinazione non valida.");
@@ -143,16 +143,16 @@ class GUISchedNotifica extends AJDialog implements ISchedulazione
       }
       if(sDestinazione.length() > 1) {
         sDestinazione = sDestinazione.substring(1);
-        oFormPanel.setValue(sNOTIFICA_DESTINAZIONE, sDestinazione);
+        oFormPanel.setValue(sNOT_DESTINAZIONE, sDestinazione);
       }
-      oFormPanel.setValue(sNOTIFICA_CANCELLATA, Boolean.TRUE);
+      oFormPanel.setValue(sNOT_CANCELLATA, Boolean.TRUE);
     }
     else {
-      oFormPanel.setValue(sNOTIFICA_CANCELLATA, Boolean.FALSE);
+      oFormPanel.setValue(sNOT_CANCELLATA, Boolean.FALSE);
     }
     
     if(sDestinazionePrec == null || !sDestinazionePrec.equals(sDestinazione)) {
-      oFormPanel.setValue(sNOTIFICA_DA_ATTIVITA, Boolean.FALSE);
+      oFormPanel.setValue(sNOT_DA_ATTIVITA, Boolean.FALSE);
     }
     
     return true;

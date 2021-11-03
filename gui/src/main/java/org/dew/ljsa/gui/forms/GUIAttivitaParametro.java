@@ -79,8 +79,8 @@ class GUIAttivitaParametro extends AJDialog implements IAttivita
     oFormPanel.setValues(mapValues);
     
     if(!boEditFlag) {
-      oFormPanel.setEnabled(sPARAMETRI_PARAMETRO, false);
-      oFormPanel.setDefaultFocus(sPARAMETRI_DESCRIZIONE);
+      oFormPanel.setEnabled(sPAR_PARAMETRO, false);
+      oFormPanel.setDefaultFocus(sPAR_DESCRIZIONE);
     }
   }
   
@@ -96,28 +96,28 @@ class GUIAttivitaParametro extends AJDialog implements IAttivita
   {
     oFormPanel = new FormPanel("Parametro");
     oFormPanel.addRow();
-    oFormPanel.addTextField(sPARAMETRI_PARAMETRO, "Parametro", 255);
+    oFormPanel.addTextField(sPAR_PARAMETRO, "Parametro", 255);
     oFormPanel.addRow();
-    oFormPanel.addNoteField(sPARAMETRI_DESCRIZIONE, "Descrizione", 3, 255);
+    oFormPanel.addNoteField(sPAR_DESCRIZIONE, "Descrizione", 3, 255);
     oFormPanel.addRow();
-    oFormPanel.addNoteField(sPARAMETRI_VALORI, "Valori", 3, 255);
+    oFormPanel.addNoteField(sPAR_VALORI, "Valori", 3, 255);
     oFormPanel.addRow();
-    oFormPanel.addNoteField(sPARAMETRI_PREDEFINITO, "Predefinito", 3, 1024);
+    oFormPanel.addNoteField(sPAR_PREDEFINITO, "Predefinito", 3, 1024);
     
     oFormPanel.build();
     
     List<String> oMandatoryFields = new ArrayList<String>();
-    oMandatoryFields.add(sPARAMETRI_PARAMETRO);
-    oMandatoryFields.add(sPARAMETRI_DESCRIZIONE);
+    oMandatoryFields.add(sPAR_PARAMETRO);
+    oMandatoryFields.add(sPAR_DESCRIZIONE);
     oFormPanel.setMandatoryFields(oMandatoryFields);
     
-    Component compParametro = oFormPanel.getComponent(sPARAMETRI_PARAMETRO);
+    Component compParametro = oFormPanel.getComponent(sPAR_PARAMETRO);
     if(compParametro instanceof JTextField) {
       buildHints();
       
       new CollectionAutoCompleter(compParametro, listHints, true);
       
-      Component compDescrizione = oFormPanel.getComponent(sPARAMETRI_DESCRIZIONE);
+      Component compDescrizione = oFormPanel.getComponent(sPAR_DESCRIZIONE);
       compDescrizione.addFocusListener(new FocusAdapter() {
         public void focusGained(FocusEvent e) {
           setDescriptionHint();
@@ -184,8 +184,8 @@ class GUIAttivitaParametro extends AJDialog implements IAttivita
   {
     String sDescHint = null;
     
-    String sChiave      = (String) oFormPanel.getValue(sPARAMETRI_PARAMETRO);
-    String sDescrizione = (String) oFormPanel.getValue(sPARAMETRI_DESCRIZIONE);
+    String sChiave      = (String) oFormPanel.getValue(sPAR_PARAMETRO);
+    String sDescrizione = (String) oFormPanel.getValue(sPAR_DESCRIZIONE);
     
     if(sChiave == null || sChiave.length() == 0) {
       sDescHint = null;
@@ -229,7 +229,7 @@ class GUIAttivitaParametro extends AJDialog implements IAttivita
     
     if(sDescHint != null) {
       if(sDescrizione == null || sDescrizione.length() == 0) {
-        oFormPanel.setValue(sPARAMETRI_DESCRIZIONE, sDescHint);
+        oFormPanel.setValue(sPAR_DESCRIZIONE, sDescHint);
       }
     }
   }

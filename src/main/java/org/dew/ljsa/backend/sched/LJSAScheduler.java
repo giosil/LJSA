@@ -1313,8 +1313,8 @@ class LJSAScheduler
         if(sEvento != null && sDestinazione != null) {
           if(!setCheckUnique.contains(sKey)) {
             Map<String, Object> mapRecord = new HashMap<String, Object>();
-            mapRecord.put(ISchedulazione.sNOTIFICA_EVENTO,       sEvento);
-            mapRecord.put(ISchedulazione.sNOTIFICA_DESTINAZIONE, sDestinazione);
+            mapRecord.put(ISchedulazione.sNOT_EVENTO,       sEvento);
+            mapRecord.put(ISchedulazione.sNOT_DESTINAZIONE, sDestinazione);
             listResult.add(mapRecord);
             setCheckUnique.add(sKey);
           }
@@ -1337,15 +1337,15 @@ class LJSAScheduler
             break;
           }
           else if(sDestinazione.startsWith("-") && sDestinazione.length() > 1) {
-            mapRecord.put(ISchedulazione.sNOTIFICA_EVENTO,       sEvento);
-            mapRecord.put(ISchedulazione.sNOTIFICA_DESTINAZIONE, sDestinazione.substring(1));
+            mapRecord.put(ISchedulazione.sNOT_EVENTO,       sEvento);
+            mapRecord.put(ISchedulazione.sNOT_DESTINAZIONE, sDestinazione.substring(1));
             listResult.remove(mapRecord);
             setCheckUnique.remove(sKey);
           }
           else {
             if(!setCheckUnique.contains(sKey)) {
-              mapRecord.put(ISchedulazione.sNOTIFICA_EVENTO,       sEvento);
-              mapRecord.put(ISchedulazione.sNOTIFICA_DESTINAZIONE, sDestinazione);
+              mapRecord.put(ISchedulazione.sNOT_EVENTO,       sEvento);
+              mapRecord.put(ISchedulazione.sNOT_DESTINAZIONE, sDestinazione);
               listResult.add(mapRecord);
               setCheckUnique.add(sKey);
             }

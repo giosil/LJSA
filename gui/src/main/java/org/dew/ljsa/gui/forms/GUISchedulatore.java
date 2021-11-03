@@ -1,22 +1,63 @@
 package org.dew.ljsa.gui.forms;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.tree.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import org.dew.swingup.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
+import org.dew.ljsa.ISchedulatore;
+import org.dew.ljsa.ISchedulazione;
+import org.dew.ljsa.gui.TreeResources;
+
+import org.dew.swingup.AWorkPanel;
+import org.dew.swingup.GUIMessage;
+import org.dew.swingup.IConstants;
+import org.dew.swingup.IWorkObject;
+import org.dew.swingup.ResourcesMgr;
 import org.dew.swingup.fm.FMUtils;
 import org.dew.swingup.fm.GUIFileManager;
-import org.dew.swingup.rpc.*;
-import org.dew.swingup.util.*;
+import org.dew.swingup.rpc.IRPCClient;
+import org.dew.swingup.util.CodeAndDescription;
+import org.dew.swingup.util.GUIUtil;
+import org.dew.swingup.util.SimpleTableModelForSorter;
+import org.dew.swingup.util.TableColumnResizer;
+import org.dew.swingup.util.TableSorter;
+import org.dew.swingup.util.TableUtils;
+
 import org.dew.util.WUtil;
-import org.dew.ljsa.*;
-import org.dew.ljsa.gui.TreeResources;
 
 public
 class GUISchedulatore extends JPanel implements ActionListener, IWorkObject, ISchedulatore

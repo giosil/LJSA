@@ -34,7 +34,7 @@
         constructor(id?: string, multiple?: boolean) {
             super(id);
             this.multiple = multiple;
-            this.name = 'CFSelServizi';
+            this.name = 'LJSASelServizi';
         }
 
         protected updateState(nextState: any): void {
@@ -120,6 +120,20 @@
                 minimumInputLength: 3
             };
             this.init(options);
+        }
+    }
+
+    export class LJSASelStati extends WUX.WSelect2 {
+        constructor(id?: string, multiple?: boolean) {
+            super(id);
+            this.multiple = multiple;
+            this.name = 'LJSASelStati';
+            this.options = [
+                { id: '', text: '' },
+                { id: 'A', text: '(A) Attiva' },
+                { id: 'D', text: '(D) Disattivata' },
+                { id: 'E', text: '(E) In Esecuzione' },
+            ];
         }
     }
 }

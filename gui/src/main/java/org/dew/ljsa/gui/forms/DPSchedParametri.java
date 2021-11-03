@@ -93,7 +93,7 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
     Map<String, Object> mapResult = GUISchedParametro.showMe(null);
     if(mapResult == null) return;
     
-    String sParametro = WUtil.toString(mapResult.get(sPARAMETRI_PARAMETRO), null);
+    String sParametro = WUtil.toString(mapResult.get(sPAR_PARAMETRO), null);
     
     if(exists(sParametro)) {
       GUIMessage.showWarning("Parametro " + sParametro + " gi\340 presente.");
@@ -120,7 +120,7 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
     }
     
     Map<String, Object> oRecordToRemove = oRecords.get(iRow);
-    Boolean oDaAttivita = WUtil.toBooleanObj(oRecordToRemove.get(sPARAMETRI_DA_ATTIVITA), null);
+    Boolean oDaAttivita = WUtil.toBooleanObj(oRecordToRemove.get(sPAR_DA_ATTIVITA), null);
     if(oDaAttivita != null && oDaAttivita.booleanValue()) {
       GUIMessage.showWarning("Non \350 possibile rimuovere parametri di attivit\340. Sovrascriverne il valore.");
       return;
@@ -158,7 +158,7 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
     
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      String sId = (String) mapRecord.get(sPARAMETRI_PARAMETRO);
+      String sId = (String) mapRecord.get(sPAR_PARAMETRO);
       if(sItem.equalsIgnoreCase(sId)) {
         return true;
       }
@@ -180,8 +180,8 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
   protected
   Container buildTablePanel()
   {
-    String[] asCOLUMNS   = {"Parametro",          "Descrizione",          "Valore"};
-    String[] asSYMBOLICS = {sPARAMETRI_PARAMETRO, sPARAMETRI_DESCRIZIONE, sPARAMETRI_VALORE};
+    String[] asCOLUMNS   = {"Parametro",    "Descrizione",    "Valore"};
+    String[] asSYMBOLICS = {sPAR_PARAMETRO, sPAR_DESCRIZIONE, sPAR_VALORE};
     
     oRecords = new ArrayList<Map<String, Object>>();
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
@@ -219,8 +219,8 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
         
         Map<String, Object> oRecord = oRecords.get(row);
         
-        boolean boDaAttivita = WUtil.toBoolean(oRecord.get(sPARAMETRI_DA_ATTIVITA), false);
-        boolean boOverWrite = WUtil.toBoolean(oRecord.get(sPARAMETRI_OVERWRITE),    false);
+        boolean boDaAttivita = WUtil.toBoolean(oRecord.get(sPAR_DA_ATTIVITA), false);
+        boolean boOverWrite = WUtil.toBoolean(oRecord.get(sPAR_OVERWRITE),    false);
         
         if(boDaAttivita) {
           if(boOverWrite) {
@@ -260,7 +260,6 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
     
     JPanel oResult = new JPanel(new BorderLayout());
     oResult.add(oButtonsPanel, BorderLayout.NORTH);
-    
     return oResult;
   }
 }

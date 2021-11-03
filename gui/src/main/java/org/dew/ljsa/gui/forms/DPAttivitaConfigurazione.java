@@ -76,59 +76,59 @@ class DPAttivitaConfigurazione extends ADataPanel implements IAttivita, ActionLi
     oRecords.clear();
     
     Map<String, Object> mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "nolog");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Se S le elaborazioni NON vengono tracciate in archivio");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "S, N");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "N");
+    mapRecord.put(sCONF_OPZIONE,     "nolog");
+    mapRecord.put(sCONF_DESCRIZIONE, "Se S le elaborazioni NON vengono tracciate in archivio");
+    mapRecord.put(sCONF_VALORI,      "S, N");
+    mapRecord.put(sCONF_PREDEFINITO, "N");
     oRecords.add(mapRecord);
     
     mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "attachFiles");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Se S i file prodotti vengono inviati in allegato alla mail");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "S, N");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "N");
+    mapRecord.put(sCONF_OPZIONE,     "attachFiles");
+    mapRecord.put(sCONF_DESCRIZIONE, "Se S i file prodotti vengono inviati in allegato alla mail");
+    mapRecord.put(sCONF_VALORI,      "S, N");
+    mapRecord.put(sCONF_PREDEFINITO, "N");
     oRecords.add(mapRecord);
     
     mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "attachErrorFiles");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Se S i file di errore prodotti vengono inviati in allegato alla mail");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "S, N");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "N");
+    mapRecord.put(sCONF_OPZIONE,     "attachErrorFiles");
+    mapRecord.put(sCONF_DESCRIZIONE, "Se S i file di errore prodotti vengono inviati in allegato alla mail");
+    mapRecord.put(sCONF_VALORI,      "S, N");
+    mapRecord.put(sCONF_PREDEFINITO, "N");
     oRecords.add(mapRecord);
     
     mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "compressFiles");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Se S i file prodotti vengono compressi");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "S, N");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "N");
+    mapRecord.put(sCONF_OPZIONE,     "compressFiles");
+    mapRecord.put(sCONF_DESCRIZIONE, "Se S i file prodotti vengono compressi");
+    mapRecord.put(sCONF_VALORI,      "S, N");
+    mapRecord.put(sCONF_PREDEFINITO, "N");
     oRecords.add(mapRecord);
     
     mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "excludeHolidays");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Se S vengono esclusi i giorni festivi");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "S, N");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "N");
+    mapRecord.put(sCONF_OPZIONE,     "excludeHolidays");
+    mapRecord.put(sCONF_DESCRIZIONE, "Se S vengono esclusi i giorni festivi");
+    mapRecord.put(sCONF_VALORI,      "S, N");
+    mapRecord.put(sCONF_PREDEFINITO, "N");
     oRecords.add(mapRecord);
     
     mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "single");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Se S si bloccano esecuzioni sovrapposte dello stesso job");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "S, N");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "N");
+    mapRecord.put(sCONF_OPZIONE,     "single");
+    mapRecord.put(sCONF_DESCRIZIONE, "Se S si bloccano esecuzioni sovrapposte dello stesso job");
+    mapRecord.put(sCONF_VALORI,      "S, N");
+    mapRecord.put(sCONF_PREDEFINITO, "N");
     oRecords.add(mapRecord);
     
     mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "fileInfo");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Se S viene creato il file di informazioni predefinito");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "S, N");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "N");
+    mapRecord.put(sCONF_OPZIONE,     "fileInfo");
+    mapRecord.put(sCONF_DESCRIZIONE, "Se S viene creato il file di informazioni predefinito");
+    mapRecord.put(sCONF_VALORI,      "S, N");
+    mapRecord.put(sCONF_PREDEFINITO, "N");
     oRecords.add(mapRecord);
     
     mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sCONFIGURAZIONE_OPZIONE,     "timeout");
-    mapRecord.put(sCONFIGURAZIONE_DESCRIZIONE, "Timeout di elaborazione espresso in minuti");
-    mapRecord.put(sCONFIGURAZIONE_VALORI,      "");
-    mapRecord.put(sCONFIGURAZIONE_PREDEFINITO, "0");
+    mapRecord.put(sCONF_OPZIONE,     "timeout");
+    mapRecord.put(sCONF_DESCRIZIONE, "Timeout di elaborazione espresso in minuti");
+    mapRecord.put(sCONF_VALORI,      "");
+    mapRecord.put(sCONF_PREDEFINITO, "0");
     oRecords.add(mapRecord);
     
     oTableModel.notifyUpdates();
@@ -182,7 +182,7 @@ class DPAttivitaConfigurazione extends ADataPanel implements IAttivita, ActionLi
       return;
     }
     
-    String sOpzione = (String) mapResult.get(sCONFIGURAZIONE_OPZIONE);
+    String sOpzione = (String) mapResult.get(sCONF_OPZIONE);
     if(exist(sOpzione)) {
       GUIMessage.showWarning("Opzione " + sOpzione + " gi\340 presente.");
       return;
@@ -239,7 +239,7 @@ class DPAttivitaConfigurazione extends ADataPanel implements IAttivita, ActionLi
     
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      String sId = (String) mapRecord.get(sCONFIGURAZIONE_OPZIONE);
+      String sId = (String) mapRecord.get(sCONF_OPZIONE);
       if(sItem.equalsIgnoreCase(sId)) {
         return true;
       }
@@ -261,8 +261,8 @@ class DPAttivitaConfigurazione extends ADataPanel implements IAttivita, ActionLi
   protected
   Container buildTablePanel()
   {
-    String[] asCOLUMNS   = {"Opzione",               "Descrizione",               "Valori",               "Predefinito"};
-    String[] asSYMBOLICS = {sCONFIGURAZIONE_OPZIONE, sCONFIGURAZIONE_DESCRIZIONE, sCONFIGURAZIONE_VALORI, sCONFIGURAZIONE_PREDEFINITO};
+    String[] asCOLUMNS   = {"Opzione",     "Descrizione",     "Valori",     "Predefinito"};
+    String[] asSYMBOLICS = {sCONF_OPZIONE, sCONF_DESCRIZIONE, sCONF_VALORI, sCONF_PREDEFINITO};
     
     oRecords = new ArrayList<Map<String, Object>>();
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
@@ -312,7 +312,6 @@ class DPAttivitaConfigurazione extends ADataPanel implements IAttivita, ActionLi
     
     JPanel oResult = new JPanel(new BorderLayout());
     oResult.add(oButtonsPanel, BorderLayout.NORTH);
-    
     return oResult;
   }
 }

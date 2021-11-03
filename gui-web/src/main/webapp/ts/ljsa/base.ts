@@ -63,16 +63,16 @@
     }
 
     export class IServizio {
-        static sID_SERVIZIO = 'id_servizio';
-        static sDESCRIZIONE = 'descrizione';
-        static sATTIVO      = 'attivo';
-        static sCREDENZIALI = 'credenziali';
+        static sID_SERVIZIO    = 'id_servizio';
+        static sDESCRIZIONE    = 'descrizione';
+        static sATTIVO         = 'attivo';
+        static sCREDENZIALI    = 'credenziali';
     }
 
     export class IClasse {
-        static sCLASSE      = "classe";
-        static sDESCRIZIONE = "descrizione";
-        static sATTIVITA    = "attivita";
+        static sCLASSE         = "classe";
+        static sDESCRIZIONE    = "descrizione";
+        static sATTIVITA       = "attivita";
     }
 
     export class ICredenziale {
@@ -81,6 +81,91 @@
         static sCREDENZIALI    = "credenziali";
         static sEMAIL          = "email";
         static sATTIVO         = "attivo";
+    }
+
+    export class IAttivita {
+        static sID_SERVIZIO        = "id_servizio";
+        static sID_ATTIVITA        = "id_attivita";
+        static sDESCRIZIONE        = "descrizione";
+        static sCLASSE             = "classe";
+        static sATTIVO             = "attivo";
+
+        static sID_CREDENZIALE_INS = "id_credenziale_ins";
+        static sDATA_INS           = "data_inserimento";
+        static sORA_INS            = "ora_inserimento";
+        static sID_CREDENZIALE_AGG = "id_credenziale_agg";
+        static sDATA_AGG           = "data_aggiornamento";
+        static sORA_AGG            = "ora_aggiornamento";
+
+        static sCONFIGURAZIONE     = "configurazione";
+        static sCONF_OPZIONE       = "opzione";
+        static sCONF_DESCRIZIONE   = "descrizione";
+        static sCONF_VALORI        = "valori";
+        static sCONF_PREDEFINITO   = "predefinito";
+
+        static sPARAMETRI          = "parametri";
+        static sPAR_PARAMETRO      = "parametro";
+        static sPAR_DESCRIZIONE    = "descrizione";
+        static sPAR_VALORI         = "valori";
+        static sPAR_PREDEFINITO    = "predefinito";
+
+        static sNOTIFICA           = "notifica";
+        static sNOT_EVENTO         = "evento";
+        static sNOT_DESTINAZIONE   = "destinazione";
+    }
+
+    export class ISched {
+        static sID_SCHEDULAZIONE      = "id_schedulazione";
+        static sID_SERVIZIO           = "id_servizio";
+        static sID_ATTIVITA           = "id_attivita";
+        static sSCHEDULAZIONE         = "schedulazione";
+        static sDESCRIZIONE           = "descrizione";
+        static sID_CREDENZIALE_INS    = "id_credenziale_ins";
+        static sDATA_INS              = "data_inserimento";
+        static sORA_INS               = "ora_inserimento";
+        static sID_CREDENZIALE_AGG    = "id_credenziale_agg";
+        static sDATA_AGG              = "data_aggiornamento";
+        static sORA_AGG               = "ora_aggiornamento";
+        static sSTATO                 = "stato";
+        static sINIZIO_VALIDITA       = "inizio_validita";
+        static sFINE_VALIDITA         = "fine_validita";
+        static sDATA_SCHED            = "data_schedulazione";
+        static sORA_SCHED             = "ora_schedulazione";
+        static sATTIVO                = "a";
+
+        static sPARAMETRI             = "parametri";
+        static sPAR_PARAMETRO         = "parametro";
+        static sPAR_VALORE            = "valore";
+        static sPAR_DA_ATTIVITA       = "da_attivita";
+        static sPAR_OVERWRITE         = "overwrite";
+        static sPAR_DESCRIZIONE       = IAttivita.sPAR_DESCRIZIONE;
+        static sPAR_VALORI            = IAttivita.sPAR_VALORI;
+        static sPAR_PREDEFINITO       = IAttivita.sPAR_PREDEFINITO;
+
+        static sCONFIGURAZIONE        = "configurazione";
+        static sCONF_OPZIONE          = "opzione";
+        static sCONF_VALORE           = "valore";
+        static sCONF_DA_ATTIVITA      = "da_attivita";
+        static sCONF_OVERWRITE        = "overwrite";
+        static sCONF_DESCRIZIONE      = IAttivita.sCONF_DESCRIZIONE;
+        static sCONF_VALORI           = IAttivita.sCONF_VALORI;
+        static sCONF_PREDEFINITO      = IAttivita.sCONF_PREDEFINITO;
+        static sCONF_TIMEOUT          = "timeout";
+        static sCONF_STOP_ON_TIMEOUT  = "stopOnTimeout";
+        static sCONF_COMPRESS_FILES   = "compressFiles";
+        static sCONF_ATTACH_FILES     = "attachFiles";
+        static sCONF_ATTACH_ERR_FILES = "attachErrorFiles";
+        static sCONF_FILE_INFO        = "fileInfo";
+        static sCONF_NO_LOG           = "nolog";
+
+        static sNOTIFICA              = "notifica";
+        static sNOT_EVENTO            = "evento";
+        static sNOT_DESTINAZIONE      = "destinazione";
+        static sNOT_DA_ATTIVITA       = "da_attivita";
+        static sNOT_CANCELLATA        = "cancellata";
+
+        static sESEC_COMPLETATE       = "esecuzioni_completate";
+        static sESEC_INTERROTTE       = "esecuzioni_interrotte";
     }
 }
 

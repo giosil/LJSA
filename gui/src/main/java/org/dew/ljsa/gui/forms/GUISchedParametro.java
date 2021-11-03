@@ -88,7 +88,7 @@ class GUISchedParametro extends AJDialog implements ISchedulazione
   public
   void setValues(Map<String, Object> mapValues, boolean boEditFlag)
   {
-    Boolean oOverWrite = (Boolean) mapValues.get(sPARAMETRI_OVERWRITE);
+    Boolean oOverWrite = (Boolean) mapValues.get(sPAR_OVERWRITE);
     if(oOverWrite != null) {
       boOverWrite = oOverWrite.booleanValue();
     }
@@ -99,16 +99,16 @@ class GUISchedParametro extends AJDialog implements ISchedulazione
     oFormPanel.setValues(mapValues);
     
     if(!boEditFlag) {
-      oFormPanel.setEnabled(sPARAMETRI_PARAMETRO, false);
-      oFormPanel.setDefaultFocus(sPARAMETRI_VALORE);
+      oFormPanel.setEnabled(sPAR_PARAMETRO, false);
+      oFormPanel.setDefaultFocus(sPAR_VALORE);
     }
   }
   
   public
   void hideDescrizioneValori()
   {
-    oFormPanel.setVisible(IAttivita.sPARAMETRI_DESCRIZIONE, false);
-    oFormPanel.setVisible(IAttivita.sPARAMETRI_VALORI, false);
+    oFormPanel.setVisible(IAttivita.sPAR_DESCRIZIONE, false);
+    oFormPanel.setVisible(IAttivita.sPAR_VALORI, false);
     this.setSize(400, 200);
   }
   
@@ -124,27 +124,27 @@ class GUISchedParametro extends AJDialog implements ISchedulazione
   {
     oFormPanel = new FormPanel("Parametro");
     oFormPanel.addRow();
-    oFormPanel.addTextField(sPARAMETRI_PARAMETRO, "Parametro", 255);
+    oFormPanel.addTextField(sPAR_PARAMETRO, "Parametro", 255);
     oFormPanel.addRow();
-    oFormPanel.addNoteField(IAttivita.sPARAMETRI_DESCRIZIONE, "Descrizione", 3, 255);
+    oFormPanel.addNoteField(IAttivita.sPAR_DESCRIZIONE, "Descrizione", 3, 255);
     oFormPanel.addRow();
-    oFormPanel.addNoteField(IAttivita.sPARAMETRI_VALORI, "Valori", 3, 255);
+    oFormPanel.addNoteField(IAttivita.sPAR_VALORI, "Valori", 3, 255);
     oFormPanel.addRow();
-    oFormPanel.addNoteField(sPARAMETRI_VALORE, "Valore", 3, 1024);
-    oFormPanel.addHiddenField(IAttivita.sPARAMETRI_PREDEFINITO);
-    oFormPanel.addHiddenField(sPARAMETRI_DA_ATTIVITA);
-    oFormPanel.addHiddenField(sPARAMETRI_OVERWRITE);
+    oFormPanel.addNoteField(sPAR_VALORE, "Valore", 3, 1024);
+    oFormPanel.addHiddenField(IAttivita.sPAR_PREDEFINITO);
+    oFormPanel.addHiddenField(sPAR_DA_ATTIVITA);
+    oFormPanel.addHiddenField(sPAR_OVERWRITE);
     
     oFormPanel.build();
     
-    oFormPanel.setEnabled(IAttivita.sPARAMETRI_DESCRIZIONE, false);
-    oFormPanel.setEnabled(IAttivita.sPARAMETRI_VALORI, false);
+    oFormPanel.setEnabled(IAttivita.sPAR_DESCRIZIONE, false);
+    oFormPanel.setEnabled(IAttivita.sPAR_VALORI, false);
     
     List<String> oMandatoryFields = new ArrayList<String>();
-    oMandatoryFields.add(sPARAMETRI_PARAMETRO);
+    oMandatoryFields.add(sPAR_PARAMETRO);
     oFormPanel.setMandatoryFields(oMandatoryFields);
     
-    Component compParametro = oFormPanel.getComponent(sPARAMETRI_PARAMETRO);
+    Component compParametro = oFormPanel.getComponent(sPAR_PARAMETRO);
     if(compParametro instanceof JTextField) {
       buildHints();
       
@@ -180,15 +180,15 @@ class GUISchedParametro extends AJDialog implements ISchedulazione
     }
     
     if(!boOverWrite) {
-      Boolean oDaAttivita = (Boolean) oFormPanel.getValue(sPARAMETRI_DA_ATTIVITA);
+      Boolean oDaAttivita = (Boolean) oFormPanel.getValue(sPAR_DA_ATTIVITA);
       if(oDaAttivita != null && oDaAttivita.booleanValue()) {
-        String sPredefinito = (String) oFormPanel.getValue(IAttivita.sPARAMETRI_PREDEFINITO);
+        String sPredefinito = (String) oFormPanel.getValue(IAttivita.sPAR_PREDEFINITO);
         if(sPredefinito == null) {
-          oFormPanel.setValue(IAttivita.sPARAMETRI_PREDEFINITO, "");
+          oFormPanel.setValue(IAttivita.sPAR_PREDEFINITO, "");
           sPredefinito = "";
         }
-        String sValore = (String) oFormPanel.getValue(sPARAMETRI_VALORE);
-        oFormPanel.setValue(sPARAMETRI_OVERWRITE, new Boolean(!sPredefinito.equals(sValore)));
+        String sValore = (String) oFormPanel.getValue(sPAR_VALORE);
+        oFormPanel.setValue(sPAR_OVERWRITE, new Boolean(!sPredefinito.equals(sValore)));
       }
     }
     
@@ -198,7 +198,7 @@ class GUISchedParametro extends AJDialog implements ISchedulazione
   protected static
   Vector<String> getValori(Map<String, Object> mapValues)
   {
-    String sValori = (String) mapValues.get(IAttivita.sPARAMETRI_VALORI);
+    String sValori = (String) mapValues.get(IAttivita.sPAR_VALORI);
     
     if(sValori == null) {
       return null;

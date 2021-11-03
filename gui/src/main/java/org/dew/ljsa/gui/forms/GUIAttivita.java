@@ -197,8 +197,8 @@ class GUIAttivita extends AEntityEditor implements IAttivita
     fp.addDataPanel(sNOTIFICA, oDPNotifica);
     
     fp.addHiddenField(sID_CREDENZIALE_INS);
-    fp.addHiddenField(sDATA_INSERIMENTO);
-    fp.addHiddenField(sORA_INSERIMENTO);
+    fp.addHiddenField(sDATA_INS);
+    fp.addHiddenField(sORA_INS);
     
     fp.build();
     
@@ -228,12 +228,12 @@ class GUIAttivita extends AEntityEditor implements IAttivita
   protected
   Container buildGUIResult()
   {
-    String[] asCOLUMNS   = {"Servizio",   "Codice",     "Descrizione", "Classe", "Id Cred. Ins.",     "Data Ins.",      "Ora Ins.",        "Id Cred. Agg.",     "Data Agg.",         "Ora Agg."};
-    String[] asSYMBOLICS = {sID_SERVIZIO, sID_ATTIVITA, sDESCRIZIONE,  sCLASSE,  sID_CREDENZIALE_INS, sDATA_INSERIMENTO, sORA_INSERIMENTO, sID_CREDENZIALE_AGG, sDATA_AGGIORNAMENTO, sORA_AGGIORNAMENTO};
+    String[] asCOLUMNS   = {"Servizio",   "Codice",     "Descrizione", "Classe", "Id Cred. Ins.",     "Data Ins.", "Ora Ins.", "Id Cred. Agg.",     "Data Agg.", "Ora Agg."};
+    String[] asSYMBOLICS = {sID_SERVIZIO, sID_ATTIVITA, sDESCRIZIONE,  sCLASSE,  sID_CREDENZIALE_INS, sDATA_INS,   sORA_INS,   sID_CREDENZIALE_AGG, sDATA_AGG,   sORA_AGG};
     
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
-    oTableModel.addTimeField(sORA_INSERIMENTO);
-    oTableModel.addTimeField(sORA_AGGIORNAMENTO);
+    oTableModel.addTimeField(sORA_INS);
+    oTableModel.addTimeField(sORA_AGG);
     
     oTable = new JTable(oTableModel);
     oTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

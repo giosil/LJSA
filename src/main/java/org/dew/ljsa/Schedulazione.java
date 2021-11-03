@@ -84,11 +84,11 @@ class Schedulazione implements ISchedulazione
     setIdAttivita(wm.getString(sID_ATTIVITA));
     String sSchedulazione = wm.getString(sSCHEDULAZIONE);
     if(sSchedulazione == null) {
-      if(wm.get(sDATA_SCHEDULAZIONE) == null) {
+      if(wm.get(sDATA_SCHED) == null) {
         throw new Exception(sSCHEDULAZIONE + " is null");
       }
-      int iDataSchedulazione = wm.getIntDate(sDATA_SCHEDULAZIONE);
-      int iOraSchedulazione  = wm.getIntTime(sORA_SCHEDULAZIONE);
+      int iDataSchedulazione = wm.getIntDate(sDATA_SCHED);
+      int iOraSchedulazione  = wm.getIntTime(sORA_SCHE);
       setSchedulazione(iDataSchedulazione, iOraSchedulazione);
     }
     else {
@@ -110,11 +110,11 @@ class Schedulazione implements ISchedulazione
     }
     
     setIdCredenzialeIns(sIdCredenzialeIns);
-    setDataInserimento(wm.getIntDate(sDATA_INSERIMENTO));
-    setOraInserimento(wm.getIntTime(sORA_INSERIMENTO));
+    setDataInserimento(wm.getIntDate(sDATA_INS));
+    setOraInserimento(wm.getIntTime(sORA_INS));
     setIdCredenzialeAgg(sIdCredenzialeAgg);
-    setDataAggiornamento(wm.getIntDate(sDATA_AGGIORNAMENTO));
-    setOraAggiornamento(wm.getIntTime(sORA_AGGIORNAMENTO));
+    setDataAggiornamento(wm.getIntDate(sDATA_AGG));
+    setOraAggiornamento(wm.getIntTime(sORA_AGG));
     setInizioValidita(wm.getIntDate(sINIZIO_VALIDITA));
     setFineValidita(wm.getIntDate(sFINE_VALIDITA));
     
@@ -130,8 +130,8 @@ class Schedulazione implements ISchedulazione
       Map<String, Object> mapConf = new HashMap<String, Object>();
       for(int i = 0; i < listConf.size(); i++) {
         Map<String, Object> map = WUtil.toMapObject(listConf.get(i));
-        String sOpzione = WUtil.toString(map.get(sCONFIGURAZIONE_OPZIONE), null);
-        Object oValore  = map.get(sCONFIGURAZIONE_VALORE);
+        String sOpzione = WUtil.toString(map.get(sCONF_OPZIONE), null);
+        Object oValore  = map.get(sCONF_VALORE);
         String sValore = null;
         if(oValore != null) {
           sValore = oValore.toString();
@@ -139,9 +139,9 @@ class Schedulazione implements ISchedulazione
         else {
           sValore = "";
         }
-        boolean daAttivita = WUtil.toBoolean(map.get(sCONFIGURAZIONE_DA_ATTIVITA), false);
+        boolean daAttivita = WUtil.toBoolean(map.get(sCONF_DA_ATTIVITA), false);
         if(daAttivita) {
-          boolean overWrite = WUtil.toBoolean(map.get(sCONFIGURAZIONE_OVERWRITE), false);
+          boolean overWrite = WUtil.toBoolean(map.get(sCONF_OVERWRITE), false);
           if(overWrite) {
             mapConf.put(sOpzione, sValore);
           }
@@ -165,8 +165,8 @@ class Schedulazione implements ISchedulazione
       Map<String, Object> mapParams = new HashMap<String, Object>();
       for(int i = 0; i < listParams.size(); i++) {
         Map<String, Object> map = WUtil.toMapObject(listParams.get(i));
-        String sParametro = WUtil.toString(map.get(sPARAMETRI_PARAMETRO), null);
-        Object oValore  = map.get(sPARAMETRI_VALORE);
+        String sParametro = WUtil.toString(map.get(sPAR_PARAMETRO), null);
+        Object oValore  = map.get(sPAR_VALORE);
         String sValore = null;
         if(oValore != null) {
           sValore = oValore.toString();
@@ -174,9 +174,9 @@ class Schedulazione implements ISchedulazione
         else {
           sValore = "";
         }
-        Boolean oDaAttivita = (Boolean) map.get(sPARAMETRI_DA_ATTIVITA);
+        Boolean oDaAttivita = (Boolean) map.get(sPAR_DA_ATTIVITA);
         if(oDaAttivita != null && oDaAttivita.booleanValue()) {
-          Boolean oOverWrite = (Boolean) map.get(sPARAMETRI_OVERWRITE);
+          Boolean oOverWrite = (Boolean) map.get(sPAR_OVERWRITE);
           if(oOverWrite != null && oOverWrite.booleanValue()) {
             mapParams.put(sParametro, sValore);
           }
@@ -195,30 +195,30 @@ class Schedulazione implements ISchedulazione
     if(listNotifica != null) {
       for(int i = 0; i < listNotifica.size(); i++) {
         Map<String, Object> map = listNotifica.get(i);
-        String sEvento       = WUtil.toString(map.get(sNOTIFICA_EVENTO),       null);
-        String sDestinazione = WUtil.toString(map.get(sNOTIFICA_DESTINAZIONE), null);
+        String sEvento       = WUtil.toString(map.get(sNOT_EVENTO),       null);
+        String sDestinazione = WUtil.toString(map.get(sNOT_DESTINAZIONE), null);
         if(sDestinazione == null) continue;
-        Boolean boDaAttivita = WUtil.toBoolean(map.get(sNOTIFICA_DA_ATTIVITA), false);
-        Boolean boCancellata = WUtil.toBoolean(map.get(sNOTIFICA_CANCELLATA),  false);
+        Boolean boDaAttivita = WUtil.toBoolean(map.get(sNOT_DA_ATTIVITA), false);
+        Boolean boCancellata = WUtil.toBoolean(map.get(sNOT_CANCELLATA),  false);
         if(boDaAttivita) {
           if(boCancellata) {
             Map<String, Object> mapItem = new HashMap<String, Object>();
-            mapItem.put(sNOTIFICA_EVENTO,       sEvento);
-            mapItem.put(sNOTIFICA_DESTINAZIONE, "-" + sDestinazione);
+            mapItem.put(sNOT_EVENTO,       sEvento);
+            mapItem.put(sNOT_DESTINAZIONE, "-" + sDestinazione);
             vNotifica.add(mapItem);
           }
         }
         else {
           if(boCancellata) {
             Map<String, Object> mapItem = new HashMap<String, Object>();
-            mapItem.put(sNOTIFICA_EVENTO,       sEvento);
-            mapItem.put(sNOTIFICA_DESTINAZIONE, "-" + sDestinazione);
+            mapItem.put(sNOT_EVENTO,       sEvento);
+            mapItem.put(sNOT_DESTINAZIONE, "-" + sDestinazione);
             vNotifica.add(mapItem);
           }
           else {
             Map<String, Object> mapItem = new HashMap<String, Object>();
-            mapItem.put(sNOTIFICA_EVENTO,       sEvento);
-            mapItem.put(sNOTIFICA_DESTINAZIONE, sDestinazione);
+            mapItem.put(sNOT_EVENTO,       sEvento);
+            mapItem.put(sNOT_DESTINAZIONE, sDestinazione);
             vNotifica.add(mapItem);
           }
         }
@@ -601,12 +601,12 @@ class Schedulazione implements ISchedulazione
     
     Map<String, Object> mapNotifica = new HashMap<String, Object>();
     if(sEvento != null) {
-      mapNotifica.put(sNOTIFICA_EVENTO, sEvento);
+      mapNotifica.put(sNOT_EVENTO, sEvento);
     }
     else {
-      mapNotifica.put(sNOTIFICA_EVENTO, "R");
+      mapNotifica.put(sNOT_EVENTO, "R");
     }
-    mapNotifica.put(sNOTIFICA_DESTINAZIONE, sDestinazione);
+    mapNotifica.put(sNOT_DESTINAZIONE, sDestinazione);
     
     if(stato != null && stato.equals(sSTATO_IN_ESECUZIONE)) {
       if(listNotificaTemporanea == null) {
@@ -675,9 +675,9 @@ class Schedulazione implements ISchedulazione
     if(listNotifica != null) {
       for(int i = 0; i < listNotifica.size(); i++) {
         Map<String, Object> mapNotifica = listNotifica.get(i);
-        String sE = WUtil.toString(mapNotifica.get(sNOTIFICA_EVENTO), null);
+        String sE = WUtil.toString(mapNotifica.get(sNOT_EVENTO), null);
         if(sE != null && sE.equals(sEvento)) {
-          Object oDestinazione = mapNotifica.get(sNOTIFICA_DESTINAZIONE);
+          Object oDestinazione = mapNotifica.get(sNOT_DESTINAZIONE);
           if(oDestinazione != null) {
             listResult.add(oDestinazione.toString());
           }
@@ -688,9 +688,9 @@ class Schedulazione implements ISchedulazione
     if(listNotificaTemporanea != null) {
       for(int i = 0; i < listNotificaTemporanea.size(); i++) {
         Map<String, Object> mapNotifica = listNotificaTemporanea.get(i);
-        String sE = (String) mapNotifica.get(sNOTIFICA_EVENTO);
+        String sE = (String) mapNotifica.get(sNOT_EVENTO);
         if(sE != null && sE.equals(sEvento)) {
-          Object oDestinazione = mapNotifica.get(sNOTIFICA_DESTINAZIONE);
+          Object oDestinazione = mapNotifica.get(sNOT_DESTINAZIONE);
           if(oDestinazione != null) {
             listResult.add(oDestinazione.toString());
           }
@@ -726,7 +726,7 @@ class Schedulazione implements ISchedulazione
   boolean getFlagAttachErrorFiles()
   {
     if(mapConfigurazione == null) return false;
-    return WUtil.toBoolean(mapConfigurazione.get(sCONF_ATTACH_ERROR_FILES), false);
+    return WUtil.toBoolean(mapConfigurazione.get(sCONF_ATTACH_ERR_FILES), false);
   }
   
   public
@@ -867,11 +867,11 @@ class Schedulazione implements ISchedulazione
     map.put(sDESCRIZIONE,        getDescrizione());
     map.put(sSTATO,              getStato());
     map.put(sID_CREDENZIALE_INS, idCredenzialeIns);
-    map.put(sDATA_INSERIMENTO,   dataInserimento);
-    map.put(sORA_INSERIMENTO,    oraInserimento);
+    map.put(sDATA_INS,   dataInserimento);
+    map.put(sORA_INS,    oraInserimento);
     map.put(sID_CREDENZIALE_AGG, idCredenzialeAgg);
-    map.put(sDATA_AGGIORNAMENTO, dataAggiornamento);
-    map.put(sORA_AGGIORNAMENTO,  oraAggiornamento);
+    map.put(sDATA_AGG, dataAggiornamento);
+    map.put(sORA_AGG,  oraAggiornamento);
     
     if(inizioValidita == 0) inizioValidita = getDefInizioValidita();
     if(fineValidita   == 0) fineValidita   = getDefFineValidita();

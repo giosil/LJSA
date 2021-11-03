@@ -202,11 +202,11 @@ class WSLJSA
     qb.put("CLASSE",             IAttivita.sCLASSE);
     qb.put("ATTIVO",             IAttivita.sATTIVO);
     qb.put("ID_CREDENZIALE_INS", IAttivita.sID_CREDENZIALE_INS);
-    qb.put("DATA_INSERIMENTO",   IAttivita.sDATA_INSERIMENTO);
-    qb.put("ORA_INSERIMENTO",    IAttivita.sORA_INSERIMENTO);
+    qb.put("DATA_INSERIMENTO",   IAttivita.sDATA_INS);
+    qb.put("ORA_INSERIMENTO",    IAttivita.sORA_INS);
     qb.put("ID_CREDENZIALE_AGG", IAttivita.sID_CREDENZIALE_AGG);
-    qb.put("DATA_AGGIORNAMENTO", IAttivita.sDATA_AGGIORNAMENTO);
-    qb.put("ORA_AGGIORNAMENTO",  IAttivita.sORA_AGGIORNAMENTO);
+    qb.put("DATA_AGGIORNAMENTO", IAttivita.sDATA_AGG);
+    qb.put("ORA_AGGIORNAMENTO",  IAttivita.sORA_AGG);
     String sSQL = qb.select("LJSA_ATTIVITA", mapFilter);
     sSQL += " ORDER BY ID_SERVIZIO,ID_ATTIVITA";
     
@@ -237,11 +237,11 @@ class WSLJSA
         record.put(IAttivita.sCLASSE,                 sClasse);
         record.putBoolean(IAttivita.sATTIVO,          sAttivo);
         record.put(IAttivita.sID_CREDENZIALE_INS,     sIdCredenzialeIns);
-        record.putDate(IAttivita.sDATA_INSERIMENTO,   iDataInserimento);
-        record.put(IAttivita.sORA_INSERIMENTO,        iOraInserimento);
+        record.putDate(IAttivita.sDATA_INS,   iDataInserimento);
+        record.put(IAttivita.sORA_INS,        iOraInserimento);
         record.put(IAttivita.sID_CREDENZIALE_AGG,     sIdCredenzialeAgg);
-        record.putDate(IAttivita.sDATA_AGGIORNAMENTO, iDataAggiornamento);
-        record.put(IAttivita.sORA_AGGIORNAMENTO,      iOraAggiornamento);
+        record.putDate(IAttivita.sDATA_AGG, iDataAggiornamento);
+        record.put(IAttivita.sORA_AGG,      iOraAggiornamento);
         
         listResult.add(record.toMapObject());
       }
@@ -1046,8 +1046,8 @@ class WSLJSA
         for(int i = 0; i < listNotifica.size(); i++) {
           Map<String, Object> mapRecord = listNotifica.get(i);
           
-          String evento = WUtil.toString(mapRecord.get(ISchedulazione.sNOTIFICA_EVENTO), "R");
-          String destinazione = WUtil.toString(mapRecord.get(ISchedulazione.sNOTIFICA_DESTINAZIONE), null);
+          String evento = WUtil.toString(mapRecord.get(ISchedulazione.sNOT_EVENTO), "R");
+          String destinazione = WUtil.toString(mapRecord.get(ISchedulazione.sNOT_DESTINAZIONE), null);
           if(destinazione == null || destinazione.length() == 0) {
             continue;
           }
@@ -1234,10 +1234,10 @@ class WSLJSA
         String sSQL = "INSERT INTO LJSA_ATTIVITA_CONF(ID_SERVIZIO,ID_ATTIVITA,OPZIONE,DESCRIZIONE,VALORI,PREDEFINITO) VALUES(?,?,?,?,?,?)";
         pstm = conn.prepareStatement(sSQL);
         for(Map<String, Object> mapRecord : listConfigurazione) {
-          String sOpzione     = WUtil.toString(mapRecord.get(IAttivita.sCONFIGURAZIONE_OPZIONE),     null);
-          String sDescrizione = WUtil.toString(mapRecord.get(IAttivita.sCONFIGURAZIONE_DESCRIZIONE), null);
-          String sValori      = WUtil.toString(mapRecord.get(IAttivita.sCONFIGURAZIONE_VALORI),      null);
-          String sPredefinito = WUtil.toString(mapRecord.get(IAttivita.sCONFIGURAZIONE_PREDEFINITO), null);
+          String sOpzione     = WUtil.toString(mapRecord.get(IAttivita.sCONF_OPZIONE),     null);
+          String sDescrizione = WUtil.toString(mapRecord.get(IAttivita.sCONF_DESCRIZIONE), null);
+          String sValori      = WUtil.toString(mapRecord.get(IAttivita.sCONF_VALORI),      null);
+          String sPredefinito = WUtil.toString(mapRecord.get(IAttivita.sCONF_PREDEFINITO), null);
           
           if(sOpzione == null || sOpzione.length() == 0) continue;
           if(sDescrizione == null || sDescrizione.length() == 0) sDescrizione = sOpzione;
@@ -1259,10 +1259,10 @@ class WSLJSA
         String sSQL = "INSERT INTO LJSA_ATTIVITA_PARAMETRI(ID_SERVIZIO,ID_ATTIVITA,PARAMETRO,DESCRIZIONE,VALORI,PREDEFINITO) VALUES(?,?,?,?,?,?)";
         pstm = conn.prepareStatement(sSQL);
         for(Map<String, Object> mapRecord : listParametri) {
-          String sParametro   = WUtil.toString(mapRecord.get(IAttivita.sPARAMETRI_PARAMETRO),   null);
-          String sDescrizione = WUtil.toString(mapRecord.get(IAttivita.sPARAMETRI_DESCRIZIONE), null);
-          String sValori      = WUtil.toString(mapRecord.get(IAttivita.sPARAMETRI_VALORI),      null);
-          String sPredefinito = WUtil.toString(mapRecord.get(IAttivita.sPARAMETRI_PREDEFINITO), null);
+          String sParametro   = WUtil.toString(mapRecord.get(IAttivita.sPAR_PARAMETRO),   null);
+          String sDescrizione = WUtil.toString(mapRecord.get(IAttivita.sPAR_DESCRIZIONE), null);
+          String sValori      = WUtil.toString(mapRecord.get(IAttivita.sPAR_VALORI),      null);
+          String sPredefinito = WUtil.toString(mapRecord.get(IAttivita.sPAR_PREDEFINITO), null);
           
           if(sParametro   == null || sParametro.length()   == 0) continue;
           if(sDescrizione == null || sDescrizione.length() == 0) sDescrizione = sParametro;
@@ -1285,8 +1285,8 @@ class WSLJSA
         pstm = conn.prepareStatement(sSQL);
         for(Map<String, Object> mapRecord : listNotifica) {
           
-          String evento = WUtil.toString(mapRecord.get(IAttivita.sNOTIFICA_EVENTO),       null);
-          String destin = WUtil.toString(mapRecord.get(IAttivita.sNOTIFICA_DESTINAZIONE), null);
+          String evento = WUtil.toString(mapRecord.get(IAttivita.sNOT_EVENTO),       null);
+          String destin = WUtil.toString(mapRecord.get(IAttivita.sNOT_DESTINAZIONE), null);
           
           if(evento == null || evento.length() == 0) evento = "R";
           if(destin == null || destin.length() == 0) continue;

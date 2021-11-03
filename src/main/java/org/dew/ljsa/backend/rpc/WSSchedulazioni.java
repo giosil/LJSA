@@ -44,16 +44,16 @@ class WSSchedulazioni implements ISchedulazione
     qb.put("DESCRIZIONE",           sDESCRIZIONE);
     qb.put("SCHEDULAZIONE",         sSCHEDULAZIONE);
     qb.put("ID_CREDENZIALE_INS",    sID_CREDENZIALE_INS);
-    qb.put("DATA_INSERIMENTO",      sDATA_INSERIMENTO);
-    qb.put("ORA_INSERIMENTO",       sORA_INSERIMENTO);
+    qb.put("DATA_INSERIMENTO",      sDATA_INS);
+    qb.put("ORA_INSERIMENTO",       sORA_INS);
     qb.put("ID_CREDENZIALE_AGG",    sID_CREDENZIALE_AGG);
-    qb.put("DATA_AGGIORNAMENTO",    sDATA_AGGIORNAMENTO);
-    qb.put("ORA_AGGIORNAMENTO",     sORA_AGGIORNAMENTO);
+    qb.put("DATA_AGGIORNAMENTO",    sDATA_AGG);
+    qb.put("ORA_AGGIORNAMENTO",     sORA_AGG);
     qb.put("STATO",                 sSTATO);
     qb.put("INIZIOVALIDITA",        sINIZIO_VALIDITA + "_"); // Si escludono dal filtro diretto per
     qb.put("FINEVALIDITA",          sFINE_VALIDITA   + "_"); // implementare il  filtro  intervallo
-    qb.put("ESECUZIONI_COMPLETATE", sESECUZIONI_COMPLETATE);
-    qb.put("ESECUZIONI_INTERROTTE", sESECUZIONI_INTERROTTE);
+    qb.put("ESECUZIONI_COMPLETATE", sESEC_COMPLETATE);
+    qb.put("ESECUZIONI_INTERROTTE", sESEC_INTERROTTE);
     
     WMap wmFilter = new WMap(mapFilter);
     int inizioVal = wmFilter.getIntDate(sINIZIO_VALIDITA, 0);
@@ -98,16 +98,16 @@ class WSSchedulazioni implements ISchedulazione
         record.put(sDESCRIZIONE,            sDescrizione);
         record.put(sSCHEDULAZIONE,          sSchedulazione);
         record.put(sID_CREDENZIALE_INS,     sIdCredenzialeIns);
-        record.putDate(sDATA_INSERIMENTO,   iDataInserimento);
-        record.put(sORA_INSERIMENTO,        iOraInserimento);
+        record.putDate(sDATA_INS,           iDataInserimento);
+        record.put(sORA_INS,                iOraInserimento);
         record.put(sID_CREDENZIALE_AGG,     sIdCredenzialeAgg);
-        record.putDate(sDATA_AGGIORNAMENTO, iDataAggiornamento);
-        record.put(sORA_AGGIORNAMENTO,      iOraAggiornamento);
+        record.putDate(sDATA_AGG,           iDataAggiornamento);
+        record.put(sORA_AGG,                iOraAggiornamento);
         record.put(sSTATO,                  sStato);
         record.putDate(sINIZIO_VALIDITA,    iInizioValidita);
         record.putDate(sFINE_VALIDITA,      iFineValidita);
-        record.put(sESECUZIONI_COMPLETATE,  iEsecuzioniCompletate);
-        record.put(sESECUZIONI_INTERROTTE,  iEsecuzioniInterrotte);
+        record.put(sESEC_COMPLETATE,        iEsecuzioniCompletate);
+        record.put(sESEC_INTERROTTE,        iEsecuzioniInterrotte);
         
         listResult.add(record.toMapObject());
       }
@@ -458,13 +458,13 @@ class WSSchedulazioni implements ISchedulazione
       
       Date currentDate = new Date();
       
-      mapValues.put(sID_SCHEDULAZIONE,      idSchedulazione);
-      mapValues.put(sESECUZIONI_COMPLETATE, 0);
-      mapValues.put(sESECUZIONI_INTERROTTE, 0);
-      mapValues.put(sDATA_INSERIMENTO,      currentDate);
-      mapValues.put(sORA_INSERIMENTO,       WUtil.timeToInt(currentDate));
-      mapValues.put(sDATA_AGGIORNAMENTO,    currentDate);
-      mapValues.put(sORA_AGGIORNAMENTO,     WUtil.timeToInt(currentDate));
+      mapValues.put(sID_SCHEDULAZIONE, idSchedulazione);
+      mapValues.put(sESEC_COMPLETATE,  0);
+      mapValues.put(sESEC_INTERROTTE,  0);
+      mapValues.put(sDATA_INS,         currentDate);
+      mapValues.put(sORA_INS,          WUtil.timeToInt(currentDate));
+      mapValues.put(sDATA_AGG,         currentDate);
+      mapValues.put(sORA_AGG,          WUtil.timeToInt(currentDate));
     }
     catch(Exception ex) {
       logger.error("Exception in WSSchedulazioni.insert(" + mapValues + ")", ex);
@@ -603,16 +603,16 @@ class WSSchedulazioni implements ISchedulazione
         record.put(sDESCRIZIONE,            sDescrizione);
         record.put(sSCHEDULAZIONE,          sSchedulazione);
         record.put(sID_CREDENZIALE_INS,     sIdCredenzialeIns);
-        record.putDate(sDATA_INSERIMENTO,   iDataInserimento);
-        record.put(sORA_INSERIMENTO,        iOraInserimento);
+        record.putDate(sDATA_INS,           iDataInserimento);
+        record.put(sORA_INS,                iOraInserimento);
         record.put(sID_CREDENZIALE_AGG,     sIdCredenzialeAgg);
-        record.putDate(sDATA_AGGIORNAMENTO, iDataAggiornamento);
-        record.put(sORA_AGGIORNAMENTO,      iOraAggiornamento);
+        record.putDate(sDATA_AGG,           iDataAggiornamento);
+        record.put(sORA_AGG,                iOraAggiornamento);
         record.put(sSTATO,                  sStato);
         record.putDate(sINIZIO_VALIDITA,    iInizioValidita);
         record.putDate(sFINE_VALIDITA,      iFineValidita);
-        record.put(sESECUZIONI_COMPLETATE,  iEsecuzioniCompletate);
-        record.put(sESECUZIONI_INTERROTTE,  iEsecuzioniInterrotte);
+        record.put(sESEC_COMPLETATE,        iEsecuzioniCompletate);
+        record.put(sESEC_INTERROTTE,        iEsecuzioniInterrotte);
         
         record.put(sPARAMETRI,      readParametri(conn,      idSchedulazione, sIdServizio, sIdAttivita));
         record.put(sCONFIGURAZIONE, readConfigurazione(conn, idSchedulazione, sIdServizio, sIdAttivita));
@@ -703,13 +703,13 @@ class WSSchedulazioni implements ISchedulazione
         String sPredefinito = rs.getString("PREDEFINITO");
         
         Map<String, Object> record = new HashMap<String, Object>();
-        record.put(sPARAMETRI_PARAMETRO,   sParametro);
-        record.put(sPARAMETRI_DESCRIZIONE, sDescrizione);
-        record.put(sPARAMETRI_VALORI,      sValori);
-        record.put(sPARAMETRI_PREDEFINITO, sPredefinito);
-        record.put(sPARAMETRI_VALORE,      sPredefinito);
-        record.put(sPARAMETRI_DA_ATTIVITA, true);
-        record.put(sPARAMETRI_OVERWRITE,   false);
+        record.put(sPAR_PARAMETRO,   sParametro);
+        record.put(sPAR_DESCRIZIONE, sDescrizione);
+        record.put(sPAR_VALORI,      sValori);
+        record.put(sPAR_PREDEFINITO, sPredefinito);
+        record.put(sPAR_VALORE,      sPredefinito);
+        record.put(sPAR_DA_ATTIVITA, true);
+        record.put(sPAR_OVERWRITE,   false);
         
         mapParamsAttivita.put(sParametro, record);
         
@@ -728,15 +728,15 @@ class WSSchedulazioni implements ISchedulazione
           
           Map<String, Object> record = mapParamsAttivita.get(sParametro);
           if(record != null) {
-            record.put(sPARAMETRI_VALORE,      sValore != null ? sValore : "");
-            record.put(sPARAMETRI_OVERWRITE,   true);
+            record.put(sPAR_VALORE,      sValore != null ? sValore : "");
+            record.put(sPAR_OVERWRITE,   true);
           }
           else {
             record = new HashMap<String, Object>();
-            record.put(sPARAMETRI_PARAMETRO,   sParametro);
-            record.put(sPARAMETRI_VALORE,      sValore != null ? sValore : "");
-            record.put(sPARAMETRI_DA_ATTIVITA, false);
-            record.put(sPARAMETRI_OVERWRITE,   false);
+            record.put(sPAR_PARAMETRO,   sParametro);
+            record.put(sPAR_VALORE,      sValore != null ? sValore : "");
+            record.put(sPAR_DA_ATTIVITA, false);
+            record.put(sPAR_OVERWRITE,   false);
             
             listResult.add(record);
           }
@@ -776,13 +776,13 @@ class WSSchedulazioni implements ISchedulazione
         String sPredefinito = rs.getString("PREDEFINITO");
         
         Map<String, Object> record = new HashMap<String, Object>();
-        record.put(sCONFIGURAZIONE_OPZIONE,     sOpzione);
-        record.put(sCONFIGURAZIONE_DESCRIZIONE, sDescrizione);
-        record.put(sCONFIGURAZIONE_VALORI,      sValori);
-        record.put(sCONFIGURAZIONE_PREDEFINITO, sPredefinito);
-        record.put(sCONFIGURAZIONE_VALORE,      sPredefinito);
-        record.put(sCONFIGURAZIONE_DA_ATTIVITA, true);
-        record.put(sCONFIGURAZIONE_OVERWRITE,   false);
+        record.put(sCONF_OPZIONE,     sOpzione);
+        record.put(sCONF_DESCRIZIONE, sDescrizione);
+        record.put(sCONF_VALORI,      sValori);
+        record.put(sCONF_PREDEFINITO, sPredefinito);
+        record.put(sCONF_VALORE,      sPredefinito);
+        record.put(sCONF_DA_ATTIVITA, true);
+        record.put(sCONF_OVERWRITE,   false);
         
         mapConfigAttivita.put(sOpzione, record);
         
@@ -801,15 +801,15 @@ class WSSchedulazioni implements ISchedulazione
           
           Map<String, Object> record = mapConfigAttivita.get(sOpzione);
           if(record != null) {
-            record.put(sCONFIGURAZIONE_VALORE,      sValore != null ? sValore : "");
-            record.put(sCONFIGURAZIONE_OVERWRITE,   true);
+            record.put(sCONF_VALORE,      sValore != null ? sValore : "");
+            record.put(sCONF_OVERWRITE,   true);
           }
           else {
             record = new HashMap<String, Object>();
-            record.put(sCONFIGURAZIONE_OPZIONE,     sOpzione);
-            record.put(sCONFIGURAZIONE_VALORE,      sValore != null ? sValore : "");
-            record.put(sCONFIGURAZIONE_DA_ATTIVITA, false);
-            record.put(sCONFIGURAZIONE_OVERWRITE,   false);
+            record.put(sCONF_OPZIONE,     sOpzione);
+            record.put(sCONF_VALORE,      sValore != null ? sValore : "");
+            record.put(sCONF_DA_ATTIVITA, false);
+            record.put(sCONF_OVERWRITE,   false);
             
             listResult.add(record);
           }
@@ -849,10 +849,10 @@ class WSSchedulazioni implements ISchedulazione
         if(destin == null || destin.length() == 0) continue;
         
         Map<String, Object> record = new HashMap<String, Object>();
-        record.put(sNOTIFICA_EVENTO,       evento);
-        record.put(sNOTIFICA_DESTINAZIONE, destin);
-        record.put(sNOTIFICA_DA_ATTIVITA,  true);
-        record.put(sNOTIFICA_CANCELLATA,   false);
+        record.put(sNOT_EVENTO,       evento);
+        record.put(sNOT_DESTINAZIONE, destin);
+        record.put(sNOT_DA_ATTIVITA,  true);
+        record.put(sNOT_CANCELLATA,   false);
         
         listResult.add(record);
         
@@ -875,22 +875,22 @@ class WSSchedulazioni implements ISchedulazione
           if(destin.startsWith("-")) {
             record = mapNotifAttivita.get(evento + ":" + destin.substring(1));
             if(record != null) {
-              record.put(sNOTIFICA_CANCELLATA, true);
+              record.put(sNOT_CANCELLATA, true);
               continue;
             }
           }
           
           record = mapNotifAttivita.get(evento + ":" + destin);
           if(record != null) {
-            record.put(sNOTIFICA_DA_ATTIVITA, Boolean.FALSE);
+            record.put(sNOT_DA_ATTIVITA, Boolean.FALSE);
             continue;
           }
           
           record = new HashMap<String, Object>();
-          record.put(sNOTIFICA_EVENTO,       evento);
-          record.put(sNOTIFICA_DESTINAZIONE, destin);
-          record.put(sNOTIFICA_DA_ATTIVITA,  false);
-          record.put(sNOTIFICA_CANCELLATA,   false);
+          record.put(sNOT_EVENTO,       evento);
+          record.put(sNOT_DESTINAZIONE, destin);
+          record.put(sNOT_DA_ATTIVITA,  false);
+          record.put(sNOT_CANCELLATA,   false);
           
           listResult.add(record);
         }

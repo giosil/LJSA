@@ -146,7 +146,7 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     Map<String, Object> mapResult = GUISchedNotifica.showMe(null);
     if(mapResult == null) return;
     
-    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOTIFICA_EVENTO);
+    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOT_EVENTO);
     String sEvento = null;
     if(oEvento != null) {
       sEvento = (String) oEvento.getCode();
@@ -154,9 +154,9 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     else {
       return;
     }
-    String sDestinazione = (String) mapResult.get(sNOTIFICA_DESTINAZIONE);
-    Boolean oDaAttivita  = WUtil.toBooleanObj(mapResult.get(sNOTIFICA_DA_ATTIVITA), Boolean.FALSE);
-    Boolean oCancellata  = WUtil.toBooleanObj(mapResult.get(sNOTIFICA_CANCELLATA),  Boolean.FALSE);
+    String sDestinazione = (String) mapResult.get(sNOT_DESTINAZIONE);
+    Boolean oDaAttivita  = WUtil.toBooleanObj(mapResult.get(sNOT_DA_ATTIVITA), Boolean.FALSE);
+    Boolean oCancellata  = WUtil.toBooleanObj(mapResult.get(sNOT_CANCELLATA),  Boolean.FALSE);
     
     if(!oCancellata.booleanValue() && exists(sEvento, sDestinazione)) {
       GUIMessage.showWarning("Notifica " + sEvento + ", " + sDestinazione + " gi\340 presente.");
@@ -164,10 +164,10 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     }
     
     Map<String, Object> mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sNOTIFICA_EVENTO,       sEvento);
-    mapRecord.put(sNOTIFICA_DESTINAZIONE, sDestinazione);
-    mapRecord.put(sNOTIFICA_DA_ATTIVITA,  oDaAttivita);
-    mapRecord.put(sNOTIFICA_CANCELLATA,   oCancellata);
+    mapRecord.put(sNOT_EVENTO,       sEvento);
+    mapRecord.put(sNOT_DESTINAZIONE, sDestinazione);
+    mapRecord.put(sNOT_DA_ATTIVITA,  oDaAttivita);
+    mapRecord.put(sNOT_CANCELLATA,   oCancellata);
     
     oRecords.add(mapRecord);
     oTableModel.notifyUpdates();
@@ -189,7 +189,7 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     }
     
     Map<String, Object> oRecordToRemove = oRecords.get(iRow);
-    Boolean oDaAttivita = WUtil.toBooleanObj(oRecordToRemove.get(sNOTIFICA_DA_ATTIVITA), null);
+    Boolean oDaAttivita = WUtil.toBooleanObj(oRecordToRemove.get(sNOT_DA_ATTIVITA), null);
     if(oDaAttivita != null && oDaAttivita.booleanValue()) {
       GUIMessage.showWarning("Non \350 possibile rimuovere notifiche di attivit\340. Sovrascriverne il valore anteponendo il segno meno.");
       return;
@@ -212,7 +212,7 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     Map<String, Object> mapResult = GUISchedNotifica.showMe(mapValues);
     if(mapResult == null) return;
     
-    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOTIFICA_EVENTO);
+    CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOT_EVENTO);
     String sEvento = null;
     if(oEvento != null) {
       sEvento = (String) oEvento.getCode();
@@ -220,21 +220,21 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     else {
       return;
     }
-    String sDestinazione = (String) mapResult.get(sNOTIFICA_DESTINAZIONE);
-    Boolean oDaAttivita  = WUtil.toBooleanObj(mapResult.get(sNOTIFICA_DA_ATTIVITA), null);
+    String sDestinazione = (String) mapResult.get(sNOT_DESTINAZIONE);
+    Boolean oDaAttivita  = WUtil.toBooleanObj(mapResult.get(sNOT_DA_ATTIVITA), null);
     if(oDaAttivita == null) {
       oDaAttivita = Boolean.FALSE;
     }
-    Boolean oCancellata = WUtil.toBooleanObj(mapResult.get(sNOTIFICA_CANCELLATA), null);
+    Boolean oCancellata = WUtil.toBooleanObj(mapResult.get(sNOT_CANCELLATA), null);
     if(oCancellata == null) {
       oCancellata = Boolean.FALSE;
     }
     
     Map<String, Object> mapRecord = new HashMap<String, Object>();
-    mapRecord.put(sNOTIFICA_EVENTO,       sEvento);
-    mapRecord.put(sNOTIFICA_DESTINAZIONE, sDestinazione);
-    mapRecord.put(sNOTIFICA_DA_ATTIVITA,  oDaAttivita);
-    mapRecord.put(sNOTIFICA_CANCELLATA,   oCancellata);
+    mapRecord.put(sNOT_EVENTO,       sEvento);
+    mapRecord.put(sNOT_DESTINAZIONE, sDestinazione);
+    mapRecord.put(sNOT_DA_ATTIVITA,  oDaAttivita);
+    mapRecord.put(sNOT_CANCELLATA,   oCancellata);
     
     oRecords.set(iRow, mapRecord);
     oTableModel.notifyUpdates();
@@ -251,8 +251,8 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      String sE = (String) mapRecord.get(sNOTIFICA_EVENTO);
-      String sD = (String) mapRecord.get(sNOTIFICA_DESTINAZIONE);
+      String sE = (String) mapRecord.get(sNOT_EVENTO);
+      String sD = (String) mapRecord.get(sNOT_DESTINAZIONE);
       if(sEvento.equals(sE) && sDestinazione.equals(sD)) {
         return true;
       }
@@ -268,8 +268,8 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     String sSelection = "";
     for(int i = 0; i < oRecords.size(); i++) {
       Map<String, Object> mapRecord = oRecords.get(i);
-      String sE = (String) mapRecord.get(sNOTIFICA_EVENTO);
-      String sD = (String) mapRecord.get(sNOTIFICA_DESTINAZIONE);
+      String sE = (String) mapRecord.get(sNOT_EVENTO);
+      String sD = (String) mapRecord.get(sNOT_DESTINAZIONE);
       sSelection += sE + "\t" + sD + "\n";
       iRowsCopied++;
     }
@@ -314,8 +314,8 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
       if(exists(sE, sD)) continue;
       
       Map<String, Object> mapRecord = new HashMap<String, Object>();
-      mapRecord.put(sNOTIFICA_EVENTO,       sE);
-      mapRecord.put(sNOTIFICA_DESTINAZIONE, sD);
+      mapRecord.put(sNOT_EVENTO,       sE);
+      mapRecord.put(sNOT_DESTINAZIONE, sD);
       oRecordToPaste.add(mapRecord);
     }
     
@@ -333,8 +333,8 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     }
     for(int i = 0; i < iEnd; i++) {
       Map<String, Object> mapRecord = oRecordToPaste.get(i);
-      sMessage += mapRecord.get(sNOTIFICA_EVENTO);
-      sMessage += " - " + mapRecord.get(sNOTIFICA_DESTINAZIONE) + "\n";
+      sMessage += mapRecord.get(sNOT_EVENTO);
+      sMessage += " - " + mapRecord.get(sNOT_DESTINAZIONE) + "\n";
     }
     if(boCutted) {
       sMessage += " ...\n";
@@ -362,8 +362,8 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
   protected
   Container buildTablePanel()
   {
-    String[] asCOLUMNS   = {"Evento",         "Destinazione"};
-    String[] asSYMBOLICS = {sNOTIFICA_EVENTO, sNOTIFICA_DESTINAZIONE};
+    String[] asCOLUMNS   = {"Evento",    "Destinazione"};
+    String[] asSYMBOLICS = {sNOT_EVENTO, sNOT_DESTINAZIONE};
     
     oRecords = new ArrayList<Map<String, Object>>();
     oTableModel = new SimpleTableModelForSorter(oRecords, asCOLUMNS, asSYMBOLICS);
@@ -400,8 +400,8 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
         super.getTableCellRendererComponent(table, value, selected, focus, row, col);
         
         Map<String, Object> oRecord = oRecords.get(row);
-        boolean boDaAttivita = WUtil.toBoolean(oRecord.get(sNOTIFICA_DA_ATTIVITA), false);
-        boolean boCancellata = WUtil.toBoolean(oRecord.get(sNOTIFICA_CANCELLATA),  false);
+        boolean boDaAttivita = WUtil.toBoolean(oRecord.get(sNOT_DA_ATTIVITA), false);
+        boolean boCancellata = WUtil.toBoolean(oRecord.get(sNOT_CANCELLATA),  false);
         
         if(boDaAttivita) {
           if(boCancellata) {
@@ -467,7 +467,6 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     
     JPanel oResult = new JPanel(new BorderLayout());
     oResult.add(oButtonsPanel, BorderLayout.NORTH);
-    
     return oResult;
   }
   

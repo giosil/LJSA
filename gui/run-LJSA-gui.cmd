@@ -1,1 +1,1 @@
-"%JAVA_HOME%"\bin\java -cp target/LJSA-gui-1.0.0.jar;lib/swing3rd.jar;lib/swingup-1.0.0.jar org.dew.swingup.main.Main
+"%JAVA_HOME%"\bin\java -cp target/LJSA-gui-2.0.0.jar;lib/swing3rd.jar;lib/swingup-1.0.0.jar org.dew.swingup.main.Main
