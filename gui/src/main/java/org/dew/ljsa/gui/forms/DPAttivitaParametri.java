@@ -114,7 +114,7 @@ class DPAttivitaParametri extends ADataPanel implements IAttivita, ActionListene
   void addItem()
       throws Exception
   {
-    Map<String, Object> mapResult = GUIAttivitaParametro.showMe(null);
+    Map<String, Object> mapResult = DlgAttivitaParametro.showMe(null);
     if(mapResult == null) return;
     
     String sParametro = (String) mapResult.get(sPAR_PARAMETRO);
@@ -157,7 +157,7 @@ class DPAttivitaParametri extends ADataPanel implements IAttivita, ActionListene
     
     Map<String, Object> mapParamToOpen = oRecords.get(iRow);
     
-    Map<String, Object> mapResult = GUIAttivitaParametro.showMe(mapParamToOpen);
+    Map<String, Object> mapResult = DlgAttivitaParametro.showMe(mapParamToOpen);
     if(mapResult == null) return;
     
     oRecords.set(iRow, mapResult);

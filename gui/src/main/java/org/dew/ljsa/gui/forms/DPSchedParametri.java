@@ -90,7 +90,7 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
   void addItem()
       throws Exception
   {
-    Map<String, Object> mapResult = GUISchedParametro.showMe(null);
+    Map<String, Object> mapResult = DlgSchedParametro.showMe(null);
     if(mapResult == null) return;
     
     String sParametro = WUtil.toString(mapResult.get(sPAR_PARAMETRO), null);
@@ -140,7 +140,7 @@ class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListe
     
     Map<String, Object> mapParamToOpen = oRecords.get(iRow);
     
-    Map<String, Object> mapResult = GUISchedParametro.showMe(mapParamToOpen);
+    Map<String, Object> mapResult = DlgSchedParametro.showMe(mapParamToOpen);
     if(mapResult == null) return;
     
     oRecords.set(iRow, mapResult);

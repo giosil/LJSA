@@ -143,7 +143,7 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
   void addItem()
       throws Exception
   {
-    Map<String, Object> mapResult = GUISchedNotifica.showMe(null);
+    Map<String, Object> mapResult = DlgSchedNotifica.showMe(null);
     if(mapResult == null) return;
     
     CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOT_EVENTO);
@@ -209,7 +209,7 @@ class DPSchedNotifica extends ADataPanel implements ISchedulazione, ActionListen
     
     Map<String, Object> mapValues = oRecords.get(iRow);
     
-    Map<String, Object> mapResult = GUISchedNotifica.showMe(mapValues);
+    Map<String, Object> mapResult = DlgSchedNotifica.showMe(mapValues);
     if(mapResult == null) return;
     
     CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOT_EVENTO);

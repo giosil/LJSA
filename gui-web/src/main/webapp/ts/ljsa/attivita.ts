@@ -24,6 +24,15 @@ namespace GUI {
         // Dettaglio attributi
         protected fpDetail: WUX.WFormPanel;
         protected selSerDet: LJSASelServizi;
+        protected tabCon: WUX.WDXTable;
+        protected btnAddCon: WUX.WButton;
+        protected btnRemCon: WUX.WButton;
+        protected tabPar: WUX.WDXTable;
+        protected btnAddPar: WUX.WButton;
+        protected btnRemPar: WUX.WButton;
+        protected tabNot: WUX.WDXTable;
+        protected btnAddNot: WUX.WButton;
+        protected btnRemNot: WUX.WButton;
         // Stati
         protected isNew: boolean;
         protected status: number;
@@ -57,11 +66,11 @@ namespace GUI {
                 jrpc.execute('ATTIVITA.find', [this.fpFilter.getState(), user.groups], (result) => {
                     this.tabResult.setState(result);
 
-                    this.fpDetail.clear();
+                    this.clearDet();
                     this.status = this.iSTATUS_STARTUP;
 
                     if (this.selId) {
-                        let idx = GUI.indexOf(result, IAttivita.sID_SERVIZIO, IAttivita.sID_ATTIVITA, this.selId);
+                        let idx = GUI.indexOf(result, IAtt.sID_SERVIZIO, IAtt.sID_ATTIVITA, this.selId);
                         if (idx >= 0) {
                             setTimeout(() => {
                                 this.tabResult.select([idx]);
@@ -81,28 +90,28 @@ namespace GUI {
                 this.fpFilter.clear();
                 this.tagsFilter.setState({});
                 this.tabResult.setState([]);
-                this.fpDetail.clear();
+                this.clearDet();
                 this.status = this.iSTATUS_STARTUP;
             });
 
             this.fpFilter = new WUX.WFormPanel(this.subId('ff'));
             this.fpFilter.addRow();
-            this.fpFilter.addComponent(IAttivita.sID_SERVIZIO, 'Servizio', new LJSASelServizi());
-            this.fpFilter.addTextField(IAttivita.sID_ATTIVITA, 'Codice');
-            this.fpFilter.addTextField(IAttivita.sDESCRIZIONE, 'Descrizione');
+            this.fpFilter.addComponent(IAtt.sID_SERVIZIO, 'Servizio', new LJSASelServizi());
+            this.fpFilter.addTextField(IAtt.sID_ATTIVITA, 'Codice');
+            this.fpFilter.addTextField(IAtt.sDESCRIZIONE, 'Descrizione');
 
             this.selSerDet = new LJSASelServizi();
 
             this.fpDetail = new WUX.WFormPanel(this.subId('fpd'));
             this.fpDetail.addRow();
-            this.fpDetail.addComponent(IAttivita.sID_SERVIZIO, 'Servizio', this.selSerDet);
-            this.fpDetail.addTextField(IAttivita.sID_ATTIVITA, 'Codice');
+            this.fpDetail.addComponent(IAtt.sID_SERVIZIO, 'Servizio', this.selSerDet);
+            this.fpDetail.addTextField(IAtt.sID_ATTIVITA, 'Codice');
             this.fpDetail.addRow();
-            this.fpDetail.addTextField(IAttivita.sCLASSE,      'Classe');
-            this.fpDetail.addTextField(IAttivita.sDESCRIZIONE, 'Descrizione');
-            this.fpDetail.addInternalField(IAttivita.sID_CREDENZIALE_INS);
-            this.fpDetail.addInternalField(IAttivita.sDATA_INS);
-            this.fpDetail.addInternalField(IAttivita.sORA_INS);
+            this.fpDetail.addTextField(IAtt.sCLASSE,      'Classe');
+            this.fpDetail.addTextField(IAtt.sDESCRIZIONE, 'Descrizione');
+            this.fpDetail.addInternalField(IAtt.sID_CREDENZIALE_INS);
+            this.fpDetail.addInternalField(IAtt.sDATA_INS);
+            this.fpDetail.addInternalField(IAtt.sORA_INS);
             this.fpDetail.enabled = false;
 
             this.fpFilter.onEnterPressed((e: WUX.WEvent) => {
@@ -122,7 +131,7 @@ namespace GUI {
 
                 this.tabResult.clearSelection();
 
-                this.fpDetail.enabled = true;
+                this.enableDet(true);
 
                 this.fpDetail.clear();
                 this.selSerDet.setState(_defService);
@@ -145,7 +154,7 @@ namespace GUI {
                 this.status = this.iSTATUS_EDITING;
                 this.selId = null;
 
-                this.fpDetail.enabled = true;
+                this.enableDet(true);
 
                 setTimeout(() => { this.fpDetail.focus(); }, 100);
             });
@@ -169,9 +178,9 @@ namespace GUI {
                     jrpc.execute('ATTIVITA.insert', [values], (result) => {
                         this.status = this.iSTATUS_VIEW;
 
-                        this.fpDetail.enabled = false;
+                        this.enableDet(false);
 
-                        this.selId = result[IAttivita.sID_SERVIZIO] + ":" + result[IAttivita.sID_ATTIVITA];
+                        this.selId = result[IAtt.sID_SERVIZIO] + ":" + result[IAtt.sID_ATTIVITA];
                         this.btnFind.trigger('click');
                     });
                 }
@@ -179,9 +188,9 @@ namespace GUI {
                     jrpc.execute('ATTIVITA.update', [values], (result) => {
                         this.status = this.iSTATUS_VIEW;
 
-                        this.fpDetail.enabled = false;
+                        this.enableDet(false);
 
-                        this.selId = result[IAttivita.sID_SERVIZIO] + ":" + result[IAttivita.sID_ATTIVITA];
+                        this.selId = result[IAtt.sID_SERVIZIO] + ":" + result[IAtt.sID_ATTIVITA];
                         let selRows = this.tabResult.getSelectedRows();
                         if (!selRows || !selRows.length) {
                             this.btnFind.trigger('click');
@@ -207,15 +216,13 @@ namespace GUI {
                 WUX.confirm(GUI.MSG.CONF_CANCEL, (res: any) => {
                     if (!res) return;
                     if (this.isNew) {
-                        this.fpDetail.clear();
+                        this.clearDet();
                     }
                     else {
                         this.onSelect();
                     }
                     this.status = this.iSTATUS_VIEW;
-
-                    this.fpDetail.enabled = false;
-
+                    this.enableDet(false);
                     this.selId = null;
                 });
             });
@@ -229,8 +236,8 @@ namespace GUI {
                 }
                 let rd = this.tabResult.getSelectedRowsData();
                 if (!rd || !rd.length) return;
-                let ids = WUtil.getString(rd[0], IAttivita.sID_SERVIZIO);
-                let ida = WUtil.getString(rd[0], IAttivita.sID_ATTIVITA);
+                let ids = WUtil.getString(rd[0], IAtt.sID_SERVIZIO);
+                let ida = WUtil.getString(rd[0], IAtt.sID_ATTIVITA);
                 WUX.confirm(GUI.MSG.CONF_DELETE, (res: any) => {
                     if (!res) return;
                     jrpc.execute('ATTIVITA.delete', [ids, ida], (result) => {
@@ -240,16 +247,16 @@ namespace GUI {
             });
 
             let rc = [
-                ['Servizio', IAttivita.sID_SERVIZIO],
-                ['Codice', IAttivita.sID_ATTIVITA],
-                ['Descrizione', IAttivita.sDESCRIZIONE],
-                ['Classe', IAttivita.sCLASSE],
-                ['Id Cred. Ins.', IAttivita.sID_CREDENZIALE_INS],
-                ['Data Ins.', IAttivita.sDATA_INS],
-                ['Ora Ins.', IAttivita.sORA_INS],
-                ['Id Cred. Agg.', IAttivita.sID_CREDENZIALE_AGG],
-                ['Data Agg.', IAttivita.sDATA_AGG],
-                ['Ora Agg.', IAttivita.sORA_AGG]
+                ['Servizio', IAtt.sID_SERVIZIO],
+                ['Codice', IAtt.sID_ATTIVITA],
+                ['Descrizione', IAtt.sDESCRIZIONE],
+                ['Classe', IAtt.sCLASSE],
+                ['Id Cred. Ins.', IAtt.sID_CREDENZIALE_INS],
+                ['Data Ins.', IAtt.sDATA_INS],
+                ['Ora Ins.', IAtt.sORA_INS],
+                ['Id Cred. Agg.', IAtt.sID_CREDENZIALE_AGG],
+                ['Data Agg.', IAtt.sDATA_AGG],
+                ['Ora Agg.', IAtt.sORA_AGG]
             ];
             this.tabResult = new WUX.WDXTable(this.subId('tr'), WUtil.col(rc, 0), WUtil.col(rc, 1));
             this.tabResult.css({ h: 220 });
@@ -258,6 +265,42 @@ namespace GUI {
 
                 this.onSelect();
 
+            });
+
+            this.tabCon = new WUX.WDXTable(this.subId('tbc'), ['Opzione', 'Descrizione', 'Valori', 'Predefinito'], [IAtt.sCONF_OPZIONE, IAtt.sCONF_DESCRIZIONE, IAtt.sCONF_VALORI, IAtt.sCONF_PREDEFINITO]);
+            this.tabCon.selectionMode = 'single';
+            this.tabCon.css({ h: 250 });
+            this.tabCon.widths = [120, 120];
+
+            this.btnAddCon = new WUX.WButton(this.subId('bac'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
+            this.btnAddCon.on('click', (e: JQueryEventObject) => {
+            });
+            this.btnRemCon = new WUX.WButton(this.subId('brc'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
+            this.btnRemCon.on('click', (e: JQueryEventObject) => {
+            });
+
+            this.tabPar = new WUX.WDXTable(this.subId('tbp'), ['Parametro', 'Descrizione', 'Valori', 'Predefinito'], [IAtt.sPAR_PARAMETRO, IAtt.sPAR_DESCRIZIONE, IAtt.sPAR_VALORI, IAtt.sPAR_PREDEFINITO]);
+            this.tabPar.selectionMode = 'single';
+            this.tabPar.css({ h: 250 });
+            this.tabPar.widths = [120, 120];
+
+            this.btnAddPar = new WUX.WButton(this.subId('bap'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
+            this.btnAddPar.on('click', (e: JQueryEventObject) => {
+            });
+            this.btnRemPar = new WUX.WButton(this.subId('brp'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
+            this.btnRemPar.on('click', (e: JQueryEventObject) => {
+            });
+
+            this.tabNot = new WUX.WDXTable(this.subId('tbn'), ['Evento', 'Destinazione'], [IAtt.sNOT_EVENTO, IAtt.sNOT_DESTINAZIONE]);
+            this.tabNot.selectionMode = 'single';
+            this.tabNot.css({ h: 250 });
+            this.tabNot.widths = [120, 120];
+
+            this.btnAddNot = new WUX.WButton(this.subId('ban'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
+            this.btnAddNot.on('click', (e: JQueryEventObject) => {
+            });
+            this.btnRemNot = new WUX.WButton(this.subId('brn'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
+            this.btnRemNot.on('click', (e: JQueryEventObject) => {
             });
 
             this.cntActions = new AppTableActions('ta');
@@ -274,6 +317,44 @@ namespace GUI {
                 .addRow()
                 .addCol('12', { h: 300 })
                 .add(this.fpDetail);
+
+            this.tcoDetail.addTab('Configurazione', WUX.WIcon.WRENCH)
+                .addRow()
+                .addCol('11', { h: 300 })
+                .add(this.tabCon)
+                .addCol('1', { h: 300 })
+                .addStack(WUX.CSS.STACK_BTNS, this.btnAddCon, this.btnRemCon);
+
+            this.tcoDetail.addTab('Parametri', WUX.WIcon.EDIT)
+                .addRow()
+                .addCol('11', { h: 300 })
+                .add(this.tabPar)
+                .addCol('1', { h: 300 })
+                .addStack(WUX.CSS.STACK_BTNS, this.btnAddPar, this.btnRemPar);
+
+            this.tcoDetail.addTab('Notifica', WUX.WIcon.ENVELOPE_O)
+                .addRow()
+                .addCol('11', { h: 300 })
+                .add(this.tabNot)
+                .addCol('1', { h: 300 })
+                .addStack(WUX.CSS.STACK_BTNS, this.btnAddNot, this.btnRemNot);
+
+            this.tcoDetail.on('statechange', (e: WUX.WEvent) => {
+                let itab = this.tcoDetail.getState();
+                switch (itab) {
+                    case 0:
+                        break;
+                    case 1:
+                        this.tabCon.repaint();
+                        break;
+                    case 2:
+                        this.tabPar.repaint();
+                        break;
+                    case 3:
+                        this.tabNot.repaint();
+                        break;
+                }
+            });
 
             this.container = new WUX.WContainer();
             this.container.attributes = WUX.ATT.STICKY_CONTAINER;
@@ -311,21 +392,38 @@ namespace GUI {
             var item = WUtil.getItem(this.tabResult.getSelectedRowsData(), 0);
             if (!item) return;
 
-            let ids = WUtil.getString(item, IAttivita.sID_SERVIZIO);
-            let ida = WUtil.getString(item, IAttivita.sID_ATTIVITA);
+            let ids = WUtil.getString(item, IAtt.sID_SERVIZIO);
+            let ida = WUtil.getString(item, IAtt.sID_ATTIVITA);
             if (!ids || !ida) return;
 
-            this.fpDetail.clear();
+            this.clearDet();
 
             if (this.status == this.iSTATUS_EDITING) {
                 WUX.showWarning('Modifiche annullate');
-                this.fpDetail.enabled = false;
+                this.enableDet(false);
             }
 
             jrpc.execute('ATTIVITA.read', [ids, ida], (result) => {
                 this.fpDetail.setState(result);
+                this.tabCon.setState(WUtil.getArray(result, IAtt.sCONFIGURAZIONE));
+                this.tabPar.setState(WUtil.getArray(result, IAtt.sPARAMETRI));
+                this.tabNot.setState(WUtil.getArray(result, IAtt.sNOTIFICA));
                 this.status = this.iSTATUS_VIEW;
             });
+        }
+
+        protected clearDet() {
+            this.fpDetail.clear();
+            this.tabCon.setState([]);
+            this.tabPar.setState([]);
+            this.tabNot.setState([]);
+        }
+
+        protected enableDet(e: boolean) {
+            this.fpDetail.enabled = e;
+            this.tabCon.enabled = e;
+            this.tabPar.enabled = e;
+            this.tabNot.enabled = e;
         }
     }
 }

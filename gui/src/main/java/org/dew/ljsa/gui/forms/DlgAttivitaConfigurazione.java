@@ -21,7 +21,7 @@ import org.dew.swingup.util.CollectionAutoCompleter;
 import org.dew.swingup.util.FormPanel;
 
 public
-class GUIAttivitaConfigurazione extends AJDialog implements IAttivita
+class DlgAttivitaConfigurazione extends AJDialog implements IAttivita
 {
   private static final long serialVersionUID = 5354245914123186314L;
   
@@ -29,16 +29,16 @@ class GUIAttivitaConfigurazione extends AJDialog implements IAttivita
 	protected List<String> listHints;
 	
 	public
-	GUIAttivitaConfigurazione()
+	DlgAttivitaConfigurazione()
 	{
 		super("Configurazione");
-		this.setSize(500, 300);
+		this.setSize(500, 320);
 	}
 	
 	public static
 	Map<String, Object> showMe(Map<String, Object> mapValues)
 	{
-		GUIAttivitaConfigurazione dialog = new GUIAttivitaConfigurazione();
+		DlgAttivitaConfigurazione dialog = new DlgAttivitaConfigurazione();
 		
 		if(mapValues != null) {
 			dialog.setValues(mapValues, false);
@@ -57,7 +57,7 @@ class GUIAttivitaConfigurazione extends AJDialog implements IAttivita
 	public static
 	Map<String, Object> showMe(Map<String, Object> mapValues, boolean boEditFlag)
 	{
-		GUIAttivitaConfigurazione dialog = new GUIAttivitaConfigurazione();
+		DlgAttivitaConfigurazione dialog = new DlgAttivitaConfigurazione();
 		
 		if(mapValues != null) {
 			dialog.setValues(mapValues, boEditFlag);

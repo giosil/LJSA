@@ -83,7 +83,7 @@
         static sATTIVO         = "attivo";
     }
 
-    export class IAttivita {
+    export class IAtt {
         static sID_SERVIZIO        = "id_servizio";
         static sID_ATTIVITA        = "id_attivita";
         static sDESCRIZIONE        = "descrizione";
@@ -138,18 +138,18 @@
         static sPAR_VALORE            = "valore";
         static sPAR_DA_ATTIVITA       = "da_attivita";
         static sPAR_OVERWRITE         = "overwrite";
-        static sPAR_DESCRIZIONE       = IAttivita.sPAR_DESCRIZIONE;
-        static sPAR_VALORI            = IAttivita.sPAR_VALORI;
-        static sPAR_PREDEFINITO       = IAttivita.sPAR_PREDEFINITO;
+        static sPAR_DESCRIZIONE       = IAtt.sPAR_DESCRIZIONE;
+        static sPAR_VALORI            = IAtt.sPAR_VALORI;
+        static sPAR_PREDEFINITO       = IAtt.sPAR_PREDEFINITO;
 
         static sCONFIGURAZIONE        = "configurazione";
         static sCONF_OPZIONE          = "opzione";
         static sCONF_VALORE           = "valore";
         static sCONF_DA_ATTIVITA      = "da_attivita";
         static sCONF_OVERWRITE        = "overwrite";
-        static sCONF_DESCRIZIONE      = IAttivita.sCONF_DESCRIZIONE;
-        static sCONF_VALORI           = IAttivita.sCONF_VALORI;
-        static sCONF_PREDEFINITO      = IAttivita.sCONF_PREDEFINITO;
+        static sCONF_DESCRIZIONE      = IAtt.sCONF_DESCRIZIONE;
+        static sCONF_VALORI           = IAtt.sCONF_VALORI;
+        static sCONF_PREDEFINITO      = IAtt.sCONF_PREDEFINITO;
         static sCONF_TIMEOUT          = "timeout";
         static sCONF_STOP_ON_TIMEOUT  = "stopOnTimeout";
         static sCONF_COMPRESS_FILES   = "compressFiles";

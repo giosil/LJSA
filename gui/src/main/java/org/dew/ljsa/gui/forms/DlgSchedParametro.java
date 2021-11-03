@@ -22,7 +22,7 @@ import org.dew.ljsa.IAttivita;
 import org.dew.ljsa.ISchedulazione;
 
 public
-class GUISchedParametro extends AJDialog implements ISchedulazione
+class DlgSchedParametro extends AJDialog implements ISchedulazione
 {
   private static final long serialVersionUID = 1025760532655783957L;
   
@@ -31,16 +31,16 @@ class GUISchedParametro extends AJDialog implements ISchedulazione
   protected List<String> listHints;
   
   public
-  GUISchedParametro()
+  DlgSchedParametro()
   {
     super("Parametro");
-    this.setSize(500, 300);
+    this.setSize(500, 320);
   }
   
   public static
   Map<String, Object> showMe(Map<String, Object> mapValues)
   {
-    GUISchedParametro dialog = new GUISchedParametro();
+    DlgSchedParametro dialog = new DlgSchedParametro();
     
     if(mapValues != null) {
       dialog.setValues(mapValues, false);
@@ -64,7 +64,7 @@ class GUISchedParametro extends AJDialog implements ISchedulazione
   public static
   Map<String, Object> showMe(Map<String, Object> mapValues, boolean boEditFlag)
   {
-    GUISchedParametro dialog = new GUISchedParametro();
+    DlgSchedParametro dialog = new DlgSchedParametro();
     
     if(mapValues != null) {
       dialog.setValues(mapValues, boEditFlag);

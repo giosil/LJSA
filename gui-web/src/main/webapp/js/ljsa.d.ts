@@ -16,6 +16,15 @@ declare namespace GUI {
         protected tcoDetail: WUX.WTab;
         protected fpDetail: WUX.WFormPanel;
         protected selSerDet: LJSASelServizi;
+        protected tabCon: WUX.WDXTable;
+        protected btnAddCon: WUX.WButton;
+        protected btnRemCon: WUX.WButton;
+        protected tabPar: WUX.WDXTable;
+        protected btnAddPar: WUX.WButton;
+        protected btnRemPar: WUX.WButton;
+        protected tabNot: WUX.WDXTable;
+        protected btnAddNot: WUX.WButton;
+        protected btnRemNot: WUX.WButton;
         protected isNew: boolean;
         protected status: number;
         readonly iSTATUS_STARTUP = 0;
@@ -25,6 +34,8 @@ declare namespace GUI {
         protected render(): WUX.WContainer;
         collapseHandler(e: JQueryEventObject): void;
         protected onSelect(): void;
+        protected clearDet(): void;
+        protected enableDet(e: boolean): void;
     }
 }
 declare namespace GUI {
@@ -68,7 +79,7 @@ declare namespace GUI {
         static sEMAIL: string;
         static sATTIVO: string;
     }
-    class IAttivita {
+    class IAtt {
         static sID_SERVIZIO: string;
         static sID_ATTIVITA: string;
         static sDESCRIZIONE: string;
@@ -226,6 +237,22 @@ declare namespace GUI {
         protected render(): WUX.WContainer;
         collapseHandler(e: JQueryEventObject): void;
         protected onSelect(): void;
+    }
+}
+declare namespace GUI {
+    class DlgAttCon extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+        constructor(id: string);
+        getState(): object;
+        protected onShown(): void;
+        protected onClickOk(): boolean;
+    }
+    class DlgAttPar extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+        constructor(id: string);
+        getState(): object;
+        protected onShown(): void;
+        protected onClickOk(): boolean;
     }
 }
 declare namespace GUI {

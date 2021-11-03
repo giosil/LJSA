@@ -116,7 +116,7 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
   void addItem()
       throws Exception
   {
-    Map<String, Object> mapResult = GUISchedConfigurazione.showMe(null);
+    Map<String, Object> mapResult = DlgSchedConfigurazione.showMe(null);
     if(mapResult == null) return;
     
     String sOpzione = WUtil.toString(mapResult.get(sCONF_OPZIONE), null);
@@ -165,7 +165,7 @@ class DPSchedConfigurazione extends ADataPanel implements ISchedulazione, Action
     
     Map<String, Object> mapConfToOpen = oRecords.get(iRow);
     
-    Map<String, Object> mapResult = GUISchedConfigurazione.showMe(mapConfToOpen);
+    Map<String, Object> mapResult = DlgSchedConfigurazione.showMe(mapConfToOpen);
     if(mapResult == null) {
       return;
     }

@@ -1058,7 +1058,7 @@ class LJSAScheduler
             classe = ljsaClassLoader.loadJobClass(sClasse);
           }
           catch(ClassNotFoundException cnfex) {
-            throw new Exception(ILJSAErrors.sINVALID_CLASS + sClasse);
+            throw new Exception(ILJSAErrors.sINVALID_CLASS + sClasse + " (not found)");
           }
           if(classe == null) {
             throw new Exception(ILJSAErrors.sINVALID_CLASS + sClasse);

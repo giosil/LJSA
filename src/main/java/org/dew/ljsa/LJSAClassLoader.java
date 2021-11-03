@@ -22,11 +22,8 @@ class LJSAClassLoader extends ClassLoader
   {
     Class<?> result = loadClass(name);
     
-    if(result.isInstance(Job.class)) {
-      return (Class<? extends Job>) result;
-    }
-    
-    return null;
+    // Don't check here!
+    return (Class<? extends Job>) result;
   }
   
   public

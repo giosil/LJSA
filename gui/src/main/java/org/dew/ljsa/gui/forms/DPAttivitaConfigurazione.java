@@ -177,10 +177,8 @@ class DPAttivitaConfigurazione extends ADataPanel implements IAttivita, ActionLi
   void addItem()
       throws Exception
   {
-    Map<String, Object> mapResult = GUIAttivitaConfigurazione.showMe(null);
-    if(mapResult == null) {
-      return;
-    }
+    Map<String, Object> mapResult = DlgAttivitaConfigurazione.showMe(null);
+    if(mapResult == null) return;
     
     String sOpzione = (String) mapResult.get(sCONF_OPZIONE);
     if(exist(sOpzione)) {
@@ -221,7 +219,7 @@ class DPAttivitaConfigurazione extends ADataPanel implements IAttivita, ActionLi
     
     Map<String, Object> mapConfToOpen = oRecords.get(iRow);
     
-    Map<String, Object> mapResult = GUIAttivitaConfigurazione.showMe(mapConfToOpen);
+    Map<String, Object> mapResult = DlgAttivitaConfigurazione.showMe(mapConfToOpen);
     if(mapResult == null) return;
     
     oRecords.set(iRow, mapResult);

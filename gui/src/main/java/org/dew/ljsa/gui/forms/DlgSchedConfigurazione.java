@@ -21,7 +21,7 @@ import org.dew.swingup.util.FormPanel;
 import org.dew.util.WUtil;
 
 public
-class GUISchedConfigurazione extends AJDialog implements ISchedulazione
+class DlgSchedConfigurazione extends AJDialog implements ISchedulazione
 {
   private static final long serialVersionUID = 58297944650534861L;
  
@@ -30,16 +30,16 @@ class GUISchedConfigurazione extends AJDialog implements ISchedulazione
 	protected List<String> listHints;
 	
 	public
-	GUISchedConfigurazione()
+	DlgSchedConfigurazione()
 	{
 		super("Configurazione");
-		this.setSize(500, 300);
+		this.setSize(500, 320);
 	}
 	
 	public static
 	Map<String, Object> showMe(Map<String, Object> mapValues)
 	{
-		GUISchedConfigurazione dialog = new GUISchedConfigurazione();
+		DlgSchedConfigurazione dialog = new DlgSchedConfigurazione();
 		
 		if(mapValues != null) {
 			dialog.setValues(mapValues, false);
@@ -61,7 +61,7 @@ class GUISchedConfigurazione extends AJDialog implements ISchedulazione
 	public static
 	Map<String, Object> showMe(Map<String, Object> mapValues, boolean boEditFlag)
 	{
-		GUISchedConfigurazione dialog = new GUISchedConfigurazione();
+		DlgSchedConfigurazione dialog = new DlgSchedConfigurazione();
 		
 		if(mapValues != null) {
 			dialog.setValues(mapValues, boEditFlag);

@@ -137,7 +137,7 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
   void addItem()
       throws Exception
   {
-    Map<String, Object> mapResult = GUIAttivitaNotifica.showMe(null);
+    Map<String, Object> mapResult = DlgAttivitaNotifica.showMe(null);
     if(mapResult == null) return;
     
     CodeAndDescription oEvento = (CodeAndDescription) mapResult.get(sNOT_EVENTO);
@@ -196,7 +196,7 @@ class DPAttivitaNotifica extends ADataPanel implements IAttivita, ActionListener
     
     Map<String, Object> mapValues = oRecords.get(iRow);
     
-    Map<String, Object> mapResult = GUIAttivitaNotifica.showMe(mapValues);
+    Map<String, Object> mapResult = DlgAttivitaNotifica.showMe(mapValues);
     if(mapResult == null) {
       return;
     }
