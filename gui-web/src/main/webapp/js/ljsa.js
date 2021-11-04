@@ -9,6 +9,75 @@ var GUI;
             _this.iSTATUS_VIEW = 1;
             _this.iSTATUS_EDITING = 2;
             _this.status = _this.iSTATUS_STARTUP;
+            _this.dlgCon = new GUI.DlgAttCon(_this.subId('dlgac'));
+            _this.dlgCon.onHiddenModal(function (e) {
+                if (!_this.dlgCon.ok)
+                    return;
+                var r = _this.tabResult.getState();
+                var p = _this.dlgCon.getProps();
+                var s = _this.dlgCon.getState();
+                if (!p || !s)
+                    return;
+                var i = GUI.indexOf(r, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, p);
+                if (i >= 0) {
+                    var e_1 = r[i];
+                    var d = WUtil.getArray(e_1, GUI.IAtt.sCONFIGURAZIONE);
+                    var j = WUtil.indexOf(d, GUI.IAtt.sCONF_OPZIONE, s[GUI.IAtt.sCONF_OPZIONE]);
+                    if (j >= 0) {
+                        d[j] = s;
+                    }
+                    else {
+                        d.push(s);
+                        _this.tabCon.refresh();
+                    }
+                }
+            });
+            _this.dlgPar = new GUI.DlgAttPar(_this.subId('dlgap'));
+            _this.dlgPar.onHiddenModal(function (e) {
+                if (!_this.dlgPar.ok)
+                    return;
+                var r = _this.tabResult.getState();
+                var p = _this.dlgPar.getProps();
+                var s = _this.dlgPar.getState();
+                if (!p || !s)
+                    return;
+                var i = GUI.indexOf(r, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, p);
+                if (i >= 0) {
+                    var e_2 = r[i];
+                    var d = WUtil.getArray(e_2, GUI.IAtt.sPARAMETRI);
+                    var j = WUtil.indexOf(d, GUI.IAtt.sPAR_PARAMETRO, s[GUI.IAtt.sPAR_PARAMETRO]);
+                    if (j >= 0) {
+                        d[j] = s;
+                    }
+                    else {
+                        d.push(s);
+                        _this.tabPar.refresh();
+                    }
+                }
+            });
+            _this.dlgNot = new GUI.DlgAttNot(_this.subId('dlgan'));
+            _this.dlgNot.onHiddenModal(function (e) {
+                if (!_this.dlgNot.ok)
+                    return;
+                var r = _this.tabResult.getState();
+                var p = _this.dlgNot.getProps();
+                var s = _this.dlgNot.getState();
+                if (!p || !s)
+                    return;
+                var i = GUI.indexOf(r, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, p);
+                if (i >= 0) {
+                    var e_3 = r[i];
+                    var d = WUtil.getArray(e_3, GUI.IAtt.sNOTIFICA);
+                    var j = GUI.indexOf(d, GUI.IAtt.sNOT_EVENTO, GUI.IAtt.sNOT_DESTINAZIONE, s[GUI.IAtt.sNOT_EVENTO] + ':' + s[GUI.IAtt.sNOT_DESTINAZIONE]);
+                    if (j >= 0) {
+                        d[j] = s;
+                    }
+                    else {
+                        d.push(s);
+                        _this.tabNot.refresh();
+                    }
+                }
+            });
             return _this;
         }
         GUIAttivita.prototype.render = function () {
@@ -216,8 +285,19 @@ var GUI;
             this.tabCon.selectionMode = 'single';
             this.tabCon.css({ h: 250 });
             this.tabCon.widths = [120, 120];
+            this.tabCon.onDoubleClick(function (e) {
+                var srd = _this.tabCon.getSelectedRowsData();
+                if (!srd || !srd.length)
+                    return;
+                _this.dlgCon.setProps(_this.selId);
+                _this.dlgCon.setState(srd[0]);
+                _this.dlgCon.show(_this);
+            });
             this.btnAddCon = new WUX.WButton(this.subId('bac'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddCon.on('click', function (e) {
+                _this.dlgCon.setProps(_this.selId);
+                _this.dlgCon.setState(null);
+                _this.dlgCon.show(_this);
             });
             this.btnRemCon = new WUX.WButton(this.subId('brc'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemCon.on('click', function (e) {
@@ -226,8 +306,19 @@ var GUI;
             this.tabPar.selectionMode = 'single';
             this.tabPar.css({ h: 250 });
             this.tabPar.widths = [120, 120];
+            this.tabPar.onDoubleClick(function (e) {
+                var srd = _this.tabPar.getSelectedRowsData();
+                if (!srd || !srd.length)
+                    return;
+                _this.dlgPar.setProps(_this.selId);
+                _this.dlgPar.setState(srd[0]);
+                _this.dlgPar.show(_this);
+            });
             this.btnAddPar = new WUX.WButton(this.subId('bap'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddPar.on('click', function (e) {
+                _this.dlgPar.setProps(_this.selId);
+                _this.dlgPar.setState(null);
+                _this.dlgPar.show(_this);
             });
             this.btnRemPar = new WUX.WButton(this.subId('brp'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemPar.on('click', function (e) {
@@ -236,8 +327,19 @@ var GUI;
             this.tabNot.selectionMode = 'single';
             this.tabNot.css({ h: 250 });
             this.tabNot.widths = [120, 120];
+            this.tabNot.onDoubleClick(function (e) {
+                var srd = _this.tabPar.getSelectedRowsData();
+                if (!srd || !srd.length)
+                    return;
+                _this.dlgNot.setProps(_this.selId);
+                _this.dlgNot.setState(srd[0]);
+                _this.dlgNot.show(_this);
+            });
             this.btnAddNot = new WUX.WButton(this.subId('ban'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddNot.on('click', function (e) {
+                _this.dlgNot.setProps(_this.selId);
+                _this.dlgNot.setState(null);
+                _this.dlgNot.show(_this);
             });
             this.btnRemNot = new WUX.WButton(this.subId('brn'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemNot.on('click', function (e) {
@@ -916,6 +1018,23 @@ var GUI;
         return LJSASelStati;
     }(WUX.WSelect2));
     GUI.LJSASelStati = LJSASelStati;
+    var LJSASelEventi = (function (_super) {
+        __extends(LJSASelEventi, _super);
+        function LJSASelEventi(id, multiple) {
+            var _this = _super.call(this, id) || this;
+            _this.multiple = multiple;
+            _this.name = 'LJSASelStati';
+            _this.options = [
+                { id: '', text: '' },
+                { id: 'R', text: '(R) Risultato elaborazione' },
+                { id: 'E', text: '(E) Eccezione verificatasi' },
+                { id: 'T', text: '(T) Timeout raggiunto' },
+            ];
+            return _this;
+        }
+        return LJSASelEventi;
+    }(WUX.WSelect2));
+    GUI.LJSASelEventi = LJSASelEventi;
 })(GUI || (GUI = {}));
 var GUI;
 (function (GUI) {
@@ -1208,14 +1327,17 @@ var GUI;
                 .add(_this.fp);
             return _this;
         }
+        DlgAttCon.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (this.fp) {
+                this.fp.setState(this.state);
+            }
+        };
         DlgAttCon.prototype.getState = function () {
             if (this.fp) {
                 this.state = this.fp.getState();
             }
             return this.state;
-        };
-        DlgAttCon.prototype.onShown = function () {
-            this.fp.clear();
         };
         DlgAttCon.prototype.onClickOk = function () {
             var check = this.fp.checkMandatory(true);
@@ -1249,14 +1371,17 @@ var GUI;
                 .add(_this.fp);
             return _this;
         }
+        DlgAttPar.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (this.fp) {
+                this.fp.setState(this.state);
+            }
+        };
         DlgAttPar.prototype.getState = function () {
             if (this.fp) {
                 this.state = this.fp.getState();
             }
             return this.state;
-        };
-        DlgAttPar.prototype.onShown = function () {
-            this.fp.clear();
         };
         DlgAttPar.prototype.onClickOk = function () {
             var check = this.fp.checkMandatory(true);
@@ -1269,6 +1394,46 @@ var GUI;
         return DlgAttPar;
     }(WUX.WDialog));
     GUI.DlgAttPar = DlgAttPar;
+    var DlgAttNot = (function (_super) {
+        __extends(DlgAttNot, _super);
+        function DlgAttNot(id) {
+            var _this = _super.call(this, id, 'DlgAttNot') || this;
+            _this.title = 'Notifica';
+            _this.fp = new WUX.WFormPanel(_this.subId('fp'));
+            _this.fp.addRow();
+            _this.fp.addComponent(GUI.IAtt.sNOT_EVENTO, 'Evento', new GUI.LJSASelEventi());
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.IAtt.sNOT_DESTINAZIONE, 'Destinazione');
+            _this.fp.setMandatory(GUI.IAtt.sNOT_EVENTO, GUI.IAtt.sNOT_DESTINAZIONE);
+            _this.body
+                .addRow()
+                .addCol('12')
+                .add(_this.fp);
+            return _this;
+        }
+        DlgAttNot.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (this.fp) {
+                this.fp.setState(this.state);
+            }
+        };
+        DlgAttNot.prototype.getState = function () {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
+        };
+        DlgAttNot.prototype.onClickOk = function () {
+            var check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        };
+        return DlgAttNot;
+    }(WUX.WDialog));
+    GUI.DlgAttNot = DlgAttNot;
 })(GUI || (GUI = {}));
 var GUI;
 (function (GUI) {

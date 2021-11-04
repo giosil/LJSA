@@ -33,6 +33,9 @@ namespace GUI {
         protected tabNot: WUX.WDXTable;
         protected btnAddNot: WUX.WButton;
         protected btnRemNot: WUX.WButton;
+        protected dlgCon: DlgAttCon;
+        protected dlgPar: DlgAttPar;
+        protected dlgNot: DlgAttNot;
         // Stati
         protected isNew: boolean;
         protected status: number;
@@ -43,6 +46,70 @@ namespace GUI {
         constructor(id?: string) {
             super(id ? id : '*', 'GUIAttivita');
             this.status = this.iSTATUS_STARTUP;
+
+            this.dlgCon = new DlgAttCon(this.subId('dlgac'));
+            this.dlgCon.onHiddenModal((e: JQueryEventObject) => {
+                if (!this.dlgCon.ok) return;
+                let r = this.tabResult.getState();
+                let p = this.dlgCon.getProps();
+                let s = this.dlgCon.getState();
+                if(!p || !s) return;
+                let i = GUI.indexOf(r, IAtt.sID_SERVIZIO, IAtt.sID_ATTIVITA, p);
+                if(i >= 0) {
+                    let e = r[i];
+                    let d = WUtil.getArray(e, IAtt.sCONFIGURAZIONE);
+                    let j = WUtil.indexOf(d, IAtt.sCONF_OPZIONE, s[IAtt.sCONF_OPZIONE]);
+                    if(j >= 0) {
+                        d[j] = s;
+                    }
+                    else {
+                        d.push(s);
+                        this.tabCon.refresh();
+                    }
+                }
+            });
+            this.dlgPar = new DlgAttPar(this.subId('dlgap'));
+            this.dlgPar.onHiddenModal((e: JQueryEventObject) => {
+                if (!this.dlgPar.ok) return;
+                let r = this.tabResult.getState();
+                let p = this.dlgPar.getProps();
+                let s = this.dlgPar.getState();
+                if(!p || !s) return;
+                let i = GUI.indexOf(r, IAtt.sID_SERVIZIO, IAtt.sID_ATTIVITA, p);
+                if(i >= 0) {
+                    let e = r[i];
+                    let d = WUtil.getArray(e, IAtt.sPARAMETRI);
+                    let j = WUtil.indexOf(d, IAtt.sPAR_PARAMETRO, s[IAtt.sPAR_PARAMETRO]);
+                    if(j >= 0) {
+                        d[j] = s;
+                    }
+                    else {
+                        d.push(s);
+                        this.tabPar.refresh();
+                    }
+                }
+            });
+            this.dlgNot = new DlgAttNot(this.subId('dlgan'));
+            this.dlgNot.onHiddenModal((e: JQueryEventObject) => {
+                if (!this.dlgNot.ok) return;
+                let r = this.tabResult.getState();
+                let p = this.dlgNot.getProps();
+                let s = this.dlgNot.getState();
+                if(!p || !s) return;
+                let i = GUI.indexOf(r, IAtt.sID_SERVIZIO, IAtt.sID_ATTIVITA, p);
+                if(i >= 0) {
+                    let e = r[i];
+                    let d = WUtil.getArray(e, IAtt.sNOTIFICA);
+                    let j = GUI.indexOf(d, IAtt.sNOT_EVENTO, IAtt.sNOT_DESTINAZIONE, s[IAtt.sNOT_EVENTO] + ':' + s[IAtt.sNOT_DESTINAZIONE]);
+                    if(j >= 0) {
+                        d[j] = s;
+                    }
+                    else {
+                        d.push(s);
+                        this.tabNot.refresh();
+                    }
+                }
+            });
         }
 
         protected render() {
@@ -271,9 +338,19 @@ namespace GUI {
             this.tabCon.selectionMode = 'single';
             this.tabCon.css({ h: 250 });
             this.tabCon.widths = [120, 120];
+            this.tabCon.onDoubleClick((e: { element?: JQuery }) => {
+                let srd = this.tabCon.getSelectedRowsData();
+                if (!srd || !srd.length) return;
+                this.dlgCon.setProps(this.selId);
+                this.dlgCon.setState(srd[0]);
+                this.dlgCon.show(this);
+            });
 
             this.btnAddCon = new WUX.WButton(this.subId('bac'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddCon.on('click', (e: JQueryEventObject) => {
+                this.dlgCon.setProps(this.selId);
+                this.dlgCon.setState(null);
+                this.dlgCon.show(this);
             });
             this.btnRemCon = new WUX.WButton(this.subId('brc'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemCon.on('click', (e: JQueryEventObject) => {
@@ -283,9 +360,19 @@ namespace GUI {
             this.tabPar.selectionMode = 'single';
             this.tabPar.css({ h: 250 });
             this.tabPar.widths = [120, 120];
+            this.tabPar.onDoubleClick((e: { element?: JQuery }) => {
+                let srd = this.tabPar.getSelectedRowsData();
+                if (!srd || !srd.length) return;
+                this.dlgPar.setProps(this.selId);
+                this.dlgPar.setState(srd[0]);
+                this.dlgPar.show(this);
+            });
 
             this.btnAddPar = new WUX.WButton(this.subId('bap'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddPar.on('click', (e: JQueryEventObject) => {
+                this.dlgPar.setProps(this.selId);
+                this.dlgPar.setState(null);
+                this.dlgPar.show(this);
             });
             this.btnRemPar = new WUX.WButton(this.subId('brp'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemPar.on('click', (e: JQueryEventObject) => {
@@ -295,9 +382,19 @@ namespace GUI {
             this.tabNot.selectionMode = 'single';
             this.tabNot.css({ h: 250 });
             this.tabNot.widths = [120, 120];
+            this.tabNot.onDoubleClick((e: { element?: JQuery }) => {
+                let srd = this.tabPar.getSelectedRowsData();
+                if (!srd || !srd.length) return;
+                this.dlgNot.setProps(this.selId);
+                this.dlgNot.setState(srd[0]);
+                this.dlgNot.show(this);
+            });
 
             this.btnAddNot = new WUX.WButton(this.subId('ban'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddNot.on('click', (e: JQueryEventObject) => {
+                this.dlgNot.setProps(this.selId);
+                this.dlgNot.setState(null);
+                this.dlgNot.show(this);
             });
             this.btnRemNot = new WUX.WButton(this.subId('brn'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemNot.on('click', (e: JQueryEventObject) => {

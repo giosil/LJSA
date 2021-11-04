@@ -28,15 +28,18 @@
                 .add(this.fp);
         }
 
+        protected updateState(nextState: any) {
+            super.updateState(nextState);
+            if (this.fp) {
+                this.fp.setState(this.state);
+            }
+        }
+
         getState(): object {
             if (this.fp) {
                 this.state = this.fp.getState();
             }
             return this.state;
-        }
-
-        protected onShown() {
-            this.fp.clear();
         }
 
         protected onClickOk(): boolean {
@@ -75,6 +78,13 @@
                 .add(this.fp);
         }
 
+        protected updateState(nextState: any) {
+            super.updateState(nextState);
+            if (this.fp) {
+                this.fp.setState(this.state);
+            }
+        }
+
         getState(): object {
             if (this.fp) {
                 this.state = this.fp.getState();
@@ -82,8 +92,50 @@
             return this.state;
         }
 
-        protected onShown() {
-            this.fp.clear();
+        protected onClickOk(): boolean {
+            let check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        }
+    }
+
+    export class DlgAttNot extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+
+        constructor(id: string) {
+            super(id, 'DlgAttNot');
+
+            this.title = 'Notifica';
+
+            this.fp = new WUX.WFormPanel(this.subId('fp'));
+            this.fp.addRow();
+            this.fp.addComponent(IAtt.sNOT_EVENTO, 'Evento', new LJSASelEventi());
+            this.fp.addRow();
+            this.fp.addTextField(IAtt.sNOT_DESTINAZIONE, 'Destinazione');
+
+            this.fp.setMandatory(IAtt.sNOT_EVENTO, IAtt.sNOT_DESTINAZIONE);
+
+            this.body
+                .addRow()
+                .addCol('12')
+                .add(this.fp);
+        }
+
+        protected updateState(nextState: any) {
+            super.updateState(nextState);
+            if (this.fp) {
+                this.fp.setState(this.state);
+            }
+        }
+
+        getState(): object {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
         }
 
         protected onClickOk(): boolean {

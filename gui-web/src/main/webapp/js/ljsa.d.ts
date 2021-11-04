@@ -25,6 +25,9 @@ declare namespace GUI {
         protected tabNot: WUX.WDXTable;
         protected btnAddNot: WUX.WButton;
         protected btnRemNot: WUX.WButton;
+        protected dlgCon: DlgAttCon;
+        protected dlgPar: DlgAttPar;
+        protected dlgNot: DlgAttNot;
         protected isNew: boolean;
         protected status: number;
         readonly iSTATUS_STARTUP = 0;
@@ -209,6 +212,9 @@ declare namespace GUI {
     class LJSASelStati extends WUX.WSelect2 {
         constructor(id?: string, multiple?: boolean);
     }
+    class LJSASelEventi extends WUX.WSelect2 {
+        constructor(id?: string, multiple?: boolean);
+    }
 }
 declare namespace GUI {
     class GUICredenziali extends WUX.WComponent {
@@ -243,15 +249,22 @@ declare namespace GUI {
     class DlgAttCon extends WUX.WDialog {
         protected fp: WUX.WFormPanel;
         constructor(id: string);
+        protected updateState(nextState: any): void;
         getState(): object;
-        protected onShown(): void;
         protected onClickOk(): boolean;
     }
     class DlgAttPar extends WUX.WDialog {
         protected fp: WUX.WFormPanel;
         constructor(id: string);
+        protected updateState(nextState: any): void;
         getState(): object;
-        protected onShown(): void;
+        protected onClickOk(): boolean;
+    }
+    class DlgAttNot extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+        constructor(id: string);
+        protected updateState(nextState: any): void;
+        getState(): object;
         protected onClickOk(): boolean;
     }
 }

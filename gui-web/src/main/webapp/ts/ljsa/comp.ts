@@ -136,4 +136,18 @@
             ];
         }
     }
+
+    export class LJSASelEventi extends WUX.WSelect2 {
+        constructor(id?: string, multiple?: boolean) {
+            super(id);
+            this.multiple = multiple;
+            this.name = 'LJSASelStati';
+            this.options = [
+                { id: '', text: '' },
+                { id: 'R', text: '(R) Risultato elaborazione' },
+                { id: 'E', text: '(E) Eccezione verificatasi' },
+                { id: 'T', text: '(T) Timeout raggiunto' },
+            ];
+        }
+    }
 }
