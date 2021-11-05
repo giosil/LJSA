@@ -13,70 +13,46 @@ var GUI;
             _this.dlgCon.onHiddenModal(function (e) {
                 if (!_this.dlgCon.ok)
                     return;
-                var r = _this.tabResult.getState();
-                var p = _this.dlgCon.getProps();
+                var d = _this.tabCon.getState();
                 var s = _this.dlgCon.getState();
-                if (!p || !s)
-                    return;
-                var i = GUI.indexOf(r, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, p);
+                var i = WUtil.indexOf(d, GUI.IAtt.sCONF_OPZIONE, s[GUI.IAtt.sCONF_OPZIONE]);
                 if (i >= 0) {
-                    var e_1 = r[i];
-                    var d = WUtil.getArray(e_1, GUI.IAtt.sCONFIGURAZIONE);
-                    var j = WUtil.indexOf(d, GUI.IAtt.sCONF_OPZIONE, s[GUI.IAtt.sCONF_OPZIONE]);
-                    if (j >= 0) {
-                        d[j] = s;
-                    }
-                    else {
-                        d.push(s);
-                        _this.tabCon.refresh();
-                    }
+                    d[i] = s;
                 }
+                else {
+                    d.push(s);
+                }
+                _this.tabCon.setState(d);
             });
             _this.dlgPar = new GUI.DlgAttPar(_this.subId('dlgap'));
             _this.dlgPar.onHiddenModal(function (e) {
                 if (!_this.dlgPar.ok)
                     return;
-                var r = _this.tabResult.getState();
-                var p = _this.dlgPar.getProps();
+                var d = _this.tabPar.getState();
                 var s = _this.dlgPar.getState();
-                if (!p || !s)
-                    return;
-                var i = GUI.indexOf(r, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, p);
+                var i = WUtil.indexOf(d, GUI.IAtt.sPAR_PARAMETRO, s[GUI.IAtt.sPAR_PARAMETRO]);
                 if (i >= 0) {
-                    var e_2 = r[i];
-                    var d = WUtil.getArray(e_2, GUI.IAtt.sPARAMETRI);
-                    var j = WUtil.indexOf(d, GUI.IAtt.sPAR_PARAMETRO, s[GUI.IAtt.sPAR_PARAMETRO]);
-                    if (j >= 0) {
-                        d[j] = s;
-                    }
-                    else {
-                        d.push(s);
-                        _this.tabPar.refresh();
-                    }
+                    d[i] = s;
                 }
+                else {
+                    d.push(s);
+                }
+                _this.tabPar.setState(d);
             });
             _this.dlgNot = new GUI.DlgAttNot(_this.subId('dlgan'));
             _this.dlgNot.onHiddenModal(function (e) {
                 if (!_this.dlgNot.ok)
                     return;
-                var r = _this.tabResult.getState();
-                var p = _this.dlgNot.getProps();
+                var d = _this.tabNot.getState();
                 var s = _this.dlgNot.getState();
-                if (!p || !s)
-                    return;
-                var i = GUI.indexOf(r, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, p);
+                var i = GUI.indexOf(d, GUI.IAtt.sNOT_EVENTO, GUI.IAtt.sNOT_DESTINAZIONE, s[GUI.IAtt.sCONF_OPZIONE] + ':' + s[GUI.IAtt.sNOT_DESTINAZIONE]);
                 if (i >= 0) {
-                    var e_3 = r[i];
-                    var d = WUtil.getArray(e_3, GUI.IAtt.sNOTIFICA);
-                    var j = GUI.indexOf(d, GUI.IAtt.sNOT_EVENTO, GUI.IAtt.sNOT_DESTINAZIONE, s[GUI.IAtt.sNOT_EVENTO] + ':' + s[GUI.IAtt.sNOT_DESTINAZIONE]);
-                    if (j >= 0) {
-                        d[j] = s;
-                    }
-                    else {
-                        d.push(s);
-                        _this.tabNot.refresh();
-                    }
+                    d[i] = s;
                 }
+                else {
+                    d.push(s);
+                }
+                _this.tabNot.setState(d);
             });
             return _this;
         }
@@ -193,6 +169,10 @@ var GUI;
                     return;
                 }
                 var values = _this.fpDetail.getState();
+                values[GUI.IAtt.sCONFIGURAZIONE] = _this.tabCon.getState();
+                values[GUI.IAtt.sPARAMETRI] = _this.tabPar.getState();
+                values[GUI.IAtt.sNOTIFICA] = _this.tabNot.getState();
+                GUI.putUserLog(values);
                 if (_this.isNew) {
                     jrpc.execute('ATTIVITA.insert', [values], function (result) {
                         _this.status = _this.iSTATUS_VIEW;
@@ -283,66 +263,75 @@ var GUI;
             });
             this.tabCon = new WUX.WDXTable(this.subId('tbc'), ['Opzione', 'Descrizione', 'Valori', 'Predefinito'], [GUI.IAtt.sCONF_OPZIONE, GUI.IAtt.sCONF_DESCRIZIONE, GUI.IAtt.sCONF_VALORI, GUI.IAtt.sCONF_PREDEFINITO]);
             this.tabCon.selectionMode = 'single';
-            this.tabCon.css({ h: 250 });
-            this.tabCon.widths = [120, 120];
+            this.tabCon.css({ h: 240 });
             this.tabCon.onDoubleClick(function (e) {
-                var srd = _this.tabCon.getSelectedRowsData();
-                if (!srd || !srd.length)
+                var s = _this.tabCon.getSelectedRowsData();
+                if (!s || !s.length)
                     return;
-                _this.dlgCon.setProps(_this.selId);
-                _this.dlgCon.setState(srd[0]);
+                _this.dlgCon.setState(s[0]);
                 _this.dlgCon.show(_this);
             });
             this.btnAddCon = new WUX.WButton(this.subId('bac'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddCon.on('click', function (e) {
-                _this.dlgCon.setProps(_this.selId);
                 _this.dlgCon.setState(null);
                 _this.dlgCon.show(_this);
             });
             this.btnRemCon = new WUX.WButton(this.subId('brc'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemCon.on('click', function (e) {
+                var s = _this.tabCon.getSelectedRows();
+                if (!s || !s.length)
+                    return;
+                var d = _this.tabCon.getState();
+                d.splice(s[0], 1);
+                _this.tabCon.setState(d);
             });
             this.tabPar = new WUX.WDXTable(this.subId('tbp'), ['Parametro', 'Descrizione', 'Valori', 'Predefinito'], [GUI.IAtt.sPAR_PARAMETRO, GUI.IAtt.sPAR_DESCRIZIONE, GUI.IAtt.sPAR_VALORI, GUI.IAtt.sPAR_PREDEFINITO]);
             this.tabPar.selectionMode = 'single';
-            this.tabPar.css({ h: 250 });
-            this.tabPar.widths = [120, 120];
+            this.tabPar.css({ h: 240 });
             this.tabPar.onDoubleClick(function (e) {
-                var srd = _this.tabPar.getSelectedRowsData();
-                if (!srd || !srd.length)
+                var s = _this.tabPar.getSelectedRowsData();
+                if (!s || !s.length)
                     return;
-                _this.dlgPar.setProps(_this.selId);
-                _this.dlgPar.setState(srd[0]);
+                _this.dlgPar.setState(s[0]);
                 _this.dlgPar.show(_this);
             });
             this.btnAddPar = new WUX.WButton(this.subId('bap'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddPar.on('click', function (e) {
-                _this.dlgPar.setProps(_this.selId);
                 _this.dlgPar.setState(null);
                 _this.dlgPar.show(_this);
             });
             this.btnRemPar = new WUX.WButton(this.subId('brp'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemPar.on('click', function (e) {
+                var s = _this.tabPar.getSelectedRows();
+                if (!s || !s.length)
+                    return;
+                var d = _this.tabPar.getState();
+                d.splice(s[0], 1);
+                _this.tabPar.setState(d);
             });
             this.tabNot = new WUX.WDXTable(this.subId('tbn'), ['Evento', 'Destinazione'], [GUI.IAtt.sNOT_EVENTO, GUI.IAtt.sNOT_DESTINAZIONE]);
             this.tabNot.selectionMode = 'single';
-            this.tabNot.css({ h: 250 });
-            this.tabNot.widths = [120, 120];
+            this.tabNot.css({ h: 240 });
             this.tabNot.onDoubleClick(function (e) {
-                var srd = _this.tabPar.getSelectedRowsData();
-                if (!srd || !srd.length)
+                var s = _this.tabPar.getSelectedRowsData();
+                if (!s || !s.length)
                     return;
-                _this.dlgNot.setProps(_this.selId);
-                _this.dlgNot.setState(srd[0]);
+                _this.dlgNot.setState(s[0]);
                 _this.dlgNot.show(_this);
             });
             this.btnAddNot = new WUX.WButton(this.subId('ban'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
             this.btnAddNot.on('click', function (e) {
-                _this.dlgNot.setProps(_this.selId);
                 _this.dlgNot.setState(null);
                 _this.dlgNot.show(_this);
             });
             this.btnRemNot = new WUX.WButton(this.subId('brn'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
             this.btnRemNot.on('click', function (e) {
+                var s = _this.tabNot.getSelectedRows();
+                if (!s || !s.length)
+                    return;
+                var d = _this.tabNot.getState();
+                d.splice(s[0], 1);
+                _this.tabNot.setState(d);
             });
             this.cntActions = new GUI.AppTableActions('ta');
             this.cntActions.left.add(this.btnOpen);
@@ -434,6 +423,7 @@ var GUI;
                 this.enableDet(false);
             }
             jrpc.execute('ATTIVITA.read', [ids, ida], function (result) {
+                result[GUI.IAtt.sID_SERVIZIO] = GUI.getIdVal(result, GUI.IAtt.sID_SERVIZIO);
                 _this.fpDetail.setState(result);
                 _this.tabCon.setState(WUtil.getArray(result, GUI.IAtt.sCONFIGURAZIONE));
                 _this.tabPar.setState(WUtil.getArray(result, GUI.IAtt.sPARAMETRI));
@@ -502,6 +492,35 @@ var GUI;
         return -1;
     }
     GUI.indexOf = indexOf;
+    function putUserLog(a) {
+        if (!a)
+            return a;
+        a[ICommon.sUSER_LOG] = getUserLogged().userName;
+        return a;
+    }
+    GUI.putUserLog = putUserLog;
+    function getIdVal(a, k) {
+        if (!a || !k)
+            return a;
+        var v = a[k];
+        if (Array.isArray(v)) {
+            if (v.length > 1) {
+                return v[0];
+            }
+            else {
+                return null;
+            }
+        }
+        return v;
+    }
+    GUI.getIdVal = getIdVal;
+    var ICommon = (function () {
+        function ICommon() {
+        }
+        ICommon.sUSER_LOG = '#u';
+        return ICommon;
+    }());
+    GUI.ICommon = ICommon;
     var IServizio = (function () {
         function IServizio() {
         }
@@ -565,7 +584,7 @@ var GUI;
     var ISched = (function () {
         function ISched() {
         }
-        ISched.sID_SCHEDULAZIONE = "id_schedulazione";
+        ISched.sID = "id_schedulazione";
         ISched.sID_SERVIZIO = "id_servizio";
         ISched.sID_ATTIVITA = "id_attivita";
         ISched.sSCHEDULAZIONE = "schedulazione";
@@ -890,7 +909,7 @@ var GUI;
             return _this;
         }
         AppTableActions.prototype.componentDidMount = function () {
-            var $i = $('<div class="table-actions clearfix" data-b2x-sticky-element="1" data-b2x-sticky-element-z-index="3"></div>');
+            var $i = $('<div class="table-actions clearfix"></div>');
             this.root.append($i);
             this.left.mount($i);
             this.right.mount($i);
@@ -915,7 +934,7 @@ var GUI;
         LJSASelServizi.prototype.updateState = function (nextState) {
             _super.prototype.updateState.call(this, nextState);
             var s = WUtil.toString(nextState);
-            if (!s)
+            if (s)
                 GUI._defService = s;
         };
         LJSASelServizi.prototype.componentDidMount = function () {
@@ -925,7 +944,7 @@ var GUI;
                 var data = [];
                 for (var i = 0; i < result.length; i++) {
                     var r = result[i];
-                    var d = { id: r[0], text: r[2] };
+                    var d = { id: r[0], text: r[0] };
                     data.push(d);
                 }
                 var options = {
@@ -957,7 +976,7 @@ var GUI;
                         };
                     },
                     transport: function (params, success, failure) {
-                        jrpc.execute("CLASSI.lookup", [params.data], success);
+                        jrpc.execute("CLASSI.lookup", [params.data.q], success);
                         return undefined;
                     }
                 },
@@ -973,30 +992,47 @@ var GUI;
     var LJSASelAttivita = (function (_super) {
         __extends(LJSASelAttivita, _super);
         function LJSASelAttivita(id, multiple) {
-            var _this = _super.call(this, id, [], multiple) || this;
+            var _this = _super.call(this, id) || this;
+            _this.multiple = multiple;
             _this.name = 'LJSASelAttivita';
             return _this;
         }
+        Object.defineProperty(LJSASelAttivita.prototype, "service", {
+            set: function (s) {
+                this._serviceS = s;
+                if (!s)
+                    return;
+                if (s == this._serviceL)
+                    return;
+                GUI._defService = s;
+                this.reload(false);
+            },
+            enumerable: false,
+            configurable: true
+        });
+        LJSASelAttivita.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            var s = WUtil.toString(nextState);
+            if (s)
+                GUI._defService = s;
+        };
         LJSASelAttivita.prototype.componentDidMount = function () {
-            var options = {
-                ajax: {
-                    dataType: "json",
-                    delay: 400,
-                    processResults: function (result, params) {
-                        return {
-                            results: result
-                        };
-                    },
-                    transport: function (params, success, failure) {
-                        jrpc.execute("ATTIVITA.lookup", [GUI._defService, params.data], success);
-                        return undefined;
-                    }
-                },
-                placeholder: "",
-                allowClear: true,
-                minimumInputLength: 3
-            };
-            this.init(options);
+            var _this = this;
+            jrpc.execute('ATTIVITA.lookup', [GUI._defService, ''], function (result) {
+                _this._serviceL = GUI._defService;
+                var data = [];
+                for (var i = 0; i < result.length; i++) {
+                    var r = result[i];
+                    var d = { id: r[0], text: r[0] };
+                    data.push(d);
+                }
+                var options = {
+                    data: data,
+                    placeholder: "",
+                    allowClear: true,
+                };
+                _this.init(options);
+            });
         };
         return LJSASelAttivita;
     }(WUX.WSelect2));
@@ -1023,7 +1059,7 @@ var GUI;
         function LJSASelEventi(id, multiple) {
             var _this = _super.call(this, id) || this;
             _this.multiple = multiple;
-            _this.name = 'LJSASelStati';
+            _this.name = 'LJSASelEventi';
             _this.options = [
                 { id: '', text: '' },
                 { id: 'R', text: '(R) Risultato elaborazione' },
@@ -1330,6 +1366,7 @@ var GUI;
         DlgAttCon.prototype.updateState = function (nextState) {
             _super.prototype.updateState.call(this, nextState);
             if (this.fp) {
+                this.fp.clear();
                 this.fp.setState(this.state);
             }
         };
@@ -1374,6 +1411,7 @@ var GUI;
         DlgAttPar.prototype.updateState = function (nextState) {
             _super.prototype.updateState.call(this, nextState);
             if (this.fp) {
+                this.fp.clear();
                 this.fp.setState(this.state);
             }
         };
@@ -1414,6 +1452,7 @@ var GUI;
         DlgAttNot.prototype.updateState = function (nextState) {
             _super.prototype.updateState.call(this, nextState);
             if (this.fp) {
+                this.fp.clear();
                 this.fp.setState(this.state);
             }
         };
@@ -1434,6 +1473,137 @@ var GUI;
         return DlgAttNot;
     }(WUX.WDialog));
     GUI.DlgAttNot = DlgAttNot;
+    var DlgSchedCon = (function (_super) {
+        __extends(DlgSchedCon, _super);
+        function DlgSchedCon(id) {
+            var _this = _super.call(this, id, 'DlgSchedCon') || this;
+            _this.title = 'Configurazione';
+            _this.fp = new WUX.WFormPanel(_this.subId('fp'));
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sCONF_OPZIONE, 'Opzione');
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sCONF_DESCRIZIONE, 'Descrizione', true);
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sCONF_VALORI, 'Valori', true);
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sCONF_VALORE, 'Valore');
+            _this.fp.setMandatory(GUI.ISched.sCONF_OPZIONE, GUI.ISched.sCONF_DESCRIZIONE);
+            _this.body
+                .addRow()
+                .addCol('12')
+                .add(_this.fp);
+            return _this;
+        }
+        DlgSchedCon.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (this.fp) {
+                this.fp.clear();
+                this.fp.setState(this.state);
+            }
+        };
+        DlgSchedCon.prototype.getState = function () {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
+        };
+        DlgSchedCon.prototype.onClickOk = function () {
+            var check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        };
+        return DlgSchedCon;
+    }(WUX.WDialog));
+    GUI.DlgSchedCon = DlgSchedCon;
+    var DlgSchedPar = (function (_super) {
+        __extends(DlgSchedPar, _super);
+        function DlgSchedPar(id) {
+            var _this = _super.call(this, id, 'DlgSchedPar') || this;
+            _this.title = 'Parametro';
+            _this.fp = new WUX.WFormPanel(_this.subId('fp'));
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sPAR_PARAMETRO, 'Parametro');
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sPAR_DESCRIZIONE, 'Descrizione', true);
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sPAR_VALORI, 'Valori', true);
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sPAR_VALORE, 'Valore');
+            _this.fp.setMandatory(GUI.ISched.sPAR_PARAMETRO, GUI.ISched.sPAR_DESCRIZIONE);
+            _this.body
+                .addRow()
+                .addCol('12')
+                .add(_this.fp);
+            return _this;
+        }
+        DlgSchedPar.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (this.fp) {
+                this.fp.clear();
+                this.fp.setState(this.state);
+            }
+        };
+        DlgSchedPar.prototype.getState = function () {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
+        };
+        DlgSchedPar.prototype.onClickOk = function () {
+            var check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        };
+        return DlgSchedPar;
+    }(WUX.WDialog));
+    GUI.DlgSchedPar = DlgSchedPar;
+    var DlgSchedNot = (function (_super) {
+        __extends(DlgSchedNot, _super);
+        function DlgSchedNot(id) {
+            var _this = _super.call(this, id, 'DlgSchedNot') || this;
+            _this.title = 'Notifica';
+            _this.fp = new WUX.WFormPanel(_this.subId('fp'));
+            _this.fp.addRow();
+            _this.fp.addComponent(GUI.ISched.sNOT_EVENTO, 'Evento', new GUI.LJSASelEventi());
+            _this.fp.addRow();
+            _this.fp.addTextField(GUI.ISched.sNOT_DESTINAZIONE, 'Destinazione');
+            _this.fp.setMandatory(GUI.ISched.sNOT_EVENTO, GUI.ISched.sNOT_DESTINAZIONE);
+            _this.body
+                .addRow()
+                .addCol('12')
+                .add(_this.fp);
+            return _this;
+        }
+        DlgSchedNot.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (this.fp) {
+                this.fp.clear();
+                this.fp.setState(this.state);
+            }
+        };
+        DlgSchedNot.prototype.getState = function () {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
+        };
+        DlgSchedNot.prototype.onClickOk = function () {
+            var check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        };
+        return DlgSchedNot;
+    }(WUX.WDialog));
+    GUI.DlgSchedNot = DlgSchedNot;
 })(GUI || (GUI = {}));
 var GUI;
 (function (GUI) {
@@ -1446,6 +1616,51 @@ var GUI;
             _this.iSTATUS_VIEW = 1;
             _this.iSTATUS_EDITING = 2;
             _this.status = _this.iSTATUS_STARTUP;
+            _this.dlgCon = new GUI.DlgSchedCon(_this.subId('dlgac'));
+            _this.dlgCon.onHiddenModal(function (e) {
+                if (!_this.dlgCon.ok)
+                    return;
+                var d = _this.tabCon.getState();
+                var s = _this.dlgCon.getState();
+                var i = WUtil.indexOf(d, GUI.ISched.sCONF_OPZIONE, s[GUI.ISched.sCONF_OPZIONE]);
+                if (i >= 0) {
+                    d[i] = s;
+                }
+                else {
+                    d.push(s);
+                }
+                _this.tabCon.setState(d);
+            });
+            _this.dlgPar = new GUI.DlgSchedPar(_this.subId('dlgap'));
+            _this.dlgPar.onHiddenModal(function (e) {
+                if (!_this.dlgPar.ok)
+                    return;
+                var d = _this.tabPar.getState();
+                var s = _this.dlgPar.getState();
+                var i = WUtil.indexOf(d, GUI.ISched.sPAR_PARAMETRO, s[GUI.ISched.sPAR_PARAMETRO]);
+                if (i >= 0) {
+                    d[i] = s;
+                }
+                else {
+                    d.push(s);
+                }
+                _this.tabPar.setState(d);
+            });
+            _this.dlgNot = new GUI.DlgSchedNot(_this.subId('dlgan'));
+            _this.dlgNot.onHiddenModal(function (e) {
+                if (!_this.dlgNot.ok)
+                    return;
+                var d = _this.tabNot.getState();
+                var s = _this.dlgNot.getState();
+                var i = GUI.indexOf(d, GUI.ISched.sNOT_EVENTO, GUI.ISched.sNOT_DESTINAZIONE, s[GUI.ISched.sCONF_OPZIONE] + ':' + s[GUI.ISched.sNOT_DESTINAZIONE]);
+                if (i >= 0) {
+                    d[i] = s;
+                }
+                else {
+                    d.push(s);
+                }
+                _this.tabNot.setState(d);
+            });
             return _this;
         }
         GUISchedulazioni.prototype.render = function () {
@@ -1469,10 +1684,10 @@ var GUI;
                 var user = GUI.getUserLogged();
                 jrpc.execute('SCHEDULAZIONI.find', [_this.fpFilter.getState(), user.groups], function (result) {
                     _this.tabResult.setState(result);
-                    _this.fpDetail.clear();
+                    _this.clearDet();
                     _this.status = _this.iSTATUS_STARTUP;
                     if (_this.selId) {
-                        var idx_7 = WUtil.indexOf(result, GUI.ISched.sID_SCHEDULAZIONE, _this.selId);
+                        var idx_7 = WUtil.indexOf(result, GUI.ISched.sID, _this.selId);
                         if (idx_7 >= 0) {
                             setTimeout(function () {
                                 _this.tabResult.select([idx_7]);
@@ -1491,7 +1706,7 @@ var GUI;
                 _this.fpFilter.clear();
                 _this.tagsFilter.setState({});
                 _this.tabResult.setState([]);
-                _this.fpDetail.clear();
+                _this.clearDet();
                 _this.status = _this.iSTATUS_STARTUP;
             });
             this.fpFilter = new WUX.WFormPanel(this.subId('ff'));
@@ -1504,17 +1719,21 @@ var GUI;
             this.fpFilter.addDateField(GUI.ISched.sINIZIO_VALIDITA, 'Inizio Val.');
             this.fpFilter.addDateField(GUI.ISched.sFINE_VALIDITA, 'Fine Val.');
             this.selSerDet = new GUI.LJSASelServizi();
+            this.selAttDet = new GUI.LJSASelAttivita();
+            this.selSerDet.on('statechange', function (e) {
+                _this.selAttDet.service = _this.selSerDet.getState();
+            });
             this.fpDetail = new WUX.WFormPanel(this.subId('fpd'));
             this.fpDetail.addRow();
             this.fpDetail.addComponent(GUI.ISched.sID_SERVIZIO, 'Servizio', this.selSerDet);
-            this.fpDetail.addTextField(GUI.ISched.sID_ATTIVITA, 'Attivita\'');
+            this.fpDetail.addComponent(GUI.ISched.sID_ATTIVITA, 'Attivita\'', this.selAttDet);
             this.fpDetail.addRow();
             this.fpDetail.addTextField(GUI.ISched.sDESCRIZIONE, 'Descrizione');
             this.fpDetail.addTextField(GUI.ISched.sSCHEDULAZIONE, 'Schedulazione');
             this.fpDetail.addRow();
             this.fpDetail.addDateField(GUI.ISched.sINIZIO_VALIDITA, 'Inizio Val.');
             this.fpDetail.addDateField(GUI.ISched.sFINE_VALIDITA, 'Fine Val.');
-            this.fpDetail.addInternalField(GUI.ISched.sID_SCHEDULAZIONE);
+            this.fpDetail.addInternalField(GUI.ISched.sID);
             this.fpDetail.addInternalField(GUI.ISched.sSTATO);
             this.fpDetail.addInternalField(GUI.ISched.sID_CREDENZIALE_INS);
             this.fpDetail.addInternalField(GUI.ISched.sDATA_INS);
@@ -1535,8 +1754,8 @@ var GUI;
                 _this.status = _this.iSTATUS_EDITING;
                 _this.selId = null;
                 _this.tabResult.clearSelection();
-                _this.fpDetail.enabled = true;
-                _this.fpDetail.clear();
+                _this.enableDet(true);
+                _this.clearDet();
                 _this.selSerDet.setState(GUI._defService);
                 setTimeout(function () { _this.fpDetail.focus(); }, 100);
             });
@@ -1555,7 +1774,7 @@ var GUI;
                 _this.isNew = false;
                 _this.status = _this.iSTATUS_EDITING;
                 _this.selId = null;
-                _this.fpDetail.enabled = true;
+                _this.enableDet(true);
                 setTimeout(function () { _this.fpDetail.focus(); }, 100);
             });
             this.btnSave = new WUX.WButton(this.subId('bs'), GUI.TXT.SAVE, GUI.ICO.SAVE, WUX.BTN.ACT_OUTLINE_PRIMARY);
@@ -1572,19 +1791,23 @@ var GUI;
                     return;
                 }
                 var values = _this.fpDetail.getState();
+                values[GUI.ISched.sCONFIGURAZIONE] = _this.tabCon.getState();
+                values[GUI.ISched.sPARAMETRI] = _this.tabPar.getState();
+                values[GUI.ISched.sNOTIFICA] = _this.tabNot.getState();
+                GUI.putUserLog(values);
                 if (_this.isNew) {
                     jrpc.execute('SCHEDULAZIONI.insert', [values], function (result) {
                         _this.status = _this.iSTATUS_VIEW;
-                        _this.fpDetail.enabled = false;
-                        _this.selId = result[GUI.ISched.sID_SCHEDULAZIONE];
+                        _this.enableDet(false);
+                        _this.selId = result[GUI.ISched.sID];
                         _this.btnFind.trigger('click');
                     });
                 }
                 else {
                     jrpc.execute('SCHEDULAZIONI.update', [values], function (result) {
                         _this.status = _this.iSTATUS_VIEW;
-                        _this.fpDetail.enabled = false;
-                        _this.selId = result[GUI.ISched.sID_SCHEDULAZIONE];
+                        _this.enableDet(false);
+                        _this.selId = result[GUI.ISched.sID];
                         var selRows = _this.tabResult.getSelectedRows();
                         if (!selRows || !selRows.length) {
                             _this.btnFind.trigger('click');
@@ -1611,13 +1834,13 @@ var GUI;
                     if (!res)
                         return;
                     if (_this.isNew) {
-                        _this.fpDetail.clear();
+                        _this.clearDet();
                     }
                     else {
                         _this.onSelect();
                     }
                     _this.status = _this.iSTATUS_VIEW;
-                    _this.fpDetail.enabled = false;
+                    _this.enableDet(false);
                     _this.selId = null;
                 });
             });
@@ -1633,7 +1856,7 @@ var GUI;
                 if (!rd || !rd.length)
                     return;
                 var ids = WUtil.getString(rd[0], GUI.ISched.sID_SERVIZIO);
-                var idc = WUtil.getNumber(rd[0], GUI.ISched.sID_SCHEDULAZIONE);
+                var idc = WUtil.getNumber(rd[0], GUI.ISched.sID);
                 var usr = GUI.getUserLogged().userName;
                 WUX.confirm(GUI.MSG.CONF_DELETE, function (res) {
                     if (!res)
@@ -1643,8 +1866,47 @@ var GUI;
                     });
                 });
             });
+            this.btnToggle = new WUX.WButton(this.subId('bt'), 'Abilita', WUX.WIcon.THUMBS_O_UP, WUX.BTN.ACT_OUTLINE_DANGER);
+            this.btnToggle.on('click', function (e) {
+                _this.btnToggle.blur();
+                var rd = _this.tabResult.getSelectedRowsData();
+                if (!rd || !rd.length) {
+                    WUX.showWarning('Selezione l\'elemento da abilitare/disabilitare');
+                    return;
+                }
+                var ids = WUtil.getString(rd[0], GUI.ISched.sID_SERVIZIO);
+                var idc = WUtil.getNumber(rd[0], GUI.ISched.sID);
+                var cst = WUtil.getString(rd[0], GUI.ISched.sSTATO);
+                var flg = !(cst == 'D');
+                var usr = GUI.getUserLogged().userName;
+                _this.selId = idc;
+                jrpc.execute('SCHEDULAZIONI.setEnabled', [ids, idc, flg, usr], function (result) {
+                    var sr = _this.tabResult.getSelectedRows();
+                    if (!sr || !sr.length) {
+                        _this.btnFind.trigger('click');
+                    }
+                    else {
+                        var r = _this.tabResult.getState();
+                        var x_1 = sr[0];
+                        if (flg) {
+                            r[x_1][GUI.ISched.sSTATO] = 'A';
+                            _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
+                            _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
+                        }
+                        else {
+                            r[x_1][GUI.ISched.sSTATO] = 'D';
+                            _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
+                            _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
+                        }
+                        _this.tabResult.refresh();
+                        setTimeout(function () {
+                            _this.tabResult.select([x_1]);
+                        }, 100);
+                    }
+                });
+            });
             var rc = [
-                ['Id', GUI.ISched.sID_SCHEDULAZIONE],
+                ['Id', GUI.ISched.sID],
                 ['Servizio', GUI.ISched.sID_SERVIZIO],
                 ['Attivita\'', GUI.ISched.sID_ATTIVITA],
                 ['Schedulazione', GUI.ISched.sSCHEDULAZIONE],
@@ -1676,11 +1938,84 @@ var GUI;
                     WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
                 }
             });
+            this.tabCon = new WUX.WDXTable(this.subId('tbc'), ['Opzione', 'Descrizione', 'Valore'], [GUI.ISched.sCONF_OPZIONE, GUI.ISched.sCONF_DESCRIZIONE, GUI.ISched.sCONF_VALORE]);
+            this.tabCon.selectionMode = 'single';
+            this.tabCon.css({ h: 240 });
+            this.tabCon.onDoubleClick(function (e) {
+                var s = _this.tabCon.getSelectedRowsData();
+                if (!s || !s.length)
+                    return;
+                _this.dlgCon.setState(s[0]);
+                _this.dlgCon.show(_this);
+            });
+            this.btnAddCon = new WUX.WButton(this.subId('bac'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
+            this.btnAddCon.on('click', function (e) {
+                _this.dlgCon.setState(null);
+                _this.dlgCon.show(_this);
+            });
+            this.btnRemCon = new WUX.WButton(this.subId('brc'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
+            this.btnRemCon.on('click', function (e) {
+                var s = _this.tabCon.getSelectedRows();
+                if (!s || !s.length)
+                    return;
+                var d = _this.tabCon.getState();
+                d.splice(s[0], 1);
+                _this.tabCon.setState(d);
+            });
+            this.tabPar = new WUX.WDXTable(this.subId('tbp'), ['Parametro', 'Descrizione', 'Valore'], [GUI.ISched.sPAR_PARAMETRO, GUI.ISched.sPAR_DESCRIZIONE, GUI.ISched.sPAR_VALORE]);
+            this.tabPar.selectionMode = 'single';
+            this.tabPar.css({ h: 240 });
+            this.tabPar.onDoubleClick(function (e) {
+                var s = _this.tabPar.getSelectedRowsData();
+                if (!s || !s.length)
+                    return;
+                _this.dlgPar.setState(s[0]);
+                _this.dlgPar.show(_this);
+            });
+            this.btnAddPar = new WUX.WButton(this.subId('bap'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
+            this.btnAddPar.on('click', function (e) {
+                _this.dlgPar.setState(null);
+                _this.dlgPar.show(_this);
+            });
+            this.btnRemPar = new WUX.WButton(this.subId('brp'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
+            this.btnRemPar.on('click', function (e) {
+                var s = _this.tabPar.getSelectedRows();
+                if (!s || !s.length)
+                    return;
+                var d = _this.tabPar.getState();
+                d.splice(s[0], 1);
+                _this.tabPar.setState(d);
+            });
+            this.tabNot = new WUX.WDXTable(this.subId('tbn'), ['Evento', 'Destinazione'], [GUI.ISched.sNOT_EVENTO, GUI.ISched.sNOT_DESTINAZIONE]);
+            this.tabNot.selectionMode = 'single';
+            this.tabNot.css({ h: 240 });
+            this.tabNot.onDoubleClick(function (e) {
+                var s = _this.tabPar.getSelectedRowsData();
+                if (!s || !s.length)
+                    return;
+                _this.dlgNot.setState(s[0]);
+                _this.dlgNot.show(_this);
+            });
+            this.btnAddNot = new WUX.WButton(this.subId('ban'), GUI.TXT.ADD, '', WUX.BTN.SM_PRIMARY);
+            this.btnAddNot.on('click', function (e) {
+                _this.dlgNot.setState(null);
+                _this.dlgNot.show(_this);
+            });
+            this.btnRemNot = new WUX.WButton(this.subId('brn'), GUI.TXT.REMOVE, '', WUX.BTN.SM_DANGER);
+            this.btnRemNot.on('click', function (e) {
+                var s = _this.tabNot.getSelectedRows();
+                if (!s || !s.length)
+                    return;
+                var d = _this.tabNot.getState();
+                d.splice(s[0], 1);
+                _this.tabNot.setState(d);
+            });
             this.cntActions = new GUI.AppTableActions('ta');
             this.cntActions.left.add(this.btnOpen);
             this.cntActions.left.add(this.btnDelete);
             this.cntActions.left.add(this.btnSave);
             this.cntActions.left.add(this.btnCancel);
+            this.cntActions.left.add(this.btnToggle);
             this.cntActions.right.add(this.btnNew);
             this.tagsFilter = new WUX.WTags('tf');
             this.tcoDetail = new WUX.WTab('tcod');
@@ -1688,6 +2023,40 @@ var GUI;
                 .addRow()
                 .addCol('12', { h: 300 })
                 .add(this.fpDetail);
+            this.tcoDetail.addTab('Configurazione', WUX.WIcon.WRENCH)
+                .addRow()
+                .addCol('11', { h: 300 })
+                .add(this.tabCon)
+                .addCol('1', { h: 300 })
+                .addStack(WUX.CSS.STACK_BTNS, this.btnAddCon, this.btnRemCon);
+            this.tcoDetail.addTab('Parametri', WUX.WIcon.EDIT)
+                .addRow()
+                .addCol('11', { h: 300 })
+                .add(this.tabPar)
+                .addCol('1', { h: 300 })
+                .addStack(WUX.CSS.STACK_BTNS, this.btnAddPar, this.btnRemPar);
+            this.tcoDetail.addTab('Notifica', WUX.WIcon.ENVELOPE_O)
+                .addRow()
+                .addCol('11', { h: 300 })
+                .add(this.tabNot)
+                .addCol('1', { h: 300 })
+                .addStack(WUX.CSS.STACK_BTNS, this.btnAddNot, this.btnRemNot);
+            this.tcoDetail.on('statechange', function (e) {
+                var itab = _this.tcoDetail.getState();
+                switch (itab) {
+                    case 0:
+                        break;
+                    case 1:
+                        _this.tabCon.repaint();
+                        break;
+                    case 2:
+                        _this.tabPar.repaint();
+                        break;
+                    case 3:
+                        _this.tabNot.repaint();
+                        break;
+                }
+            });
             this.container = new WUX.WContainer();
             this.container.attributes = WUX.ATT.STICKY_CONTAINER;
             this.container
@@ -1722,18 +2091,44 @@ var GUI;
             var item = WUtil.getItem(this.tabResult.getSelectedRowsData(), 0);
             if (!item)
                 return;
-            var id = WUtil.getNumber(item, GUI.ISched.sID_SCHEDULAZIONE);
+            var id = WUtil.getNumber(item, GUI.ISched.sID);
             if (!id)
                 return;
-            this.fpDetail.clear();
+            this.clearDet();
             if (this.status == this.iSTATUS_EDITING) {
                 WUX.showWarning('Modifiche annullate');
-                this.fpDetail.enabled = false;
+                this.enableDet(false);
             }
             jrpc.execute('SCHEDULAZIONI.read', [id], function (result) {
+                result[GUI.ISched.sID_SERVIZIO] = GUI.getIdVal(result, GUI.ISched.sID_SERVIZIO);
+                result[GUI.ISched.sID_ATTIVITA] = GUI.getIdVal(result, GUI.ISched.sID_ATTIVITA);
                 _this.fpDetail.setState(result);
+                _this.tabCon.setState(WUtil.getArray(result, GUI.ISched.sCONFIGURAZIONE));
+                _this.tabPar.setState(WUtil.getArray(result, GUI.ISched.sPARAMETRI));
+                _this.tabNot.setState(WUtil.getArray(result, GUI.ISched.sNOTIFICA));
+                var cst = WUtil.getString(result, GUI.ISched.sSTATO);
+                if (cst == 'D') {
+                    _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
+                    _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
+                }
+                else {
+                    _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
+                    _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
+                }
                 _this.status = _this.iSTATUS_VIEW;
             });
+        };
+        GUISchedulazioni.prototype.clearDet = function () {
+            this.fpDetail.clear();
+            this.tabCon.setState([]);
+            this.tabPar.setState([]);
+            this.tabNot.setState([]);
+        };
+        GUISchedulazioni.prototype.enableDet = function (e) {
+            this.fpDetail.enabled = e;
+            this.tabCon.enabled = e;
+            this.tabPar.enabled = e;
+            this.tabNot.enabled = e;
         };
         return GUISchedulazioni;
     }(WUX.WComponent));

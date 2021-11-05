@@ -62,6 +62,31 @@
         return -1;
     }
 
+    export function putUserLog(a: any): any {
+        if (!a) return a;
+        a[ICommon.sUSER_LOG] = getUserLogged().userName;
+        return a;
+    }
+
+    export function getIdVal(a: any, k: any): any {
+        if(!a || !k) return a;
+        // id, code, description
+        let v = a[k];
+        if (Array.isArray(v)) {
+            if(v.length > 1) {
+                return v[0];
+            }
+            else {
+                return null;
+            }
+        }
+        return v;
+    }
+
+    export class ICommon {
+        static sUSER_LOG = '#u';
+    }
+
     export class IServizio {
         static sID_SERVIZIO    = 'id_servizio';
         static sDESCRIZIONE    = 'descrizione';
@@ -115,7 +140,7 @@
     }
 
     export class ISched {
-        static sID_SCHEDULAZIONE      = "id_schedulazione";
+        static sID                    = "id_schedulazione";
         static sID_SERVIZIO           = "id_servizio";
         static sID_ATTIVITA           = "id_attivita";
         static sSCHEDULAZIONE         = "schedulazione";

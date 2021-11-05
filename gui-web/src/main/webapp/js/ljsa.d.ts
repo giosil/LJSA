@@ -64,6 +64,11 @@ declare namespace GUI {
     function getLocale(): string;
     function isDevMode(): boolean;
     function indexOf(a: any, k1: any, k2: any, v: any): number;
+    function putUserLog(a: any): any;
+    function getIdVal(a: any, k: any): any;
+    class ICommon {
+        static sUSER_LOG: string;
+    }
     class IServizio {
         static sID_SERVIZIO: string;
         static sDESCRIZIONE: string;
@@ -109,7 +114,7 @@ declare namespace GUI {
         static sNOT_DESTINAZIONE: string;
     }
     class ISched {
-        static sID_SCHEDULAZIONE: string;
+        static sID: string;
         static sID_SERVIZIO: string;
         static sID_ATTIVITA: string;
         static sSCHEDULAZIONE: string;
@@ -206,7 +211,11 @@ declare namespace GUI {
         protected componentDidMount(): void;
     }
     class LJSASelAttivita extends WUX.WSelect2 {
+        protected _serviceL: string;
+        protected _serviceS: string;
         constructor(id?: string, multiple?: boolean);
+        set service(s: string);
+        protected updateState(nextState: any): void;
         protected componentDidMount(): void;
     }
     class LJSASelStati extends WUX.WSelect2 {
@@ -267,6 +276,27 @@ declare namespace GUI {
         getState(): object;
         protected onClickOk(): boolean;
     }
+    class DlgSchedCon extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+        constructor(id: string);
+        protected updateState(nextState: any): void;
+        getState(): object;
+        protected onClickOk(): boolean;
+    }
+    class DlgSchedPar extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+        constructor(id: string);
+        protected updateState(nextState: any): void;
+        getState(): object;
+        protected onClickOk(): boolean;
+    }
+    class DlgSchedNot extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+        constructor(id: string);
+        protected updateState(nextState: any): void;
+        getState(): object;
+        protected onClickOk(): boolean;
+    }
 }
 declare namespace GUI {
     class GUISchedulazioni extends WUX.WComponent {
@@ -281,11 +311,25 @@ declare namespace GUI {
         protected btnSave: WUX.WButton;
         protected btnCancel: WUX.WButton;
         protected btnDelete: WUX.WButton;
+        protected btnToggle: WUX.WButton;
         protected tabResult: WUX.WDXTable;
         protected selId: any;
         protected tcoDetail: WUX.WTab;
         protected fpDetail: WUX.WFormPanel;
         protected selSerDet: LJSASelServizi;
+        protected selAttDet: LJSASelAttivita;
+        protected tabCon: WUX.WDXTable;
+        protected btnAddCon: WUX.WButton;
+        protected btnRemCon: WUX.WButton;
+        protected tabPar: WUX.WDXTable;
+        protected btnAddPar: WUX.WButton;
+        protected btnRemPar: WUX.WButton;
+        protected tabNot: WUX.WDXTable;
+        protected btnAddNot: WUX.WButton;
+        protected btnRemNot: WUX.WButton;
+        protected dlgCon: DlgSchedCon;
+        protected dlgPar: DlgSchedPar;
+        protected dlgNot: DlgSchedNot;
         protected isNew: boolean;
         protected status: number;
         readonly iSTATUS_STARTUP = 0;
@@ -295,6 +339,8 @@ declare namespace GUI {
         protected render(): WUX.WContainer;
         collapseHandler(e: JQueryEventObject): void;
         protected onSelect(): void;
+        protected clearDet(): void;
+        protected enableDet(e: boolean): void;
     }
 }
 declare namespace GUI {

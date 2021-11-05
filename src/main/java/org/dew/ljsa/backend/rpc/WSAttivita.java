@@ -94,15 +94,6 @@ class WSAttivita implements IAttivita
       return listResult;
     }
     
-    if(idAttivita != null) {
-      idAttivita = idAttivita.trim().toUpperCase();
-      if(idAttivita.length() == 1) {
-        char c0 = idAttivita.charAt(0);
-        if(!Character.isLetterOrDigit(c0)) idAttivita = "";
-      }
-    }
-    
-    
     String sSQL = "SELECT ID_ATTIVITA,DESCRIZIONE ";
     sSQL += "FROM LJSA_ATTIVITA ";
     sSQL += "WHERE ID_SERVIZIO=? AND ATTIVO=? ";
@@ -120,7 +111,7 @@ class WSAttivita implements IAttivita
       pstm.setString(1, idServizio.trim().toUpperCase());
       pstm.setString(2, QueryBuilder.decodeBoolean(true));
       if(idAttivita != null && idAttivita.length() > 0) {
-        pstm.setString(3, "%" + idAttivita + "%");
+        pstm.setString(3, "%" + idAttivita.trim().toUpperCase() + "%");
       }
       rs = pstm.executeQuery();
       while(rs.next()) {

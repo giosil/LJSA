@@ -1,7 +1,5 @@
 ﻿namespace GUI {
 
-    import WUtil = WUX.WUtil;
-
     export class DlgAttCon extends WUX.WDialog {
         protected fp: WUX.WFormPanel;
 
@@ -31,6 +29,7 @@
         protected updateState(nextState: any) {
             super.updateState(nextState);
             if (this.fp) {
+                this.fp.clear();
                 this.fp.setState(this.state);
             }
         }
@@ -81,6 +80,7 @@
         protected updateState(nextState: any) {
             super.updateState(nextState);
             if (this.fp) {
+                this.fp.clear();
                 this.fp.setState(this.state);
             }
         }
@@ -127,6 +127,156 @@
         protected updateState(nextState: any) {
             super.updateState(nextState);
             if (this.fp) {
+                this.fp.clear();
+                this.fp.setState(this.state);
+            }
+        }
+
+        getState(): object {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
+        }
+
+        protected onClickOk(): boolean {
+            let check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        }
+    }
+
+    export class DlgSchedCon extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+
+        constructor(id: string) {
+            super(id, 'DlgSchedCon');
+
+            this.title = 'Configurazione';
+
+            this.fp = new WUX.WFormPanel(this.subId('fp'));
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sCONF_OPZIONE, 'Opzione');
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sCONF_DESCRIZIONE, 'Descrizione', true);
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sCONF_VALORI, 'Valori', true);
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sCONF_VALORE, 'Valore');
+
+            this.fp.setMandatory(ISched.sCONF_OPZIONE, ISched.sCONF_DESCRIZIONE);
+
+            this.body
+                .addRow()
+                .addCol('12')
+                .add(this.fp);
+        }
+
+        protected updateState(nextState: any) {
+            super.updateState(nextState);
+            if (this.fp) {
+                this.fp.clear();
+                this.fp.setState(this.state);
+            }
+        }
+
+        getState(): object {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
+        }
+
+        protected onClickOk(): boolean {
+            let check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        }
+    }
+
+    export class DlgSchedPar extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+
+        constructor(id: string) {
+            super(id, 'DlgSchedPar');
+
+            this.title = 'Parametro';
+
+            this.fp = new WUX.WFormPanel(this.subId('fp'));
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sPAR_PARAMETRO, 'Parametro');
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sPAR_DESCRIZIONE, 'Descrizione', true);
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sPAR_VALORI, 'Valori', true);
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sPAR_VALORE, 'Valore');
+
+            this.fp.setMandatory(ISched.sPAR_PARAMETRO, ISched.sPAR_DESCRIZIONE);
+
+            this.body
+                .addRow()
+                .addCol('12')
+                .add(this.fp);
+        }
+
+        protected updateState(nextState: any) {
+            super.updateState(nextState);
+            if (this.fp) {
+                this.fp.clear();
+                this.fp.setState(this.state);
+            }
+        }
+
+        getState(): object {
+            if (this.fp) {
+                this.state = this.fp.getState();
+            }
+            return this.state;
+        }
+
+        protected onClickOk(): boolean {
+            let check = this.fp.checkMandatory(true);
+            if (check) {
+                WUX.showWarning('Specificare: ' + check);
+                return false;
+            }
+            return true;
+        }
+    }
+
+    export class DlgSchedNot extends WUX.WDialog {
+        protected fp: WUX.WFormPanel;
+
+        constructor(id: string) {
+            super(id, 'DlgSchedNot');
+
+            this.title = 'Notifica';
+
+            this.fp = new WUX.WFormPanel(this.subId('fp'));
+            this.fp.addRow();
+            this.fp.addComponent(ISched.sNOT_EVENTO, 'Evento', new LJSASelEventi());
+            this.fp.addRow();
+            this.fp.addTextField(ISched.sNOT_DESTINAZIONE, 'Destinazione');
+
+            this.fp.setMandatory(ISched.sNOT_EVENTO, ISched.sNOT_DESTINAZIONE);
+
+            this.body
+                .addRow()
+                .addCol('12')
+                .add(this.fp);
+        }
+
+        protected updateState(nextState: any) {
+            super.updateState(nextState);
+            if (this.fp) {
+                this.fp.clear();
                 this.fp.setState(this.state);
             }
         }
