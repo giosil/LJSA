@@ -91,6 +91,18 @@ class ExampleLJSAJob extends ALJSAJob
 
 ![File Manager](img/07_fm.png)
 
+### Define class (Web version)
+
+![Classes](img/11_cls.png)
+
+### Define activity (Web version)
+
+![Activities](img/12_act.png)
+
+### Schedule activity (Web version)
+
+![Schedule](img/13_jobs.png)
+
 ## Contributors
 
 * [Giorgio Silvestris](https://github.com/giosil)

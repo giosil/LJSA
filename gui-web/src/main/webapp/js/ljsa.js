@@ -74,6 +74,8 @@ var GUI;
                     _this.tagsFilter.setState(_this.fpFilter.getValues(true));
                     box.collapse();
                 }
+                _this.selId = null;
+                _this.find();
             });
             this.btnReset = new WUX.WButton(this.subId('br'), GUI.TXT.RESET, '', WUX.BTN.SM_SECONDARY);
             this.btnReset.on('click', function (e) {

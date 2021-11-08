@@ -109,7 +109,9 @@ namespace GUI {
                     this.tagsFilter.setState(this.fpFilter.getValues(true));
                     box.collapse();
                 }
-
+                // A fronte di una ricerca esplicita si annulla l'elemento da selezionare
+                this.selId = null;
+                this.find();
             });
 
             this.btnReset = new WUX.WButton(this.subId('br'), GUI.TXT.RESET, '', WUX.BTN.SM_SECONDARY);
