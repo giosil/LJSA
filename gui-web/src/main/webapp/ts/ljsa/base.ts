@@ -192,6 +192,22 @@
         static sESEC_COMPLETATE       = "esecuzioni_completate";
         static sESEC_INTERROTTE       = "esecuzioni_interrotte";
     }
+
+    export class ILog {
+        static sID_LOG           = "id_log";
+        static sID_SCHEDULAZIONE = "id_schedulazione";
+        static sDATA_INIZIO      = "data_inizio";
+        static sORA_INIZIO       = "ora_inizio";
+        static sDATA_FINE        = "data_fine";
+        static sORA_FINE         = "ora_fine";
+        static sRAPPORTO         = "rapporto";
+        static sSTATO            = "stato";
+
+        static sFILES            = "files";
+        static sFILES_TIPOLOGIA  = "tipologia";
+        static sFILES_NOME_FILE  = "nome_file";
+        static sFILES_URL_FILE   = "url_file";
+    }
 }
 
 WUX.global.locale = GUI.getLocale();

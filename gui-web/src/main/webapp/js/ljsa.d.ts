@@ -39,6 +39,7 @@ declare namespace GUI {
         protected onSelect(): void;
         protected clearDet(): void;
         protected enableDet(e: boolean): void;
+        protected find(): void;
     }
 }
 declare namespace GUI {
@@ -161,6 +162,20 @@ declare namespace GUI {
         static sNOT_CANCELLATA: string;
         static sESEC_COMPLETATE: string;
         static sESEC_INTERROTTE: string;
+    }
+    class ILog {
+        static sID_LOG: string;
+        static sID_SCHEDULAZIONE: string;
+        static sDATA_INIZIO: string;
+        static sORA_INIZIO: string;
+        static sDATA_FINE: string;
+        static sORA_FINE: string;
+        static sRAPPORTO: string;
+        static sSTATO: string;
+        static sFILES: string;
+        static sFILES_TIPOLOGIA: string;
+        static sFILES_NOME_FILE: string;
+        static sFILES_URL_FILE: string;
     }
 }
 declare var jrpc: JRPC;
@@ -297,6 +312,16 @@ declare namespace GUI {
         getState(): object;
         protected onClickOk(): boolean;
     }
+    class DlgSchedLog extends WUX.WDialog<number, any[]> {
+        lblMain: WUX.WLabel;
+        tabData: WUX.WDXTable;
+        constructor(id: string);
+        protected updateProps(nextProps: number): void;
+        protected updateState(nextState: any[]): void;
+        getState(): any[];
+        protected onShown(): void;
+        protected componentDidMount(): void;
+    }
 }
 declare namespace GUI {
     class GUISchedulazioni extends WUX.WComponent {
@@ -312,6 +337,7 @@ declare namespace GUI {
         protected btnCancel: WUX.WButton;
         protected btnDelete: WUX.WButton;
         protected btnToggle: WUX.WButton;
+        protected btnLog: WUX.WButton;
         protected tabResult: WUX.WDXTable;
         protected selId: any;
         protected tcoDetail: WUX.WTab;
@@ -330,6 +356,7 @@ declare namespace GUI {
         protected dlgCon: DlgSchedCon;
         protected dlgPar: DlgSchedPar;
         protected dlgNot: DlgSchedNot;
+        protected dlgLog: DlgSchedLog;
         protected isNew: boolean;
         protected status: number;
         readonly iSTATUS_STARTUP = 0;
@@ -341,6 +368,7 @@ declare namespace GUI {
         protected onSelect(): void;
         protected clearDet(): void;
         protected enableDet(e: boolean): void;
+        protected find(): void;
     }
 }
 declare namespace GUI {

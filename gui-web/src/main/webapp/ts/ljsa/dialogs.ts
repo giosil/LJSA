@@ -1,5 +1,7 @@
 ﻿namespace GUI {
 
+    import WUtil = WUX.WUtil;
+
     export class DlgAttCon extends WUX.WDialog {
         protected fp: WUX.WFormPanel;
 
@@ -295,6 +297,93 @@
                 return false;
             }
             return true;
+        }
+    }
+
+    export class DlgSchedLog extends WUX.WDialog<number, any[]> {
+        lblMain: WUX.WLabel;
+        tabData: WUX.WDXTable;
+        
+        constructor(id: string) {
+            super(id, 'DlgSchedLog');
+
+            this.title = 'Log Schedulazione';
+
+            this.lblMain = new WUX.WLabel(this.subId('lm'));
+            this.lblMain.css(WUX.CSS.LABEL_INFO);
+            
+            let dc = [
+                ['Id Log', ILog.sID_LOG, 's'],
+                ['Data Inizio', ILog.sDATA_INIZIO, 'd'],
+                ['Ora Inizio', ILog.sORA_INIZIO, 's'],
+                ['Data Fine', ILog.sDATA_FINE, 'd'],
+                ['Ora Fine', ILog.sORA_FINE, 's'],
+                ['Stato', ILog.sSTATO, 's'],
+                ['Rapporto', ILog.sRAPPORTO , 's']
+            ];
+
+            this.tabData = new WUX.WDXTable(this.subId('tac'), WUtil.col(dc, 0), WUtil.col(dc, 1));
+            this.tabData.types = WUtil.col(dc, 2);
+            this.tabData.css({ h: 400 });
+            this.tabData.exportFile = 'log_schedulazione';
+
+            this.body
+                .addRow()
+                .addCol('12', { a: 'right' })
+                .add(this.lblMain)
+                .addDiv(8)
+                .addRow()
+                .addCol('12')
+                .add(this.tabData);
+        }
+
+        protected updateProps(nextProps: number): void {
+            super.updateProps(nextProps);
+            if (this.lblMain) {
+                if (this.props) {
+                    this.lblMain.setState('Id Schedulazione: ' + this.props);
+                }
+                else {
+                    this.lblMain.setState('');
+                }
+            }
+        }
+
+        protected updateState(nextState: any[]): void {
+            super.updateState(nextState);
+            if (this.tabData) {
+                this.tabData.setState(this.state);
+            }
+        }
+
+        getState(): any[] {
+            if (this.tabData) {
+                this.state = this.tabData.getState();
+            }
+            return this.state;
+        }
+
+        protected onShown() {
+            this.tabData.scrollTo(0);
+            setTimeout(() => {
+                if (this.state && this.state.length) {
+                    this.tabData.refresh();
+                }
+                else {
+                    this.tabData.repaint();
+                }
+            }, 100);
+        }
+
+        protected componentDidMount(): void {
+            super.componentDidMount();
+            let w = $(window).width();
+            if (w > 1260) {
+                this.cntMain.css({ w: 1260, h: 600 });
+            }
+            else {
+                this.cntMain.css({ w: 1000, h: 600 });
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ namespace GUI {
         protected btnCancel: WUX.WButton;
         protected btnDelete: WUX.WButton;
         protected btnToggle: WUX.WButton;
+        protected btnLog: WUX.WButton;
         // Risultato
         protected tabResult: WUX.WDXTable;
         protected selId: any;
@@ -39,6 +40,7 @@ namespace GUI {
         protected dlgCon: DlgSchedCon;
         protected dlgPar: DlgSchedPar;
         protected dlgNot: DlgSchedNot;
+        protected dlgLog: DlgSchedLog;
         // Stati
         protected isNew: boolean;
         protected status: number;
@@ -50,7 +52,7 @@ namespace GUI {
             super(id ? id : '*', 'GUISchedulazioni');
             this.status = this.iSTATUS_STARTUP;
 
-            this.dlgCon = new DlgSchedCon(this.subId('dlgac'));
+            this.dlgCon = new DlgSchedCon(this.subId('dlgsc'));
             this.dlgCon.onHiddenModal((e: JQueryEventObject) => {
                 if (!this.dlgCon.ok) return;
                 let d = this.tabCon.getState();
@@ -64,7 +66,7 @@ namespace GUI {
                 }
                 this.tabCon.setState(d);
             });
-            this.dlgPar = new DlgSchedPar(this.subId('dlgap'));
+            this.dlgPar = new DlgSchedPar(this.subId('dlgsp'));
             this.dlgPar.onHiddenModal((e: JQueryEventObject) => {
                 if (!this.dlgPar.ok) return;
                 let d = this.tabPar.getState();
@@ -78,7 +80,7 @@ namespace GUI {
                 }
                 this.tabPar.setState(d);
             });
-            this.dlgNot = new DlgSchedNot(this.subId('dlgan'));
+            this.dlgNot = new DlgSchedNot(this.subId('dlgsn'));
             this.dlgNot.onHiddenModal((e: JQueryEventObject) => {
                 if (!this.dlgNot.ok) return;
                 let d = this.tabNot.getState();
@@ -92,6 +94,7 @@ namespace GUI {
                 }
                 this.tabNot.setState(d);
             });
+            this.dlgLog = new DlgSchedLog(this.subId('dlgsl'));
         }
 
         protected render() {
@@ -111,23 +114,9 @@ namespace GUI {
                     this.tagsFilter.setState(this.fpFilter.getValues(true));
                     box.collapse();
                 }
-                let user = GUI.getUserLogged();
-                jrpc.execute('SCHEDULAZIONI.find', [this.fpFilter.getState(), user.groups], (result) => {
-                    this.tabResult.setState(result);
-
-                    this.clearDet();
-                    this.status = this.iSTATUS_STARTUP;
-
-                    if (this.selId) {
-                        let idx = WUtil.indexOf(result, ISched.sID, this.selId);
-                        if (idx >= 0) {
-                            setTimeout(() => {
-                                this.tabResult.select([idx]);
-                            }, 100);
-                        }
-                        this.selId = null;
-                    }
-                });
+                // A fronte di una ricerca esplicita si annulla l'elemento da selezionare
+                this.selId = null;
+                this.find();
             });
 
             this.btnReset = new WUX.WButton(this.subId('br'), GUI.TXT.RESET, '', WUX.BTN.SM_SECONDARY);
@@ -249,7 +238,7 @@ namespace GUI {
                         this.enableDet(false);
 
                         this.selId = result[ISched.sID];
-                        this.btnFind.trigger('click');
+                        this.find();
                     });
                 }
                 else {
@@ -261,7 +250,7 @@ namespace GUI {
                         this.selId = result[ISched.sID];
                         let selRows = this.tabResult.getSelectedRows();
                         if (!selRows || !selRows.length) {
-                            this.btnFind.trigger('click');
+                            this.find();
                         }
                         else {
                             let idx = selRows[0];
@@ -312,7 +301,7 @@ namespace GUI {
                 WUX.confirm(GUI.MSG.CONF_DELETE, (res: any) => {
                     if (!res) return;
                     jrpc.execute('SCHEDULAZIONI.delete', [ids, idc, usr], (result) => {
-                        this.btnFind.trigger('click');
+                        this.find();
                     });
                 });
             });
@@ -327,13 +316,14 @@ namespace GUI {
                 let ids = WUtil.getString(rd[0], ISched.sID_SERVIZIO);
                 let idc = WUtil.getNumber(rd[0], ISched.sID);
                 let cst = WUtil.getString(rd[0], ISched.sSTATO);
-                let flg = !(cst == 'D');
+                // Se current status (cst) == 'D' (Disattivata) il flag enabled (nuovo) deve essere true altrimenti false.
+                let flg = cst == 'D';
                 let usr = GUI.getUserLogged().userName;
                 this.selId = idc;
                 jrpc.execute('SCHEDULAZIONI.setEnabled', [ids, idc, flg, usr], (result) => {
                     let sr = this.tabResult.getSelectedRows();
                     if (!sr || !sr.length) {
-                        this.btnFind.trigger('click');
+                        this.find();
                     }
                     else {
                         let r = this.tabResult.getState();
@@ -353,6 +343,25 @@ namespace GUI {
                             this.tabResult.select([x]);
                         }, 100);
                     }
+                });
+            });
+            this.btnLog = new WUX.WButton(this.subId('bl'), GUI.TXT.VIEW, GUI.ICO.VIEW, WUX.BTN.ACT_OUTLINE_INFO);
+            this.btnLog.on('click', (e: JQueryEventObject) => {
+                this.btnLog.blur();
+                let rd = this.tabResult.getSelectedRowsData();
+                if (!rd || !rd.length) {
+                    WUX.showWarning('Selezione una schedulazione');
+                    return;
+                }
+                let id = WUtil.getNumber(rd[0], ISched.sID);
+                jrpc.execute('SCHEDULAZIONI.readLog', [id, 100], (result: any[]) => {
+                    if(!result || !result.length) {
+                        WUX.showWarning('Non vi sono log per la schedulazione ' + id);
+                        return;
+                    }
+                    this.dlgLog.setProps(id);
+                    this.dlgLog.setState(result);
+                    this.dlgLog.show(this);
                 });
             });
 
@@ -464,11 +473,14 @@ namespace GUI {
             });
 
             this.cntActions = new AppTableActions('ta');
+            // Left side
             this.cntActions.left.add(this.btnOpen);
             this.cntActions.left.add(this.btnDelete);
             this.cntActions.left.add(this.btnSave);
             this.cntActions.left.add(this.btnCancel);
             this.cntActions.left.add(this.btnToggle);
+            this.cntActions.left.add(this.btnLog);
+            // Right side
             this.cntActions.right.add(this.btnNew);
 
             this.tagsFilter = new WUX.WTags('tf');
@@ -598,6 +610,24 @@ namespace GUI {
             this.tabCon.enabled = e;
             this.tabPar.enabled = e;
             this.tabNot.enabled = e;
+        }
+
+        protected find() {
+            let user = GUI.getUserLogged();
+            jrpc.execute('SCHEDULAZIONI.find', [this.fpFilter.getState(), user.groups], (result) => {
+                this.tabResult.setState(result);
+                this.clearDet();
+                this.status = this.iSTATUS_STARTUP;
+                if (this.selId) {
+                    let idx = WUtil.indexOf(result, ISched.sID, this.selId);
+                    if (idx >= 0) {
+                        setTimeout(() => {
+                            this.tabResult.select([idx]);
+                        }, 100);
+                    }
+                    this.selId = null;
+                }
+            });
         }
     }
 }

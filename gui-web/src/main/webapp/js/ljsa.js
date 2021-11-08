@@ -74,21 +74,6 @@ var GUI;
                     _this.tagsFilter.setState(_this.fpFilter.getValues(true));
                     box.collapse();
                 }
-                var user = GUI.getUserLogged();
-                jrpc.execute('ATTIVITA.find', [_this.fpFilter.getState(), user.groups], function (result) {
-                    _this.tabResult.setState(result);
-                    _this.clearDet();
-                    _this.status = _this.iSTATUS_STARTUP;
-                    if (_this.selId) {
-                        var idx_1 = GUI.indexOf(result, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, _this.selId);
-                        if (idx_1 >= 0) {
-                            setTimeout(function () {
-                                _this.tabResult.select([idx_1]);
-                            }, 100);
-                        }
-                        _this.selId = null;
-                    }
-                });
             });
             this.btnReset = new WUX.WButton(this.subId('br'), GUI.TXT.RESET, '', WUX.BTN.SM_SECONDARY);
             this.btnReset.on('click', function (e) {
@@ -178,7 +163,7 @@ var GUI;
                         _this.status = _this.iSTATUS_VIEW;
                         _this.enableDet(false);
                         _this.selId = result[GUI.IAtt.sID_SERVIZIO] + ":" + result[GUI.IAtt.sID_ATTIVITA];
-                        _this.btnFind.trigger('click');
+                        _this.find();
                     });
                 }
                 else {
@@ -188,15 +173,15 @@ var GUI;
                         _this.selId = result[GUI.IAtt.sID_SERVIZIO] + ":" + result[GUI.IAtt.sID_ATTIVITA];
                         var selRows = _this.tabResult.getSelectedRows();
                         if (!selRows || !selRows.length) {
-                            _this.btnFind.trigger('click');
+                            _this.find();
                         }
                         else {
-                            var idx_2 = selRows[0];
+                            var idx_1 = selRows[0];
                             var records = _this.tabResult.getState();
-                            records[idx_2] = result;
+                            records[idx_1] = result;
                             _this.tabResult.refresh();
                             setTimeout(function () {
-                                _this.tabResult.select([idx_2]);
+                                _this.tabResult.select([idx_1]);
                             }, 100);
                         }
                     });
@@ -239,7 +224,7 @@ var GUI;
                     if (!res)
                         return;
                     jrpc.execute('ATTIVITA.delete', [ids, ida], function (result) {
-                        _this.btnFind.trigger('click');
+                        _this.find();
                     });
                 });
             });
@@ -443,6 +428,24 @@ var GUI;
             this.tabPar.enabled = e;
             this.tabNot.enabled = e;
         };
+        GUIAttivita.prototype.find = function () {
+            var _this = this;
+            var user = GUI.getUserLogged();
+            jrpc.execute('ATTIVITA.find', [this.fpFilter.getState(), user.groups], function (result) {
+                _this.tabResult.setState(result);
+                _this.clearDet();
+                _this.status = _this.iSTATUS_STARTUP;
+                if (_this.selId) {
+                    var idx_2 = GUI.indexOf(result, GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, _this.selId);
+                    if (idx_2 >= 0) {
+                        setTimeout(function () {
+                            _this.tabResult.select([idx_2]);
+                        }, 100);
+                    }
+                    _this.selId = null;
+                }
+            });
+        };
         return GUIAttivita;
     }(WUX.WComponent));
     GUI.GUIAttivita = GUIAttivita;
@@ -634,6 +637,24 @@ var GUI;
         return ISched;
     }());
     GUI.ISched = ISched;
+    var ILog = (function () {
+        function ILog() {
+        }
+        ILog.sID_LOG = "id_log";
+        ILog.sID_SCHEDULAZIONE = "id_schedulazione";
+        ILog.sDATA_INIZIO = "data_inizio";
+        ILog.sORA_INIZIO = "ora_inizio";
+        ILog.sDATA_FINE = "data_fine";
+        ILog.sORA_FINE = "ora_fine";
+        ILog.sRAPPORTO = "rapporto";
+        ILog.sSTATO = "stato";
+        ILog.sFILES = "files";
+        ILog.sFILES_TIPOLOGIA = "tipologia";
+        ILog.sFILES_NOME_FILE = "nome_file";
+        ILog.sFILES_URL_FILE = "url_file";
+        return ILog;
+    }());
+    GUI.ILog = ILog;
 })(GUI || (GUI = {}));
 WUX.global.locale = GUI.getLocale();
 var jrpc = new JRPC("/LJSA/rpc");
@@ -1342,6 +1363,7 @@ var GUI;
 })(GUI || (GUI = {}));
 var GUI;
 (function (GUI) {
+    var WUtil = WUX.WUtil;
     var DlgAttCon = (function (_super) {
         __extends(DlgAttCon, _super);
         function DlgAttCon(id) {
@@ -1604,6 +1626,84 @@ var GUI;
         return DlgSchedNot;
     }(WUX.WDialog));
     GUI.DlgSchedNot = DlgSchedNot;
+    var DlgSchedLog = (function (_super) {
+        __extends(DlgSchedLog, _super);
+        function DlgSchedLog(id) {
+            var _this = _super.call(this, id, 'DlgSchedLog') || this;
+            _this.title = 'Log Schedulazione';
+            _this.lblMain = new WUX.WLabel(_this.subId('lm'));
+            _this.lblMain.css(WUX.CSS.LABEL_INFO);
+            var dc = [
+                ['Id Log', GUI.ILog.sID_LOG, 's'],
+                ['Data Inizio', GUI.ILog.sDATA_INIZIO, 'd'],
+                ['Ora Inizio', GUI.ILog.sORA_INIZIO, 's'],
+                ['Data Fine', GUI.ILog.sDATA_FINE, 'd'],
+                ['Ora Fine', GUI.ILog.sORA_FINE, 's'],
+                ['Stato', GUI.ILog.sSTATO, 's'],
+                ['Rapporto', GUI.ILog.sRAPPORTO, 's']
+            ];
+            _this.tabData = new WUX.WDXTable(_this.subId('tac'), WUtil.col(dc, 0), WUtil.col(dc, 1));
+            _this.tabData.types = WUtil.col(dc, 2);
+            _this.tabData.css({ h: 400 });
+            _this.tabData.exportFile = 'log_schedulazione';
+            _this.body
+                .addRow()
+                .addCol('12', { a: 'right' })
+                .add(_this.lblMain)
+                .addDiv(8)
+                .addRow()
+                .addCol('12')
+                .add(_this.tabData);
+            return _this;
+        }
+        DlgSchedLog.prototype.updateProps = function (nextProps) {
+            _super.prototype.updateProps.call(this, nextProps);
+            if (this.lblMain) {
+                if (this.props) {
+                    this.lblMain.setState('Id Schedulazione: ' + this.props);
+                }
+                else {
+                    this.lblMain.setState('');
+                }
+            }
+        };
+        DlgSchedLog.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (this.tabData) {
+                this.tabData.setState(this.state);
+            }
+        };
+        DlgSchedLog.prototype.getState = function () {
+            if (this.tabData) {
+                this.state = this.tabData.getState();
+            }
+            return this.state;
+        };
+        DlgSchedLog.prototype.onShown = function () {
+            var _this = this;
+            this.tabData.scrollTo(0);
+            setTimeout(function () {
+                if (_this.state && _this.state.length) {
+                    _this.tabData.refresh();
+                }
+                else {
+                    _this.tabData.repaint();
+                }
+            }, 100);
+        };
+        DlgSchedLog.prototype.componentDidMount = function () {
+            _super.prototype.componentDidMount.call(this);
+            var w = $(window).width();
+            if (w > 1260) {
+                this.cntMain.css({ w: 1260, h: 600 });
+            }
+            else {
+                this.cntMain.css({ w: 1000, h: 600 });
+            }
+        };
+        return DlgSchedLog;
+    }(WUX.WDialog));
+    GUI.DlgSchedLog = DlgSchedLog;
 })(GUI || (GUI = {}));
 var GUI;
 (function (GUI) {
@@ -1616,7 +1716,7 @@ var GUI;
             _this.iSTATUS_VIEW = 1;
             _this.iSTATUS_EDITING = 2;
             _this.status = _this.iSTATUS_STARTUP;
-            _this.dlgCon = new GUI.DlgSchedCon(_this.subId('dlgac'));
+            _this.dlgCon = new GUI.DlgSchedCon(_this.subId('dlgsc'));
             _this.dlgCon.onHiddenModal(function (e) {
                 if (!_this.dlgCon.ok)
                     return;
@@ -1631,7 +1731,7 @@ var GUI;
                 }
                 _this.tabCon.setState(d);
             });
-            _this.dlgPar = new GUI.DlgSchedPar(_this.subId('dlgap'));
+            _this.dlgPar = new GUI.DlgSchedPar(_this.subId('dlgsp'));
             _this.dlgPar.onHiddenModal(function (e) {
                 if (!_this.dlgPar.ok)
                     return;
@@ -1646,7 +1746,7 @@ var GUI;
                 }
                 _this.tabPar.setState(d);
             });
-            _this.dlgNot = new GUI.DlgSchedNot(_this.subId('dlgan'));
+            _this.dlgNot = new GUI.DlgSchedNot(_this.subId('dlgsn'));
             _this.dlgNot.onHiddenModal(function (e) {
                 if (!_this.dlgNot.ok)
                     return;
@@ -1661,6 +1761,7 @@ var GUI;
                 }
                 _this.tabNot.setState(d);
             });
+            _this.dlgLog = new GUI.DlgSchedLog(_this.subId('dlgsl'));
             return _this;
         }
         GUISchedulazioni.prototype.render = function () {
@@ -1681,21 +1782,8 @@ var GUI;
                     _this.tagsFilter.setState(_this.fpFilter.getValues(true));
                     box.collapse();
                 }
-                var user = GUI.getUserLogged();
-                jrpc.execute('SCHEDULAZIONI.find', [_this.fpFilter.getState(), user.groups], function (result) {
-                    _this.tabResult.setState(result);
-                    _this.clearDet();
-                    _this.status = _this.iSTATUS_STARTUP;
-                    if (_this.selId) {
-                        var idx_7 = WUtil.indexOf(result, GUI.ISched.sID, _this.selId);
-                        if (idx_7 >= 0) {
-                            setTimeout(function () {
-                                _this.tabResult.select([idx_7]);
-                            }, 100);
-                        }
-                        _this.selId = null;
-                    }
-                });
+                _this.selId = null;
+                _this.find();
             });
             this.btnReset = new WUX.WButton(this.subId('br'), GUI.TXT.RESET, '', WUX.BTN.SM_SECONDARY);
             this.btnReset.on('click', function (e) {
@@ -1800,7 +1888,7 @@ var GUI;
                         _this.status = _this.iSTATUS_VIEW;
                         _this.enableDet(false);
                         _this.selId = result[GUI.ISched.sID];
-                        _this.btnFind.trigger('click');
+                        _this.find();
                     });
                 }
                 else {
@@ -1810,15 +1898,15 @@ var GUI;
                         _this.selId = result[GUI.ISched.sID];
                         var selRows = _this.tabResult.getSelectedRows();
                         if (!selRows || !selRows.length) {
-                            _this.btnFind.trigger('click');
+                            _this.find();
                         }
                         else {
-                            var idx_8 = selRows[0];
+                            var idx_7 = selRows[0];
                             var records = _this.tabResult.getState();
-                            records[idx_8] = result;
+                            records[idx_7] = result;
                             _this.tabResult.refresh();
                             setTimeout(function () {
-                                _this.tabResult.select([idx_8]);
+                                _this.tabResult.select([idx_7]);
                             }, 100);
                         }
                     });
@@ -1862,7 +1950,7 @@ var GUI;
                     if (!res)
                         return;
                     jrpc.execute('SCHEDULAZIONI.delete', [ids, idc, usr], function (result) {
-                        _this.btnFind.trigger('click');
+                        _this.find();
                     });
                 });
             });
@@ -1877,13 +1965,13 @@ var GUI;
                 var ids = WUtil.getString(rd[0], GUI.ISched.sID_SERVIZIO);
                 var idc = WUtil.getNumber(rd[0], GUI.ISched.sID);
                 var cst = WUtil.getString(rd[0], GUI.ISched.sSTATO);
-                var flg = !(cst == 'D');
+                var flg = cst == 'D';
                 var usr = GUI.getUserLogged().userName;
                 _this.selId = idc;
                 jrpc.execute('SCHEDULAZIONI.setEnabled', [ids, idc, flg, usr], function (result) {
                     var sr = _this.tabResult.getSelectedRows();
                     if (!sr || !sr.length) {
-                        _this.btnFind.trigger('click');
+                        _this.find();
                     }
                     else {
                         var r = _this.tabResult.getState();
@@ -1903,6 +1991,25 @@ var GUI;
                             _this.tabResult.select([x_1]);
                         }, 100);
                     }
+                });
+            });
+            this.btnLog = new WUX.WButton(this.subId('bl'), GUI.TXT.VIEW, GUI.ICO.VIEW, WUX.BTN.ACT_OUTLINE_INFO);
+            this.btnLog.on('click', function (e) {
+                _this.btnLog.blur();
+                var rd = _this.tabResult.getSelectedRowsData();
+                if (!rd || !rd.length) {
+                    WUX.showWarning('Selezione una schedulazione');
+                    return;
+                }
+                var id = WUtil.getNumber(rd[0], GUI.ISched.sID);
+                jrpc.execute('SCHEDULAZIONI.readLog', [id, 100], function (result) {
+                    if (!result || !result.length) {
+                        WUX.showWarning('Non vi sono log per la schedulazione ' + id);
+                        return;
+                    }
+                    _this.dlgLog.setProps(id);
+                    _this.dlgLog.setState(result);
+                    _this.dlgLog.show(_this);
                 });
             });
             var rc = [
@@ -2016,6 +2123,7 @@ var GUI;
             this.cntActions.left.add(this.btnSave);
             this.cntActions.left.add(this.btnCancel);
             this.cntActions.left.add(this.btnToggle);
+            this.cntActions.left.add(this.btnLog);
             this.cntActions.right.add(this.btnNew);
             this.tagsFilter = new WUX.WTags('tf');
             this.tcoDetail = new WUX.WTab('tcod');
@@ -2129,6 +2237,24 @@ var GUI;
             this.tabCon.enabled = e;
             this.tabPar.enabled = e;
             this.tabNot.enabled = e;
+        };
+        GUISchedulazioni.prototype.find = function () {
+            var _this = this;
+            var user = GUI.getUserLogged();
+            jrpc.execute('SCHEDULAZIONI.find', [this.fpFilter.getState(), user.groups], function (result) {
+                _this.tabResult.setState(result);
+                _this.clearDet();
+                _this.status = _this.iSTATUS_STARTUP;
+                if (_this.selId) {
+                    var idx_8 = WUtil.indexOf(result, GUI.ISched.sID, _this.selId);
+                    if (idx_8 >= 0) {
+                        setTimeout(function () {
+                            _this.tabResult.select([idx_8]);
+                        }, 100);
+                    }
+                    _this.selId = null;
+                }
+            });
         };
         return GUISchedulazioni;
     }(WUX.WComponent));

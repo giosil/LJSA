@@ -241,10 +241,12 @@ namespace GUI {
             });
 
             this.cntActions = new AppTableActions('ta');
+            // Left side
             this.cntActions.left.add(this.btnOpen);
             this.cntActions.left.add(this.btnDelete);
             this.cntActions.left.add(this.btnSave);
             this.cntActions.left.add(this.btnCancel);
+            // Right side
             this.cntActions.right.add(this.btnNew);
 
             this.tagsFilter = new WUX.WTags('tf');

@@ -109,21 +109,7 @@ namespace GUI {
                     this.tagsFilter.setState(this.fpFilter.getValues(true));
                     box.collapse();
                 }
-                let user = GUI.getUserLogged();
-                jrpc.execute('ATTIVITA.find', [this.fpFilter.getState(), user.groups], (result) => {
-                    this.tabResult.setState(result);
-                    this.clearDet();
-                    this.status = this.iSTATUS_STARTUP;
-                    if (this.selId) {
-                        let idx = GUI.indexOf(result, IAtt.sID_SERVIZIO, IAtt.sID_ATTIVITA, this.selId);
-                        if (idx >= 0) {
-                            setTimeout(() => {
-                                this.tabResult.select([idx]);
-                            }, 100);
-                        }
-                        this.selId = null;
-                    }
-                });
+
             });
 
             this.btnReset = new WUX.WButton(this.subId('br'), GUI.TXT.RESET, '', WUX.BTN.SM_SECONDARY);
@@ -229,7 +215,7 @@ namespace GUI {
                         this.enableDet(false);
 
                         this.selId = result[IAtt.sID_SERVIZIO] + ":" + result[IAtt.sID_ATTIVITA];
-                        this.btnFind.trigger('click');
+                        this.find();
                     });
                 }
                 else {
@@ -241,7 +227,7 @@ namespace GUI {
                         this.selId = result[IAtt.sID_SERVIZIO] + ":" + result[IAtt.sID_ATTIVITA];
                         let selRows = this.tabResult.getSelectedRows();
                         if (!selRows || !selRows.length) {
-                            this.btnFind.trigger('click');
+                            this.find();
                         }
                         else {
                             let idx = selRows[0];
@@ -289,7 +275,7 @@ namespace GUI {
                 WUX.confirm(GUI.MSG.CONF_DELETE, (res: any) => {
                     if (!res) return;
                     jrpc.execute('ATTIVITA.delete', [ids, ida], (result) => {
-                        this.btnFind.trigger('click');
+                        this.find();
                     });
                 });
             });
@@ -388,10 +374,12 @@ namespace GUI {
             });
 
             this.cntActions = new AppTableActions('ta');
+            // Left side
             this.cntActions.left.add(this.btnOpen);
             this.cntActions.left.add(this.btnDelete);
             this.cntActions.left.add(this.btnSave);
             this.cntActions.left.add(this.btnCancel);
+            // Right side 
             this.cntActions.right.add(this.btnNew);
 
             this.tagsFilter = new WUX.WTags('tf');
@@ -513,5 +501,22 @@ namespace GUI {
             this.tabNot.enabled = e;
         }
 
+        protected find() {
+            let user = GUI.getUserLogged();
+            jrpc.execute('ATTIVITA.find', [this.fpFilter.getState(), user.groups], (result) => {
+                this.tabResult.setState(result);
+                this.clearDet();
+                this.status = this.iSTATUS_STARTUP;
+                if (this.selId) {
+                    let idx = GUI.indexOf(result, IAtt.sID_SERVIZIO, IAtt.sID_ATTIVITA, this.selId);
+                    if (idx >= 0) {
+                        setTimeout(() => {
+                            this.tabResult.select([idx]);
+                        }, 100);
+                    }
+                    this.selId = null;
+                }
+            });
+        }
     }
 }
