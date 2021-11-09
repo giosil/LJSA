@@ -399,6 +399,9 @@ namespace GUI {
                     WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
                 }
             });
+            this.tabResult.onDoubleClick((e: { element?: JQuery }) => {
+                this.btnLog.trigger('click');
+            });
 
             this.tabCon = new WUX.WDXTable(this.subId('tbc'), ['Opzione', 'Descrizione', 'Valore'], [ISched.sCONF_OPZIONE, ISched.sCONF_DESCRIZIONE, ISched.sCONF_VALORE]);
             this.tabCon.selectionMode = 'single';

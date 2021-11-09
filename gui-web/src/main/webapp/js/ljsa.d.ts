@@ -40,6 +40,7 @@ declare namespace GUI {
         protected clearDet(): void;
         protected enableDet(e: boolean): void;
         protected find(): void;
+        protected setDefCon(): void;
     }
 }
 declare namespace GUI {
@@ -223,6 +224,7 @@ declare namespace GUI {
     }
     class LJSASelClassi extends WUX.WSelect2 {
         constructor(id?: string, multiple?: boolean);
+        protected updateState(nextState: any): void;
         protected componentDidMount(): void;
     }
     class LJSASelAttivita extends WUX.WSelect2 {

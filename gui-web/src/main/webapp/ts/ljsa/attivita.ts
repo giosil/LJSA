@@ -140,7 +140,7 @@ namespace GUI {
             this.fpDetail.addComponent(IAtt.sID_SERVIZIO, 'Servizio', this.selSerDet);
             this.fpDetail.addTextField(IAtt.sID_ATTIVITA, 'Codice');
             this.fpDetail.addRow();
-            this.fpDetail.addTextField(IAtt.sCLASSE,      'Classe');
+            this.fpDetail.addComponent(IAtt.sCLASSE,      'Classe', new LJSASelClassi());
             this.fpDetail.addTextField(IAtt.sDESCRIZIONE, 'Descrizione');
             this.fpDetail.addInternalField(IAtt.sID_CREDENZIALE_INS);
             this.fpDetail.addInternalField(IAtt.sDATA_INS);
@@ -165,7 +165,9 @@ namespace GUI {
                 this.tabResult.clearSelection();
                 this.enableDet(true);
 
-                this.fpDetail.clear();
+                this.clearDet();
+                // Set default job configuration
+                this.setDefCon();
                 this.selSerDet.setState(_defService);
 
                 setTimeout(() => { this.fpDetail.focus(); }, 100);
@@ -519,6 +521,29 @@ namespace GUI {
                     this.selId = null;
                 }
             });
+        }
+
+        protected setDefCon() {
+           let d = [
+               ['nolog','Se S le elaborazioni NON vengono tracciate in archivio','S, N','N'],
+               ['attachFiles','Se S i file prodotti vengono inviati in allegato alla mail','S, N','N'],
+               ['attachErrorFiles','Se S i file di errore prodotti vengono inviati in allegato alla mail','S, N','N'],
+               ['compressFiles','Se S i file prodotti vengono compressi','S, N','N'],
+               ['excludeHolidays','Se S vengono esclusi i giorni festivi','S, N','N'],
+               ['single','Se S si bloccano esecuzioni sovrapposte dello stesso job','S, N','N'],
+               ['fileInfo','Se S viene creato il file di informazioni predefinito','S, N','N'],
+               ['timeout','Timeout di elaborazione espresso in minuti','','0']
+           ];
+           let s = [];
+           for(let i=0; i < d.length; i++) {
+               let r = {};
+               r[IAtt.sCONF_OPZIONE] = d[i][0];
+               r[IAtt.sCONF_DESCRIZIONE] = d[i][1];
+               r[IAtt.sCONF_VALORI] = d[i][2];
+               r[IAtt.sCONF_PREDEFINITO] = d[i][3];
+               s.push(r);
+           }
+           this.tabCon.setState(s);
         }
     }
 }

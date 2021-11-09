@@ -366,4 +366,32 @@ class BEConfig
       ex.printStackTrace();
     }
   }
+  
+  public static
+  boolean isManaged(String idServizio)
+  {
+    if(idServizio == null || idServizio.length() == 0) {
+      return false;
+    }
+    
+    String sService = BEConfig.getProperty(BEConfig.sLJSA_CONF_SERVICE);
+    if(sService != null && sService.length() > 0) {
+      return sService.equals(idServizio);
+    }
+    
+    String sExcluded = BEConfig.getProperty(BEConfig.sLJSA_CONF_SER_EXCLUDED);
+    if(sExcluded != null && sExcluded.length() > 0) {
+      int sep = sExcluded.indexOf(',');
+      if(sep > 0) {
+        if(sExcluded.startsWith(idServizio + ","))     return false;
+        if(sExcluded.contains("," + idServizio + ",")) return false;
+        if(sExcluded.endsWith("," + idServizio))       return false;
+      }
+      else {
+        return !sExcluded.equals(idServizio);
+      }
+    }
+    
+    return true;
+  }
 }

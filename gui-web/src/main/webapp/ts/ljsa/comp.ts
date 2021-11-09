@@ -71,14 +71,29 @@
             this.name = 'LJSASelClassi';
         }
 
+        protected updateState(nextState: any): void {
+            if(nextState) {
+               if(!Array.isArray(nextState)) {
+                 nextState = [nextState, nextState];
+               }
+            }
+            super.updateState(nextState);
+        }
+
         protected componentDidMount(): void {
             let options: Select2Options = {
                 ajax: {
                     dataType: "json",
                     delay: 400,
                     processResults: function (result, params) {
+                        let r = [];
+                        if(result) {
+                            for(let i = 0; i < result.length; i++) {
+                                r.push({'id': result[i][0], 'text': result[i][2]})
+                            }
+                        }
                         return {
-                            results: result
+                            results: r
                         };
                     },
                     transport: function (params: JQueryAjaxSettings, success?: (data: any) => null, failure?: () => null): JQueryXHR {

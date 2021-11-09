@@ -326,6 +326,27 @@
             this.tabData.types = WUtil.col(dc, 2);
             this.tabData.css({ h: 400 });
             this.tabData.exportFile = 'log_schedulazione';
+            this.tabData.onCellPrepared((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: DevExpress.ui.dxDataGridColumn, rowIndex?: number, rowType?: string, row?: DevExpress.ui.dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => {
+                let f = e.column.dataField;
+                if (f == ILog.sID_LOG) {
+                    e.cellElement.addClass('clickable');
+                }
+            });
+            this.tabData.onCellClick((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.event, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: DevExpress.ui.dxDataGridRowObject }) => {
+                let row = e.row;
+                if (row != null && row.rowType == 'data') {
+                    let f = e.column.dataField;
+                    if (f == ILog.sID_LOG) {
+                        let u = WUtil.getString(e.data, ILog.sFILES);
+                        if(!u) {
+                            WUX.showWarning("File non disponibili");
+                        }
+                        else {
+                            WUX.openURL(u, false, true);
+                        }
+                    }
+                }
+            });
 
             this.body
                 .addRow()

@@ -100,7 +100,7 @@ var GUI;
             this.fpDetail.addComponent(GUI.IAtt.sID_SERVIZIO, 'Servizio', this.selSerDet);
             this.fpDetail.addTextField(GUI.IAtt.sID_ATTIVITA, 'Codice');
             this.fpDetail.addRow();
-            this.fpDetail.addTextField(GUI.IAtt.sCLASSE, 'Classe');
+            this.fpDetail.addComponent(GUI.IAtt.sCLASSE, 'Classe', new GUI.LJSASelClassi());
             this.fpDetail.addTextField(GUI.IAtt.sDESCRIZIONE, 'Descrizione');
             this.fpDetail.addInternalField(GUI.IAtt.sID_CREDENZIALE_INS);
             this.fpDetail.addInternalField(GUI.IAtt.sDATA_INS);
@@ -120,7 +120,8 @@ var GUI;
                 _this.selId = null;
                 _this.tabResult.clearSelection();
                 _this.enableDet(true);
-                _this.fpDetail.clear();
+                _this.clearDet();
+                _this.setDefCon();
                 _this.selSerDet.setState(GUI._defService);
                 setTimeout(function () { _this.fpDetail.focus(); }, 100);
             });
@@ -447,6 +448,28 @@ var GUI;
                     _this.selId = null;
                 }
             });
+        };
+        GUIAttivita.prototype.setDefCon = function () {
+            var d = [
+                ['nolog', 'Se S le elaborazioni NON vengono tracciate in archivio', 'S, N', 'N'],
+                ['attachFiles', 'Se S i file prodotti vengono inviati in allegato alla mail', 'S, N', 'N'],
+                ['attachErrorFiles', 'Se S i file di errore prodotti vengono inviati in allegato alla mail', 'S, N', 'N'],
+                ['compressFiles', 'Se S i file prodotti vengono compressi', 'S, N', 'N'],
+                ['excludeHolidays', 'Se S vengono esclusi i giorni festivi', 'S, N', 'N'],
+                ['single', 'Se S si bloccano esecuzioni sovrapposte dello stesso job', 'S, N', 'N'],
+                ['fileInfo', 'Se S viene creato il file di informazioni predefinito', 'S, N', 'N'],
+                ['timeout', 'Timeout di elaborazione espresso in minuti', '', '0']
+            ];
+            var s = [];
+            for (var i = 0; i < d.length; i++) {
+                var r = {};
+                r[GUI.IAtt.sCONF_OPZIONE] = d[i][0];
+                r[GUI.IAtt.sCONF_DESCRIZIONE] = d[i][1];
+                r[GUI.IAtt.sCONF_VALORI] = d[i][2];
+                r[GUI.IAtt.sCONF_PREDEFINITO] = d[i][3];
+                s.push(r);
+            }
+            this.tabCon.setState(s);
         };
         return GUIAttivita;
     }(WUX.WComponent));
@@ -988,14 +1011,28 @@ var GUI;
             _this.name = 'LJSASelClassi';
             return _this;
         }
+        LJSASelClassi.prototype.updateState = function (nextState) {
+            if (nextState) {
+                if (!Array.isArray(nextState)) {
+                    nextState = [nextState, nextState];
+                }
+            }
+            _super.prototype.updateState.call(this, nextState);
+        };
         LJSASelClassi.prototype.componentDidMount = function () {
             var options = {
                 ajax: {
                     dataType: "json",
                     delay: 400,
                     processResults: function (result, params) {
+                        var r = [];
+                        if (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                r.push({ 'id': result[i][0], 'text': result[i][2] });
+                            }
+                        }
                         return {
-                            results: result
+                            results: r
                         };
                     },
                     transport: function (params, success, failure) {
@@ -1648,6 +1685,27 @@ var GUI;
             _this.tabData.types = WUtil.col(dc, 2);
             _this.tabData.css({ h: 400 });
             _this.tabData.exportFile = 'log_schedulazione';
+            _this.tabData.onCellPrepared(function (e) {
+                var f = e.column.dataField;
+                if (f == GUI.ILog.sID_LOG) {
+                    e.cellElement.addClass('clickable');
+                }
+            });
+            _this.tabData.onCellClick(function (e) {
+                var row = e.row;
+                if (row != null && row.rowType == 'data') {
+                    var f = e.column.dataField;
+                    if (f == GUI.ILog.sID_LOG) {
+                        var u = WUtil.getString(e.data, GUI.ILog.sFILES);
+                        if (!u) {
+                            WUX.showWarning("File non disponibili");
+                        }
+                        else {
+                            WUX.openURL(u, false, true);
+                        }
+                    }
+                }
+            });
             _this.body
                 .addRow()
                 .addCol('12', { a: 'right' })
@@ -2046,6 +2104,9 @@ var GUI;
                 else if (s == 'E') {
                     WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
                 }
+            });
+            this.tabResult.onDoubleClick(function (e) {
+                _this.btnLog.trigger('click');
             });
             this.tabCon = new WUX.WDXTable(this.subId('tbc'), ['Opzione', 'Descrizione', 'Valore'], [GUI.ISched.sCONF_OPZIONE, GUI.ISched.sCONF_DESCRIZIONE, GUI.ISched.sCONF_VALORE]);
             this.tabCon.selectionMode = 'single';

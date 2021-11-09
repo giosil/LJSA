@@ -21,7 +21,7 @@ import org.dew.ljsa.ILog;
 import org.dew.ljsa.ISchedulazione;
 import org.dew.ljsa.LJSAClient;
 import org.dew.ljsa.Schedulazione;
-
+import org.dew.ljsa.backend.util.BEConfig;
 import org.dew.ljsa.backend.util.ConnectionManager;
 import org.dew.ljsa.backend.util.DataUtil;
 import org.dew.ljsa.backend.util.QueryBuilder;
@@ -354,6 +354,7 @@ class WSSchedulazioni implements ISchedulazione
     sSQL += "WHERE ID_SCHEDULAZIONE=? ";
     sSQL += "ORDER BY ID_LOG DESC";
     
+    String sUrlDownload = null;
     Connection conn = null;
     PreparedStatement pstm = null;
     ResultSet rs = null;
@@ -371,6 +372,22 @@ class WSSchedulazioni implements ISchedulazione
         String sRapporto = rs.getString("RAPPORTO");
         String sStato    = rs.getString("STATO");
         
+        if(sUrlDownload == null || sUrlDownload.length() == 0) {
+          sUrlDownload = getURLLog(conn, idSchedulazione, iIdLog);
+          if(sUrlDownload != null && sUrlDownload.length() > 1) {
+            if(sUrlDownload.endsWith("/")) {
+              sUrlDownload = sUrlDownload.substring(0, sUrlDownload.length()-1);
+            }
+            int lastSep = sUrlDownload.lastIndexOf('/');
+            if(lastSep > 0) {
+              sUrlDownload = sUrlDownload.substring(0, lastSep);
+            }
+            else {
+              sUrlDownload = null;
+            }
+          }
+        }
+        
         WMap record = new WMap();
         record.put(ILog.sID_SCHEDULAZIONE, idSchedulazione);
         record.put(ILog.sID_LOG,           iIdLog);
@@ -380,6 +397,9 @@ class WSSchedulazioni implements ISchedulazione
         record.put(ILog.sORA_FINE,         iOraFine);
         record.put(ILog.sRAPPORTO,         sRapporto);
         record.put(ILog.sSTATO,            sStato);
+        if(sUrlDownload != null && sUrlDownload.length() > 1) {
+          record.put(ILog.sFILES,          sUrlDownload + "/" + iIdLog);
+        }
         
         listResult.add(record.toMapObject());
         
@@ -597,22 +617,22 @@ class WSSchedulazioni implements ISchedulazione
         int iEsecuzioniCompletate = rs.getInt("ESECUZIONI_COMPLETATE");
         int iEsecuzioniInterrotte = rs.getInt("ESECUZIONI_INTERROTTE");
         
-        record.put(sID_SCHEDULAZIONE,       idSchedulazione);
-        record.putList(sID_SERVIZIO,        sIdServizio, sIdServizio, sDescServizio);
-        record.putList(sID_ATTIVITA,        sIdAttivita, sIdAttivita, sDescAttivita);
-        record.put(sDESCRIZIONE,            sDescrizione);
-        record.put(sSCHEDULAZIONE,          sSchedulazione);
-        record.put(sID_CREDENZIALE_INS,     sIdCredenzialeIns);
-        record.putDate(sDATA_INS,           iDataInserimento);
-        record.put(sORA_INS,                iOraInserimento);
-        record.put(sID_CREDENZIALE_AGG,     sIdCredenzialeAgg);
-        record.putDate(sDATA_AGG,           iDataAggiornamento);
-        record.put(sORA_AGG,                iOraAggiornamento);
-        record.put(sSTATO,                  sStato);
-        record.putDate(sINIZIO_VALIDITA,    iInizioValidita);
-        record.putDate(sFINE_VALIDITA,      iFineValidita);
-        record.put(sESEC_COMPLETATE,        iEsecuzioniCompletate);
-        record.put(sESEC_INTERROTTE,        iEsecuzioniInterrotte);
+        record.put(sID_SCHEDULAZIONE,    idSchedulazione);
+        record.putList(sID_SERVIZIO,     sIdServizio, sIdServizio, sDescServizio);
+        record.putList(sID_ATTIVITA,     sIdAttivita, sIdAttivita, sDescAttivita);
+        record.put(sDESCRIZIONE,         sDescrizione);
+        record.put(sSCHEDULAZIONE,       sSchedulazione);
+        record.put(sID_CREDENZIALE_INS,  sIdCredenzialeIns);
+        record.putDate(sDATA_INS,        iDataInserimento);
+        record.put(sORA_INS,             iOraInserimento);
+        record.put(sID_CREDENZIALE_AGG,  sIdCredenzialeAgg);
+        record.putDate(sDATA_AGG,        iDataAggiornamento);
+        record.put(sORA_AGG,             iOraAggiornamento);
+        record.put(sSTATO,               sStato);
+        record.putDate(sINIZIO_VALIDITA, iInizioValidita);
+        record.putDate(sFINE_VALIDITA,   iFineValidita);
+        record.put(sESEC_COMPLETATE,     iEsecuzioniCompletate);
+        record.put(sESEC_INTERROTTE,     iEsecuzioniInterrotte);
         
         record.put(sPARAMETRI,      readParametri(conn,      idSchedulazione, sIdServizio, sIdAttivita));
         record.put(sCONFIGURAZIONE, readConfigurazione(conn, idSchedulazione, sIdServizio, sIdAttivita));
@@ -900,5 +920,66 @@ class WSSchedulazioni implements ISchedulazione
       ConnectionManager.close(rs, pstm);
     }
     return listResult;
+  }
+  
+  protected static
+  String getURLLog(Connection conn, int idSchedulazione, int idLog)
+      throws Exception
+  {
+    String result = null;
+    PreparedStatement pstm = null;
+    ResultSet rs = null;
+    try {
+      pstm = conn.prepareStatement("SELECT URL_FILE FROM LJSA_LOG_FILES WHERE ID_LOG=?");
+      pstm.setInt(1, idLog);
+      rs = pstm.executeQuery();
+      if(rs.next()) {
+        String urlFile = rs.getString("URL_FILE");
+        if(urlFile != null && urlFile.length() > 0) {
+          int lastSep = urlFile.lastIndexOf('/');
+          if(lastSep > 0) {
+            result = urlFile.substring(0, lastSep);
+          }
+        }
+      }
+    }
+    finally {
+      ConnectionManager.close(rs, pstm);
+    }
+    
+    if(result == null || result.length() == 0) {
+      String idServizio = getIdServizio(conn, idSchedulazione);
+      if(idServizio != null && idServizio.length() > 0) {
+        if(BEConfig.isManaged(idServizio)) {
+          return BEConfig.getLJSADownload(idLog);
+        }
+      }
+    }
+    
+    if(result == null || result.length() == 0) {
+      result = BEConfig.getLJSADownload(idLog);
+    }
+    return result;
+  }
+  
+  protected static
+  String getIdServizio(Connection conn, int idSchedulazione)
+      throws Exception
+  {
+    String result = null;
+    PreparedStatement pstm = null;
+    ResultSet rs = null;
+    try {
+      pstm = conn.prepareStatement("SELECT ID_SERVIZIO FROM LJSA_SCHEDULAZIONI WHERE ID_SCHEDULAZIONE=?");
+      pstm.setInt(1, idSchedulazione);
+      rs = pstm.executeQuery();
+      if(rs.next()) {
+        result = rs.getString("ID_SERVIZIO");
+      }
+    }
+    finally {
+      ConnectionManager.close(rs, pstm);
+    }
+    return result;
   }
 }
