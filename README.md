@@ -61,7 +61,7 @@ class ExampleLJSAJob extends ALJSAJob
 }
 ```
 
-## Run LJSA GUI (org.dew.swingup.main.Main)
+## Run LJSA GUI (org.dew.swingup.main.Main) from LJSA-gui sub-project
 
 ### Define class
 
@@ -90,6 +90,8 @@ class ExampleLJSAJob extends ALJSAJob
 ### File Manager
 
 ![File Manager](img/07_fm.png)
+
+## Deploy LJSA GUI WebApp from LJSA-gui-wep sub-project
 
 ### Define class (Web version)
 
