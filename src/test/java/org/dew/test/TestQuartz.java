@@ -8,6 +8,7 @@ import org.dew.ljsa.backend.util.BEConfig;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -39,6 +40,11 @@ public class TestQuartz {
           .withIdentity("TestJob", "Group")
           .storeDurably(true)
           .build();
+      
+      // Put custom data
+      
+      JobDataMap jobDataMap = jobDetail.getJobDataMap();
+      jobDataMap.put("parameter", "value");
       
       scheduler.addJob(jobDetail, true);
       

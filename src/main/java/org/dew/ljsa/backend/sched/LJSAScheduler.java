@@ -107,11 +107,11 @@ class LJSAScheduler
       _boSchedulerStarted = false;
       scheduleLJSAJobs();
       updateSchedulatori();
-      logger.debug("Scheduler inizializzato");
+      logger.debug("Scheduler initialized");
     }
     catch(Exception ex) {
       _sInitException = ex.toString();
-      logger.error("Errore durante l'inizializzazione dello scheduler", ex);
+      logger.error("Exception in LJSAScheduler.init(" + boForceSleepingFlag + ")", ex);
     }
   }
   
@@ -220,8 +220,8 @@ class LJSAScheduler
       ut.commit();
     }
     catch(Exception ex) {
+      ConnectionManager.rollback(ut);
       logger.error("Exception in LJSAScheduler.loadSchedulazioni()", ex);
-      if(ut != null) try{ ut.rollback(); } catch(Exception exut) {};
       throw ex;
     }
     finally {
@@ -251,10 +251,9 @@ class LJSAScheduler
         }
         boResult = true;
       }
-      else
-        if(!_boSleepingMode) {
-          boResult = loadSchedulazioni();
-        }
+      else if(!_boSleepingMode) {
+        boResult = loadSchedulazioni();
+      }
     }
     return boResult;
   }
@@ -277,8 +276,8 @@ class LJSAScheduler
       ut.commit();
     }
     catch(Exception ex) {
+      ConnectionManager.rollback(ut);
       logger.error("Exception in LJSAScheduler.updateLogSchedulatore()", ex);
-      if(ut != null) try{ ut.rollback(); } catch(Exception exut) {};
       throw ex;
     }
     finally {
@@ -707,7 +706,7 @@ class LJSAScheduler
   {
     List<List<Object>> listResult = new ArrayList<List<Object>>();
     
-    List<Object> listHeader = new ArrayList<Object>();
+    List<Object> listHeader = new ArrayList<Object>(4);
     listHeader.add("Group");
     listHeader.add("Name");
     listHeader.add("Type");
@@ -733,7 +732,7 @@ class LJSAScheduler
         String  sTriggerType = getTriggerType(trigger);
         String  sTriggerInfo = getTriggerInfo(trigger);
         
-        List<Object> record = new ArrayList<Object>();
+        List<Object> record = new ArrayList<Object>(4);
         record.add(sTriggerGroupName);
         record.add(sTriggerName);
         record.add(sTriggerType);
@@ -751,7 +750,7 @@ class LJSAScheduler
   {
     List<List<Object>> listResult = new ArrayList<List<Object>>();
     
-    List<Object> listHeader = new ArrayList<Object>();
+    List<Object> listHeader = new ArrayList<Object>(4);
     listHeader.add("Group");
     listHeader.add("Name");
     listHeader.add("Type");
@@ -764,7 +763,7 @@ class LJSAScheduler
     for(JobExecutionContext jobExecutionContext : listCurrentlyExecutingJobs) {
       Trigger trigger = jobExecutionContext.getTrigger();
       
-      List<Object> record = new ArrayList<Object>();
+      List<Object> record = new ArrayList<Object>(4);
       record.add(trigger.getKey().getGroup());
       record.add(trigger.getKey().getName());
       record.add(getTriggerType(trigger));
@@ -865,8 +864,8 @@ class LJSAScheduler
       ut.commit();
     }
     catch(Exception ex) {
-      logger.error("Exception in LJSAScheduler.updateSchedulatori", ex);
       ConnectionManager.rollback(ut);
+      logger.error("Exception in LJSAScheduler.updateSchedulatori()", ex);
       throw ex;
     }
     finally {
@@ -888,7 +887,7 @@ class LJSAScheduler
       pstm.setInt(3, iOraSchedulazione);
       pstm.executeUpdate();
       
-      pstm.close();
+      ConnectionManager.close(pstm);
       
       pstm = conn.prepareStatement(sSQL_I);
       pstm.setString(1, getIdSchedulatore());
@@ -1021,8 +1020,7 @@ class LJSAScheduler
     sSQL += "S.FINEVALIDITA,";
     sSQL += "A.CLASSE ";
     sSQL += "FROM LJSA_SCHEDULAZIONI S,LJSA_ATTIVITA A ";
-    sSQL += "WHERE S.ID_SERVIZIO=A.ID_SERVIZIO ";
-    sSQL += "AND S.ID_ATTIVITA=A.ID_ATTIVITA ";
+    sSQL += "WHERE S.ID_SERVIZIO=A.ID_SERVIZIO AND S.ID_ATTIVITA=A.ID_ATTIVITA ";
     sSQL += "AND S.ID_SCHEDULAZIONE=?";
     LJSAClassLoader ljsaClassLoader = new LJSAClassLoader();
     PreparedStatement pstm = null;
@@ -1122,8 +1120,7 @@ class LJSAScheduler
     sSQL += "S.FINEVALIDITA,";
     sSQL += "A.CLASSE ";
     sSQL += "FROM LJSA_SCHEDULAZIONI S,LJSA_ATTIVITA A ";
-    sSQL += "WHERE S.ID_SERVIZIO=A.ID_SERVIZIO ";
-    sSQL += "AND S.ID_ATTIVITA=A.ID_ATTIVITA ";
+    sSQL += "WHERE S.ID_SERVIZIO=A.ID_SERVIZIO AND S.ID_ATTIVITA=A.ID_ATTIVITA ";
     sSQL += "AND S.FINEVALIDITA>=? AND A.ATTIVO=? AND S.STATO<>?";
     if(_sLJSAService != null && _sLJSAService.length() > 0) {
       sSQL += " AND S.ID_SERVIZIO=?";
@@ -1430,9 +1427,8 @@ class LJSAScheduler
     Date oNow = new Date();
     int iCurrentDate = WUtil.toIntDate(oNow, 0);
     int iCurrentTime = WUtil.toIntTime(oNow, 0);
-    String sSQL = "UPDATE LJSA_SCHEDULAZIONI SET STATO=?, "; // (1)
-    sSQL += "ID_CREDENZIALE_AGG=?,DATA_AGGIORNAMENTO=?,ORA_AGGIORNAMENTO=? "; // (4)
-    sSQL += "WHERE ID_SCHEDULAZIONE=?"; // (5)
+    String sSQL = "UPDATE LJSA_SCHEDULAZIONI SET STATO=?,ID_CREDENZIALE_AGG=?,DATA_AGGIORNAMENTO=?,ORA_AGGIORNAMENTO=? ";
+    sSQL += "WHERE ID_SCHEDULAZIONE=?";
     String sStato = boEnabled ? ISchedulazione.sSTATO_ATTIVA : ISchedulazione.sSTATO_DISATTIVATA;
     PreparedStatement pstm = null;
     try {
