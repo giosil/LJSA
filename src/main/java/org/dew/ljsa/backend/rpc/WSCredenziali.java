@@ -31,6 +31,13 @@ class WSCredenziali implements ICredenziale
   protected static Logger logger = Logger.getLogger(WSCredenziali.class);
   
   public static
+  Principal getCurrentUser()
+    throws Exception
+  {
+    return RPCContext.getUserPrincipal();
+  }
+  
+  public static
   List<String> getServicesEnabled()
     throws Exception
   {
