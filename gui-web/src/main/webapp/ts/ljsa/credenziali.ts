@@ -102,6 +102,8 @@ namespace GUI {
             this.fpDetail.addTextField(ICredenziale.sEMAIL, 'Email');
             this.fpDetail.enabled = false;
 
+            this.fpDetail.setMandatory(ICredenziale.sID_SERVIZIO, ICredenziale.sID_CREDENZIALE);
+
             this.fpFilter.onEnterPressed((e: WUX.WEvent) => {
                 this.btnFind.trigger('click');
             });

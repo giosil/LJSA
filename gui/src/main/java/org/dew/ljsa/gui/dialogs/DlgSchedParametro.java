@@ -1,4 +1,4 @@
-package org.dew.ljsa.gui.forms;
+package org.dew.ljsa.gui.dialogs;
 
 import java.awt.Component;
 import java.awt.Container;

@@ -2,6 +2,59 @@
 
     import WUtil = WUX.WUtil;
 
+    export let _c = [
+        ['attachFiles','Se S i file prodotti vengono inviati in allegato alla mail'],
+        ['attachErrorFiles','Se S i file di errore prodotti vengono inviati in allegato alla mail'],
+        ['compressFiles','Se S i file prodotti vengono compressi'],
+        ['excludeHolidays','Se S vengono esclusi i giorni festivi'],
+        ['fileInfo','Se S viene creato il file di informazioni predefinito'],
+        ['jdbc.driver','Driver jdbc'],
+        ['jdbc.ds','Data Source jdbc'],
+        ['jdbc.url','URL jdbc'],
+        ['jdbc.user','User jdbc'],
+        ['jdbc.password','Passoword jdbc'],
+        ['language','Lingua'],
+        ['mail.delete','Se S le mail non vengono conservate sul server'],
+        ['mail.user','Utente casella di posta elettronica'],
+        ['mail.password','Password casella di posta elettronica'],
+        ['message','Testo del messaggio di notifica'],
+        ['nolog','Se S le elaborazioni NON vengono tracciate in archivio'],
+        ['report','Template del report'],
+        ['single','Se S si bloccano esecuzioni sovrapposte dello stesso job'],
+        ['stopOnTimeout','Interrompe l\'elaborazione a timeout raggiunto'],
+        ['subject','Oggetto del messaggio di notifica'],
+        ['timeout','Timeout di elaborazione espresso in minuti']
+    ];
+
+    export let _p = [
+        ['command','Comando di sistema'],
+        ['exception','[LJTest] Simulazione di eccezione'],
+        ['fromDate','Dalla data (YYYYMMDD)'],
+        ['name','Nome'],
+        ['sleep','[LJTest] Simulazione elaborazione (s)'],
+        ['sql','Comando sql'],
+        ['sql.1','Comando sql 1a parte'],
+        ['sql.2','Comando sql 2a parte'],
+        ['sql.3','Comando sql 3a parte'],
+        ['sql.4','Comando sql 4a parte'],
+        ['sql.5','Comando sql 5a parte'],
+        ['sql.6','Comando sql 6a parte'],
+        ['sql.7','Comando sql 7a parte'],
+        ['table','Nome tabella'],
+        ['text','Testo'],
+        ['title','Titolo report'],
+        ['toDate','Alla data (YYYYMMDD)'],
+        ['type','Tipo report'],
+    ];
+
+    export function _c1(a: any[][], k: string): string {
+        if(!a || !k) return;
+        for(let i = 0; i < a.length; i++) {
+            if(a[i][0] == k) return a[i][1];
+        }
+        return '';
+    }
+
     export class DlgAttCon extends WUX.WDialog {
         protected fp: WUX.WFormPanel;
 
@@ -21,6 +74,24 @@
             this.fp.addTextField(IAtt.sCONF_PREDEFINITO, 'Predefinito');
 
             this.fp.setMandatory(IAtt.sCONF_OPZIONE, IAtt.sCONF_DESCRIZIONE);
+
+            this.fp.onFocus(IAtt.sCONF_OPZIONE, (e: JQueryEventObject) => {
+                $(e.target).autocomplete({
+                    source: WUtil.col(_c, 0),
+                    minLength: 1
+                });
+            });
+            this.fp.onFocus(IAtt.sCONF_DESCRIZIONE, (e: JQueryEventObject) => {
+                if(this.fp.isBlank(IAtt.sCONF_DESCRIZIONE)) {
+                    let k = this.fp.getValue(IAtt.sCONF_OPZIONE);
+                    let d = _c1(_c, k);
+                    if(d) {
+                       setTimeout(() => {
+                           this.fp.setValue(IAtt.sCONF_DESCRIZIONE, d);
+                       });
+                    }
+                }
+            });
 
             this.body
                 .addRow()
@@ -72,6 +143,24 @@
             this.fp.addTextField(IAtt.sPAR_PREDEFINITO, 'Predefinito');
 
             this.fp.setMandatory(IAtt.sPAR_PARAMETRO, IAtt.sPAR_DESCRIZIONE);
+
+            this.fp.onFocus(IAtt.sPAR_PARAMETRO, (e: JQueryEventObject) => {
+                $(e.target).autocomplete({
+                    source: WUtil.col(_p, 0),
+                    minLength: 1
+                });
+            });
+            this.fp.onFocus(IAtt.sPAR_DESCRIZIONE, (e: JQueryEventObject) => {
+                if(this.fp.isBlank(IAtt.sPAR_DESCRIZIONE)) {
+                    let k = this.fp.getValue(IAtt.sPAR_PARAMETRO);
+                    let d = _c1(_p, k);
+                    if(d) {
+                       setTimeout(() => {
+                           this.fp.setValue(IAtt.sPAR_DESCRIZIONE, d);
+                       });
+                    }
+                }
+            });
 
             this.body
                 .addRow()
@@ -171,6 +260,24 @@
 
             this.fp.setMandatory(ISched.sCONF_OPZIONE, ISched.sCONF_DESCRIZIONE);
 
+            this.fp.onFocus(ISched.sCONF_OPZIONE, (e: JQueryEventObject) => {
+                $(e.target).autocomplete({
+                    source: WUtil.col(_c, 0),
+                    minLength: 1
+                });
+            });
+            this.fp.onFocus(ISched.sCONF_DESCRIZIONE, (e: JQueryEventObject) => {
+                if(this.fp.isBlank(ISched.sCONF_DESCRIZIONE)) {
+                    let k = this.fp.getValue(ISched.sCONF_OPZIONE);
+                    let d = _c1(_c, k);
+                    if(d) {
+                       setTimeout(() => {
+                           this.fp.setValue(ISched.sCONF_DESCRIZIONE, d);
+                       });
+                    }
+                }
+            });
+
             this.body
                 .addRow()
                 .addCol('12')
@@ -221,6 +328,24 @@
             this.fp.addTextField(ISched.sPAR_VALORE, 'Valore');
 
             this.fp.setMandatory(ISched.sPAR_PARAMETRO, ISched.sPAR_DESCRIZIONE);
+
+            this.fp.onFocus(ISched.sPAR_PARAMETRO, (e: JQueryEventObject) => {
+                $(e.target).autocomplete({
+                    source: WUtil.col(_p, 0),
+                    minLength: 1
+                });
+            });
+            this.fp.onFocus(ISched.sPAR_DESCRIZIONE, (e: JQueryEventObject) => {
+                if(this.fp.isBlank(ISched.sPAR_DESCRIZIONE)) {
+                    let k = this.fp.getValue(ISched.sPAR_PARAMETRO);
+                    let d = _c1(_p, k);
+                    if(d) {
+                       setTimeout(() => {
+                           this.fp.setValue(ISched.sPAR_DESCRIZIONE, d);
+                       });
+                    }
+                }
+            });
 
             this.body
                 .addRow()

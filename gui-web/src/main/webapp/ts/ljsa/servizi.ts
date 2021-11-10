@@ -95,6 +95,8 @@ namespace GUI {
             this.fpDetail.addTextField(IServizio.sDESCRIZIONE, 'Descrizione');
             this.fpDetail.enabled = false;
 
+            this.fpDetail.setMandatory(IServizio.sID_SERVIZIO, IServizio.sDESCRIZIONE);
+
             this.fpFilter.onEnterPressed((e: WUX.WEvent) => {
                 this.btnFind.trigger('click');
             });

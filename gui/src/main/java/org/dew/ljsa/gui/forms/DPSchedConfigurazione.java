@@ -27,7 +27,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.dew.ljsa.ISchedulazione;
-
+import org.dew.ljsa.gui.dialogs.DlgSchedConfigurazione;
 import org.dew.swingup.GUIMessage;
 import org.dew.swingup.IConstants;
 import org.dew.swingup.util.ADataPanel;

@@ -31,7 +31,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.dew.ljsa.IAttivita;
-
+import org.dew.ljsa.gui.dialogs.DlgAttivitaNotifica;
 import org.dew.swingup.GUIMessage;
 import org.dew.swingup.IConstants;
 import org.dew.swingup.ResourcesMgr;

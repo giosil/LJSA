@@ -106,6 +106,7 @@ var GUI;
             this.fpDetail.addInternalField(GUI.IAtt.sDATA_INS);
             this.fpDetail.addInternalField(GUI.IAtt.sORA_INS);
             this.fpDetail.enabled = false;
+            this.fpDetail.setMandatory(GUI.IAtt.sID_SERVIZIO, GUI.IAtt.sID_ATTIVITA, GUI.IAtt.sCLASSE, GUI.IAtt.sDESCRIZIONE);
             this.fpFilter.onEnterPressed(function (e) {
                 _this.btnFind.trigger('click');
             });
@@ -141,6 +142,8 @@ var GUI;
                 _this.status = _this.iSTATUS_EDITING;
                 _this.selId = null;
                 _this.enableDet(true);
+                _this.fpDetail.setEnabled(GUI.IAtt.sID_SERVIZIO, false);
+                _this.fpDetail.setEnabled(GUI.IAtt.sID_ATTIVITA, false);
                 setTimeout(function () { _this.fpDetail.focus(); }, 100);
             });
             this.btnSave = new WUX.WButton(this.subId('bs'), GUI.TXT.SAVE, GUI.ICO.SAVE, WUX.BTN.ACT_OUTLINE_PRIMARY);
@@ -752,6 +755,7 @@ var GUI;
             this.fpDetail.addTextField(GUI.IClasse.sCLASSE, 'Classe');
             this.fpDetail.addTextField(GUI.IClasse.sDESCRIZIONE, 'Descrizione');
             this.fpDetail.enabled = false;
+            this.fpDetail.setMandatory(GUI.IClasse.sCLASSE, GUI.IClasse.sDESCRIZIONE);
             this.fpFilter.onEnterPressed(function (e) {
                 _this.btnFind.trigger('click');
             });
@@ -1205,6 +1209,7 @@ var GUI;
             this.fpDetail.addPasswordField(GUI.ICredenziale.sCREDENZIALI, 'Password');
             this.fpDetail.addTextField(GUI.ICredenziale.sEMAIL, 'Email');
             this.fpDetail.enabled = false;
+            this.fpDetail.setMandatory(GUI.ICredenziale.sID_SERVIZIO, GUI.ICredenziale.sID_CREDENZIALE);
             this.fpFilter.onEnterPressed(function (e) {
                 _this.btnFind.trigger('click');
             });
@@ -1403,6 +1408,59 @@ var GUI;
 var GUI;
 (function (GUI) {
     var WUtil = WUX.WUtil;
+    GUI._c = [
+        ['attachFiles', 'Se S i file prodotti vengono inviati in allegato alla mail'],
+        ['attachErrorFiles', 'Se S i file di errore prodotti vengono inviati in allegato alla mail'],
+        ['compressFiles', 'Se S i file prodotti vengono compressi'],
+        ['excludeHolidays', 'Se S vengono esclusi i giorni festivi'],
+        ['fileInfo', 'Se S viene creato il file di informazioni predefinito'],
+        ['jdbc.driver', 'Driver jdbc'],
+        ['jdbc.ds', 'Data Source jdbc'],
+        ['jdbc.url', 'URL jdbc'],
+        ['jdbc.user', 'User jdbc'],
+        ['jdbc.password', 'Passoword jdbc'],
+        ['language', 'Lingua'],
+        ['mail.delete', 'Se S le mail non vengono conservate sul server'],
+        ['mail.user', 'Utente casella di posta elettronica'],
+        ['mail.password', 'Password casella di posta elettronica'],
+        ['message', 'Testo del messaggio di notifica'],
+        ['nolog', 'Se S le elaborazioni NON vengono tracciate in archivio'],
+        ['report', 'Template del report'],
+        ['single', 'Se S si bloccano esecuzioni sovrapposte dello stesso job'],
+        ['stopOnTimeout', 'Interrompe l\'elaborazione a timeout raggiunto'],
+        ['subject', 'Oggetto del messaggio di notifica'],
+        ['timeout', 'Timeout di elaborazione espresso in minuti']
+    ];
+    GUI._p = [
+        ['command', 'Comando di sistema'],
+        ['exception', '[LJTest] Simulazione di eccezione'],
+        ['fromDate', 'Dalla data (YYYYMMDD)'],
+        ['name', 'Nome'],
+        ['sleep', '[LJTest] Simulazione elaborazione (s)'],
+        ['sql', 'Comando sql'],
+        ['sql.1', 'Comando sql 1a parte'],
+        ['sql.2', 'Comando sql 2a parte'],
+        ['sql.3', 'Comando sql 3a parte'],
+        ['sql.4', 'Comando sql 4a parte'],
+        ['sql.5', 'Comando sql 5a parte'],
+        ['sql.6', 'Comando sql 6a parte'],
+        ['sql.7', 'Comando sql 7a parte'],
+        ['table', 'Nome tabella'],
+        ['text', 'Testo'],
+        ['title', 'Titolo report'],
+        ['toDate', 'Alla data (YYYYMMDD)'],
+        ['type', 'Tipo report'],
+    ];
+    function _c1(a, k) {
+        if (!a || !k)
+            return;
+        for (var i = 0; i < a.length; i++) {
+            if (a[i][0] == k)
+                return a[i][1];
+        }
+        return '';
+    }
+    GUI._c1 = _c1;
     var DlgAttCon = (function (_super) {
         __extends(DlgAttCon, _super);
         function DlgAttCon(id) {
@@ -1418,6 +1476,23 @@ var GUI;
             _this.fp.addRow();
             _this.fp.addTextField(GUI.IAtt.sCONF_PREDEFINITO, 'Predefinito');
             _this.fp.setMandatory(GUI.IAtt.sCONF_OPZIONE, GUI.IAtt.sCONF_DESCRIZIONE);
+            _this.fp.onFocus(GUI.IAtt.sCONF_OPZIONE, function (e) {
+                $(e.target).autocomplete({
+                    source: WUtil.col(GUI._c, 0),
+                    minLength: 1
+                });
+            });
+            _this.fp.onFocus(GUI.IAtt.sCONF_DESCRIZIONE, function (e) {
+                if (_this.fp.isBlank(GUI.IAtt.sCONF_DESCRIZIONE)) {
+                    var k = _this.fp.getValue(GUI.IAtt.sCONF_OPZIONE);
+                    var d_1 = _c1(GUI._c, k);
+                    if (d_1) {
+                        setTimeout(function () {
+                            _this.fp.setValue(GUI.IAtt.sCONF_DESCRIZIONE, d_1);
+                        });
+                    }
+                }
+            });
             _this.body
                 .addRow()
                 .addCol('12')
@@ -1463,6 +1538,23 @@ var GUI;
             _this.fp.addRow();
             _this.fp.addTextField(GUI.IAtt.sPAR_PREDEFINITO, 'Predefinito');
             _this.fp.setMandatory(GUI.IAtt.sPAR_PARAMETRO, GUI.IAtt.sPAR_DESCRIZIONE);
+            _this.fp.onFocus(GUI.IAtt.sPAR_PARAMETRO, function (e) {
+                $(e.target).autocomplete({
+                    source: WUtil.col(GUI._p, 0),
+                    minLength: 1
+                });
+            });
+            _this.fp.onFocus(GUI.IAtt.sPAR_DESCRIZIONE, function (e) {
+                if (_this.fp.isBlank(GUI.IAtt.sPAR_DESCRIZIONE)) {
+                    var k = _this.fp.getValue(GUI.IAtt.sPAR_PARAMETRO);
+                    var d_2 = _c1(GUI._p, k);
+                    if (d_2) {
+                        setTimeout(function () {
+                            _this.fp.setValue(GUI.IAtt.sPAR_DESCRIZIONE, d_2);
+                        });
+                    }
+                }
+            });
             _this.body
                 .addRow()
                 .addCol('12')
@@ -1549,6 +1641,23 @@ var GUI;
             _this.fp.addRow();
             _this.fp.addTextField(GUI.ISched.sCONF_VALORE, 'Valore');
             _this.fp.setMandatory(GUI.ISched.sCONF_OPZIONE, GUI.ISched.sCONF_DESCRIZIONE);
+            _this.fp.onFocus(GUI.ISched.sCONF_OPZIONE, function (e) {
+                $(e.target).autocomplete({
+                    source: WUtil.col(GUI._c, 0),
+                    minLength: 1
+                });
+            });
+            _this.fp.onFocus(GUI.ISched.sCONF_DESCRIZIONE, function (e) {
+                if (_this.fp.isBlank(GUI.ISched.sCONF_DESCRIZIONE)) {
+                    var k = _this.fp.getValue(GUI.ISched.sCONF_OPZIONE);
+                    var d_3 = _c1(GUI._c, k);
+                    if (d_3) {
+                        setTimeout(function () {
+                            _this.fp.setValue(GUI.ISched.sCONF_DESCRIZIONE, d_3);
+                        });
+                    }
+                }
+            });
             _this.body
                 .addRow()
                 .addCol('12')
@@ -1594,6 +1703,23 @@ var GUI;
             _this.fp.addRow();
             _this.fp.addTextField(GUI.ISched.sPAR_VALORE, 'Valore');
             _this.fp.setMandatory(GUI.ISched.sPAR_PARAMETRO, GUI.ISched.sPAR_DESCRIZIONE);
+            _this.fp.onFocus(GUI.ISched.sPAR_PARAMETRO, function (e) {
+                $(e.target).autocomplete({
+                    source: WUtil.col(GUI._p, 0),
+                    minLength: 1
+                });
+            });
+            _this.fp.onFocus(GUI.ISched.sPAR_DESCRIZIONE, function (e) {
+                if (_this.fp.isBlank(GUI.ISched.sPAR_DESCRIZIONE)) {
+                    var k = _this.fp.getValue(GUI.ISched.sPAR_PARAMETRO);
+                    var d_4 = _c1(GUI._p, k);
+                    if (d_4) {
+                        setTimeout(function () {
+                            _this.fp.setValue(GUI.ISched.sPAR_DESCRIZIONE, d_4);
+                        });
+                    }
+                }
+            });
             _this.body
                 .addRow()
                 .addCol('12')
@@ -1871,6 +1997,24 @@ var GUI;
             this.selSerDet.on('statechange', function (e) {
                 _this.selAttDet.service = _this.selSerDet.getState();
             });
+            this.selAttDet.on('statechange', function (e) {
+                if (_this.status == _this.iSTATUS_EDITING && _this.isNew) {
+                    var a = _this.selAttDet.getState();
+                    if (!a) {
+                        _this.tabCon.setState([]);
+                        _this.tabPar.setState([]);
+                        _this.tabNot.setState([]);
+                    }
+                    else {
+                        var s = _this.selSerDet.getState();
+                        jrpc.execute('SCHEDULAZIONI.readInfoAttivita', [s, a], function (result) {
+                            _this.tabCon.setState(WUtil.getArray(result, GUI.ISched.sCONFIGURAZIONE));
+                            _this.tabPar.setState(WUtil.getArray(result, GUI.ISched.sPARAMETRI));
+                            _this.tabNot.setState(WUtil.getArray(result, GUI.ISched.sNOTIFICA));
+                        });
+                    }
+                }
+            });
             this.fpDetail = new WUX.WFormPanel(this.subId('fpd'));
             this.fpDetail.addRow();
             this.fpDetail.addComponent(GUI.ISched.sID_SERVIZIO, 'Servizio', this.selSerDet);
@@ -1889,6 +2033,7 @@ var GUI;
             this.fpDetail.addInternalField(GUI.ISched.sESEC_COMPLETATE);
             this.fpDetail.addInternalField(GUI.ISched.sESEC_INTERROTTE);
             this.fpDetail.enabled = false;
+            this.fpDetail.setMandatory(GUI.ISched.sID_SERVIZIO, GUI.ISched.sID_ATTIVITA, GUI.ISched.sDESCRIZIONE, GUI.ISched.sSCHEDULAZIONE);
             this.fpFilter.onEnterPressed(function (e) {
                 _this.btnFind.trigger('click');
             });
@@ -1923,6 +2068,8 @@ var GUI;
                 _this.status = _this.iSTATUS_EDITING;
                 _this.selId = null;
                 _this.enableDet(true);
+                _this.fpDetail.setEnabled(GUI.IAtt.sID_SERVIZIO, false);
+                _this.fpDetail.setEnabled(GUI.IAtt.sID_ATTIVITA, false);
                 setTimeout(function () { _this.fpDetail.focus(); }, 100);
             });
             this.btnSave = new WUX.WButton(this.subId('bs'), GUI.TXT.SAVE, GUI.ICO.SAVE, WUX.BTN.ACT_OUTLINE_PRIMARY);
@@ -2111,6 +2258,18 @@ var GUI;
             this.tabCon = new WUX.WDXTable(this.subId('tbc'), ['Opzione', 'Descrizione', 'Valore'], [GUI.ISched.sCONF_OPZIONE, GUI.ISched.sCONF_DESCRIZIONE, GUI.ISched.sCONF_VALORE]);
             this.tabCon.selectionMode = 'single';
             this.tabCon.css({ h: 240 });
+            this.tabCon.onRowPrepared(function (e) {
+                if (!e.data)
+                    return;
+                var d = WUtil.getBoolean(e.data, GUI.ISched.sCONF_DA_ATTIVITA);
+                var o = WUtil.getBoolean(e.data, GUI.ISched.sCONF_OVERWRITE);
+                if (!d) {
+                    WUX.setCss(e.rowElement, WUX.CSS.WARNING);
+                }
+                else if (o) {
+                    WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
+                }
+            });
             this.tabCon.onDoubleClick(function (e) {
                 var s = _this.tabCon.getSelectedRowsData();
                 if (!s || !s.length)
@@ -2135,6 +2294,18 @@ var GUI;
             this.tabPar = new WUX.WDXTable(this.subId('tbp'), ['Parametro', 'Descrizione', 'Valore'], [GUI.ISched.sPAR_PARAMETRO, GUI.ISched.sPAR_DESCRIZIONE, GUI.ISched.sPAR_VALORE]);
             this.tabPar.selectionMode = 'single';
             this.tabPar.css({ h: 240 });
+            this.tabPar.onRowPrepared(function (e) {
+                if (!e.data)
+                    return;
+                var d = WUtil.getBoolean(e.data, GUI.ISched.sPAR_DA_ATTIVITA);
+                var o = WUtil.getBoolean(e.data, GUI.ISched.sPAR_OVERWRITE);
+                if (!d) {
+                    WUX.setCss(e.rowElement, WUX.CSS.WARNING);
+                }
+                else if (o) {
+                    WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
+                }
+            });
             this.tabPar.onDoubleClick(function (e) {
                 var s = _this.tabPar.getSelectedRowsData();
                 if (!s || !s.length)
@@ -2391,6 +2562,7 @@ var GUI;
             this.fpDetail.addTextField(GUI.IServizio.sID_SERVIZIO, 'Codice');
             this.fpDetail.addTextField(GUI.IServizio.sDESCRIZIONE, 'Descrizione');
             this.fpDetail.enabled = false;
+            this.fpDetail.setMandatory(GUI.IServizio.sID_SERVIZIO, GUI.IServizio.sDESCRIZIONE);
             this.fpFilter.onEnterPressed(function (e) {
                 _this.btnFind.trigger('click');
             });

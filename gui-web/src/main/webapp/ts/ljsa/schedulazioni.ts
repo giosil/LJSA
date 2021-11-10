@@ -147,6 +147,24 @@ namespace GUI {
             this.selSerDet.on('statechange', (e: WUX.WEvent) => {
                 this.selAttDet.service = this.selSerDet.getState();
             });
+            this.selAttDet.on('statechange', (e: WUX.WEvent) => {
+                if(this.status == this.iSTATUS_EDITING && this.isNew) {
+                    let a = this.selAttDet.getState();
+                    if(!a) {
+                        this.tabCon.setState([]);
+                        this.tabPar.setState([]);
+                        this.tabNot.setState([]);
+                    }
+                    else {
+                        let s = this.selSerDet.getState();
+                        jrpc.execute('SCHEDULAZIONI.readInfoAttivita', [s, a], (result) => {
+                            this.tabCon.setState(WUtil.getArray(result, ISched.sCONFIGURAZIONE));
+                            this.tabPar.setState(WUtil.getArray(result, ISched.sPARAMETRI));
+                            this.tabNot.setState(WUtil.getArray(result, ISched.sNOTIFICA));
+                        });
+                    }
+                }
+            });
 
             this.fpDetail = new WUX.WFormPanel(this.subId('fpd'));
             this.fpDetail.addRow();
@@ -166,6 +184,8 @@ namespace GUI {
             this.fpDetail.addInternalField(ISched.sESEC_COMPLETATE);
             this.fpDetail.addInternalField(ISched.sESEC_INTERROTTE);
             this.fpDetail.enabled = false;
+
+            this.fpDetail.setMandatory(ISched.sID_SERVIZIO, ISched.sID_ATTIVITA, ISched.sDESCRIZIONE, ISched.sSCHEDULAZIONE);
 
             this.fpFilter.onEnterPressed((e: WUX.WEvent) => {
                 this.btnFind.trigger('click');
@@ -208,6 +228,8 @@ namespace GUI {
                 this.selId = null;
 
                 this.enableDet(true);
+                this.fpDetail.setEnabled(IAtt.sID_SERVIZIO, false);
+                this.fpDetail.setEnabled(IAtt.sID_ATTIVITA, false);
 
                 setTimeout(() => { this.fpDetail.focus(); }, 100);
             });
@@ -406,6 +428,17 @@ namespace GUI {
             this.tabCon = new WUX.WDXTable(this.subId('tbc'), ['Opzione', 'Descrizione', 'Valore'], [ISched.sCONF_OPZIONE, ISched.sCONF_DESCRIZIONE, ISched.sCONF_VALORE]);
             this.tabCon.selectionMode = 'single';
             this.tabCon.css({ h: 240 });
+            this.tabCon.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number, isSelected?: boolean }) => {
+                if (!e.data) return;
+                let d = WUtil.getBoolean(e.data, ISched.sCONF_DA_ATTIVITA);
+                let o = WUtil.getBoolean(e.data, ISched.sCONF_OVERWRITE);
+                if(!d) {
+                     WUX.setCss(e.rowElement, WUX.CSS.WARNING);
+                }
+                else if(o) {
+                     WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
+                }
+            });
             this.tabCon.onDoubleClick((e: { element?: JQuery }) => {
                 let s = this.tabCon.getSelectedRowsData();
                 if (!s || !s.length) return;
@@ -430,6 +463,17 @@ namespace GUI {
             this.tabPar = new WUX.WDXTable(this.subId('tbp'), ['Parametro', 'Descrizione', 'Valore'], [ISched.sPAR_PARAMETRO, ISched.sPAR_DESCRIZIONE, ISched.sPAR_VALORE]);
             this.tabPar.selectionMode = 'single';
             this.tabPar.css({ h: 240 });
+            this.tabPar.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number, isSelected?: boolean }) => {
+                if (!e.data) return;
+                let d = WUtil.getBoolean(e.data, ISched.sPAR_DA_ATTIVITA);
+                let o = WUtil.getBoolean(e.data, ISched.sPAR_OVERWRITE);
+                if(!d) {
+                     WUX.setCss(e.rowElement, WUX.CSS.WARNING);
+                }
+                else if(o) {
+                     WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
+                }
+            });
             this.tabPar.onDoubleClick((e: { element?: JQuery }) => {
                 let s = this.tabPar.getSelectedRowsData();
                 if (!s || !s.length) return;

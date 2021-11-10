@@ -1,4 +1,4 @@
-package org.dew.ljsa.gui.forms;
+package org.dew.ljsa.gui.dialogs;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -10,25 +10,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.dew.ljsa.ISchedulazione;
+import org.dew.ljsa.IAttivita;
 
 import org.dew.swingup.AJDialog;
 import org.dew.swingup.GUIMessage;
 import org.dew.swingup.util.CodeAndDescription;
 import org.dew.swingup.util.FormPanel;
 
-import org.dew.util.WUtil;
-
 public
-class DlgSchedNotifica extends AJDialog implements ISchedulazione
+class DlgAttivitaNotifica extends AJDialog implements IAttivita
 {
-  private static final long serialVersionUID = 5505298169575448320L;
+  private static final long serialVersionUID = -4179883652810375790L;
   
   protected FormPanel oFormPanel;
-  protected String sDestinazionePrec;
   
   public
-  DlgSchedNotifica()
+  DlgAttivitaNotifica()
   {
     super("Notifica");
     this.setSize(500, 190);
@@ -37,7 +34,7 @@ class DlgSchedNotifica extends AJDialog implements ISchedulazione
   public static
   Map<String, Object> showMe(Map<String, Object> mapValues)
   {
-    DlgSchedNotifica dialog = new DlgSchedNotifica();
+    DlgAttivitaNotifica dialog = new DlgAttivitaNotifica();
     
     if(mapValues != null) {
       dialog.setValues(mapValues);
@@ -48,9 +45,7 @@ class DlgSchedNotifica extends AJDialog implements ISchedulazione
     
     dialog.setVisible(true);
     
-    if(dialog.isCancel()) {
-      return null;
-    }
+    if(dialog.isCancel()) return null;
     
     return dialog.getParametro();
   }
@@ -58,15 +53,6 @@ class DlgSchedNotifica extends AJDialog implements ISchedulazione
   public
   void setValues(Map<String, Object> mapValues)
   {
-    sDestinazionePrec = (String) mapValues.get(sNOT_DESTINAZIONE);
-    if(sDestinazionePrec == null) sDestinazionePrec = "";
-    
-    Boolean oCancellata = WUtil.toBooleanObj(mapValues.get(sNOT_CANCELLATA), null);
-    if(oCancellata != null && oCancellata.booleanValue()) {
-      String sDestinazione = (String) mapValues.get(sNOT_DESTINAZIONE);
-      mapValues.put(sNOT_DESTINAZIONE, "-" + sDestinazione);
-    }
-    
     oFormPanel.setValues(mapValues);
     oFormPanel.requestFocus(sNOT_EVENTO);
   }
@@ -93,8 +79,6 @@ class DlgSchedNotifica extends AJDialog implements ISchedulazione
     oFormPanel.addBlankField();
     oFormPanel.addRow();
     oFormPanel.addTextField(sNOT_DESTINAZIONE, "Destinaz. (email)", 255);
-    oFormPanel.addHiddenField(sNOT_DA_ATTIVITA);
-    oFormPanel.addHiddenField(sNOT_CANCELLATA);
     
     Map<String, Object> mapDefaultValues = new HashMap<String, Object>();
     mapDefaultValues.put(sNOT_EVENTO, "R");
@@ -134,27 +118,6 @@ class DlgSchedNotifica extends AJDialog implements ISchedulazione
       GUIMessage.showWarning("Occorre valorizzare i seguenti campi:\n" + sCheckMandatory);
       return false;
     }
-    
-    String sDestinazione = (String) oFormPanel.getValue(sNOT_DESTINAZIONE);
-    if(sDestinazione != null && sDestinazione.startsWith("-")) {
-      if(sDestinazione.length() < 2) {
-        GUIMessage.showWarning("Destinazione non valida.");
-        return false;
-      }
-      if(sDestinazione.length() > 1) {
-        sDestinazione = sDestinazione.substring(1);
-        oFormPanel.setValue(sNOT_DESTINAZIONE, sDestinazione);
-      }
-      oFormPanel.setValue(sNOT_CANCELLATA, Boolean.TRUE);
-    }
-    else {
-      oFormPanel.setValue(sNOT_CANCELLATA, Boolean.FALSE);
-    }
-    
-    if(sDestinazionePrec == null || !sDestinazionePrec.equals(sDestinazione)) {
-      oFormPanel.setValue(sNOT_DA_ATTIVITA, Boolean.FALSE);
-    }
-    
     return true;
   }
 }

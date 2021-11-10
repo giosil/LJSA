@@ -1,4 +1,4 @@
-package org.dew.ljsa.gui.forms;
+package org.dew.ljsa.gui.dialogs;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -191,19 +191,19 @@ class DlgAttivitaParametro extends AJDialog implements IAttivita
       sDescHint = null;
     }
     if(sChiave.equals("command")) {
-      sDescHint = "Comando sistema operativo";
+      sDescHint = "Comando di sistema";
     }
     else if(sChiave.equals("exception")) {
       sDescHint = "[LJTest] Simulazione di eccezione";
     }
     else if(sChiave.equals("fromDate")) {
-      sDescHint = "Dalla data (YYYYMMGG)";
+      sDescHint = "Dalla data (YYYYMMDD)";
     }
     else if(sChiave.equals("name")) {
       sDescHint = "Nome";
     }
     else if(sChiave.equals("sleep")) {
-      sDescHint = "[LJTest] Simulazione di elaborazione prolungata (in secondi)";
+      sDescHint = "[LJTest] Simulazione elaborazione (s)";
     }
     else if(sChiave.equals("sql")) {
       sDescHint = "Comando sql";
@@ -221,7 +221,7 @@ class DlgAttivitaParametro extends AJDialog implements IAttivita
       sDescHint = "Titolo report";
     }
     else if(sChiave.equals("toDate")) {
-      sDescHint = "Alla data (YYYYMMGG)";
+      sDescHint = "Alla data (YYYYMMDD)";
     }
     else if(sChiave.equals("type")) {
       sDescHint = "Tipo report";

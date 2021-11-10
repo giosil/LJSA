@@ -376,9 +376,9 @@ class LJSAScheduler
       throw new Exception(ILJSAErrors.sSCHED_NOT_ENABLED);
     }
     
-    int iIndex = _schedulazioni.indexOf(schedulazione);
-    if(iIndex >= 0) {
-      Schedulazione s = (Schedulazione) _schedulazioni.get(iIndex);
+    int index = _schedulazioni.indexOf(schedulazione);
+    if(index >= 0) {
+      Schedulazione s = (Schedulazione) _schedulazioni.get(index);
       if(boReplaceIfAlreadyScheduled || s.isUpdated(schedulazione)) {
         if(isRunning(s)) {
           logger.debug(s + " is running. Try to interrupt...");
@@ -398,7 +398,7 @@ class LJSAScheduler
           throw new Exception(ILJSAErrors.sINVALID_SCHEDULATION);
         }
         // Si sostituisce la vecchia schedulazione con quella modificata
-        _schedulazioni.set(iIndex, schedulazione);
+        _schedulazioni.set(index, schedulazione);
         logger.debug(schedulazione + " scheduled (update)");
         return true;
       }
@@ -456,8 +456,8 @@ class LJSAScheduler
     if(_boSleepingMode) {
       throw new Exception(ILJSAErrors.sSLEEPING_MODE);
     }
-    int iIndex = _schedulazioni.indexOf(schedulazione);
-    if(iIndex < 0) {
+    int index = _schedulazioni.indexOf(schedulazione);
+    if(index < 0) {
       // [Remote]
       Class<? extends Job> classe = schedulazione.getClasseAttivita();
       if(classe != null && classe.equals(LJSARemoteJobExecutor.class)) {
@@ -468,7 +468,7 @@ class LJSAScheduler
       return false;
     }
     
-    Schedulazione sched = (Schedulazione) _schedulazioni.get(iIndex);
+    Schedulazione sched = (Schedulazione) _schedulazioni.get(index);
     if(isRunning(sched)) {
       if(boInterrupt) {
         logger.debug(sched + " is running. Try to interrupt...");
@@ -520,8 +520,8 @@ class LJSAScheduler
       // [Remote]
       Class<? extends Job> classe = schedulazione.getClasseAttivita();
       if(classe != null && classe.equals(LJSARemoteJobExecutor.class)) {
-        String sResult = LJSARemoteJobExecutor.invokeInterrupt(schedulazione.getIdSchedulazione());
-        logger.debug(schedulazione + " invokeInterrupt(" + schedulazione.getIdSchedulazione() + ") -> " + sResult);
+        String result = LJSARemoteJobExecutor.invokeInterrupt(schedulazione.getIdSchedulazione());
+        logger.debug(schedulazione + " invokeInterrupt(" + schedulazione.getIdSchedulazione() + ") -> " + result);
         return true;
       }
       return false;
@@ -712,7 +712,6 @@ class LJSAScheduler
     listHeader.add("Type");
     listHeader.add("Info");
     listResult.add(listHeader);
-    
     if(scheduler == null) return listResult;
     
     List<String> asTriggerGroupNames = scheduler.getTriggerGroupNames();
@@ -756,7 +755,6 @@ class LJSAScheduler
     listHeader.add("Type");
     listHeader.add("Info");
     listResult.add(listHeader);
-    
     if(scheduler == null) return listResult;
     
     List<JobExecutionContext> listCurrentlyExecutingJobs = scheduler.getCurrentlyExecutingJobs();
@@ -796,41 +794,33 @@ class LJSAScheduler
   public static
   String getIdSchedulatore()
   {
-    String sResult = "LJSA";
+    String result = "LJSA";
     if(_sLJSAService != null && _sLJSAService.length() > 0) {
-      sResult += "-" + _sLJSAService;
+      result += "-" + _sLJSAService;
     }
-    return sResult;
+    return result;
   }
   
   private static
   String getTriggerType(Trigger trigger)
-    throws Exception
   {
-    if(trigger instanceof SimpleTrigger) {
-      return "Simple";
-    }
-    else if(trigger instanceof CronTrigger) {
-      return "Cron";
-    }
+    if(trigger instanceof SimpleTrigger) return "Simple";
+    if(trigger instanceof CronTrigger)   return "Cron";
     return "Unknow";
   }
   
   private static
   String getTriggerInfo(Trigger trigger)
-    throws Exception
   {
-    String sInfo = "";
     if(trigger instanceof SimpleTrigger) {
-      int  repeatCount = ((SimpleTrigger) trigger).getRepeatCount();
+      int  repeatCount    = ((SimpleTrigger) trigger).getRepeatCount();
       long repeatInterval = ((SimpleTrigger) trigger).getRepeatInterval();
-      sInfo += "repeatCount = " + repeatCount + ", repeatInterval = " + repeatInterval;
+      return "repeatCount = " + repeatCount + ",repeatInterval = " + repeatInterval;
     }
     else if(trigger instanceof CronTrigger) {
-      String sCronExpr = ((CronTrigger) trigger).getCronExpression();
-      sInfo += "CronExpression = " + sCronExpr;
+      return "cronExpression = " + ((CronTrigger) trigger).getCronExpression();
     }
-    return sInfo;
+    return "";
   }
   
   private static
@@ -888,7 +878,6 @@ class LJSAScheduler
       pstm.executeUpdate();
       
       ConnectionManager.close(pstm);
-      
       pstm = conn.prepareStatement(sSQL_I);
       pstm.setString(1, getIdSchedulatore());
       pstm.setInt(2, iDataSchedulazione);
@@ -930,7 +919,6 @@ class LJSAScheduler
           sRepeatInterval = sSchedulazione.substring(iSlash + 1).trim();
           iRepeatInterval = Integer.parseInt(sRepeatInterval) * 1000;
         }
-        
         trigger = TriggerBuilder.newTrigger()
             .forJob(new JobKey(schedulazione.getJobName(), schedulazione.getJobGroup()))
             .withIdentity(schedulazione.getTriggerName(), schedulazione.getTriggerGroup())

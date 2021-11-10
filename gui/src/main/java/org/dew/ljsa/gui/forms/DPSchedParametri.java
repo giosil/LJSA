@@ -13,6 +13,7 @@ import org.dew.util.WUtil;
 import org.dew.swingup.*;
 
 import org.dew.ljsa.*;
+import org.dew.ljsa.gui.dialogs.DlgSchedParametro;
 
 public
 class DPSchedParametri extends ADataPanel implements ISchedulazione, ActionListener, ListSelectionListener

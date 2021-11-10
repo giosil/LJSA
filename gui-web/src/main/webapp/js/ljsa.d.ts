@@ -272,6 +272,9 @@ declare namespace GUI {
     }
 }
 declare namespace GUI {
+    let _c: string[][];
+    let _p: string[][];
+    function _c1(a: any[][], k: string): string;
     class DlgAttCon extends WUX.WDialog {
         protected fp: WUX.WFormPanel;
         constructor(id: string);

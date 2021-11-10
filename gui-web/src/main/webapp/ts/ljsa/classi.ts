@@ -94,6 +94,8 @@ namespace GUI {
             this.fpDetail.addTextField(IClasse.sDESCRIZIONE, 'Descrizione');
             this.fpDetail.enabled = false;
 
+            this.fpDetail.setMandatory(IClasse.sCLASSE, IClasse.sDESCRIZIONE);
+
             this.fpFilter.onEnterPressed((e: WUX.WEvent) => {
                 this.btnFind.trigger('click');
             });

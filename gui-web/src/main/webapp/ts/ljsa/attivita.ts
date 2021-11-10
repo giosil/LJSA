@@ -147,6 +147,8 @@ namespace GUI {
             this.fpDetail.addInternalField(IAtt.sORA_INS);
             this.fpDetail.enabled = false;
 
+            this.fpDetail.setMandatory(IAtt.sID_SERVIZIO, IAtt.sID_ATTIVITA, IAtt.sCLASSE, IAtt.sDESCRIZIONE);
+
             this.fpFilter.onEnterPressed((e: WUX.WEvent) => {
                 this.btnFind.trigger('click');
             });
@@ -189,6 +191,8 @@ namespace GUI {
                 this.selId = null;
 
                 this.enableDet(true);
+                this.fpDetail.setEnabled(IAtt.sID_SERVIZIO, false);
+                this.fpDetail.setEnabled(IAtt.sID_ATTIVITA, false);
 
                 setTimeout(() => { this.fpDetail.focus(); }, 100);
             });
