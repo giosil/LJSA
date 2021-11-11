@@ -1,10 +1,17 @@
 package org.dew.ljsa.backend.util;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-import javax.naming.*;
-import javax.sql.*;
-import javax.transaction.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
+
+import javax.transaction.UserTransaction;
 
 public
 class ConnectionManager
