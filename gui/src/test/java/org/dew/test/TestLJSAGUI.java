@@ -9,15 +9,15 @@ import junit.framework.TestSuite;
 public 
 class TestLJSAGUI extends TestCase 
 {
-	public TestLJSAGUI(String testName) {
-		super(testName);
-	}
-	
-	public static Test suite() {
-		return new TestSuite(TestLJSAGUI.class);
-	}
-	
-	public void testApp() {
-		System.out.println(ResourcesMgr.sPREFIX + " build " + ResourcesMgr.sBUILD);
-	}
+  public TestLJSAGUI(String testName) {
+    super(testName);
+  }
+  
+  public static Test suite() {
+    return new TestSuite(TestLJSAGUI.class);
+  }
+  
+  public void testApp() {
+    System.out.println(ResourcesMgr.sPREFIX + " build " + ResourcesMgr.sBUILD);
+  }
 }
