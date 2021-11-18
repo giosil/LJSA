@@ -65,7 +65,7 @@ class ExampleLJSAJob extends ALJSAJob
 
 ![Schema](img/00_relational.png)
 
-## Run LJSA GUI (org.dew.swingup.main.Main) from LJSA-gui sub-project
+## Run LJSA GUI (org.dew.swingup.main.Main) from LJSA-gui (see gui folder) sub-project
 
 ### Define class
 
