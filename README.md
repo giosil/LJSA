@@ -2,6 +2,13 @@
 
 A job scheduler configurable through RESTful web services.
 
+## Dependencies
+
+**multi-rpc 2.0.0**
+
+- `git clone https://github.com/giosil/multi-rpc.git` 
+- `mvn clean install` - this will publish `multi-rpc-2.0.0.jar` in Maven local repository
+
 ## Build
 
 - `git clone https://github.com/giosil/LJSA.git`

@@ -1,10 +1,10 @@
 package org.dew.test;
 
-import org.dew.ljsa.backend.sched.LJSAScheduler;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.dew.ljsa.backend.sched.LJSAScheduler;
 
 public class TestLJSA extends TestCase {
   
