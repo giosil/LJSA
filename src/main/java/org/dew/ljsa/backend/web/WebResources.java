@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 
+import java.net.URLConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,64 +29,19 @@ class WebResources
 {
   public static final String sMSG_INVALID_CRED = "Credenziali non valide";
   
-  protected static Map<String, String> mapMIME = new HashMap<String, String>();
-  
-  static {
-    mapMIME.put("txt",   "text/plain");
-    mapMIME.put("dat",   "text/plain");
-    mapMIME.put("csv",   "text/plain");
-    mapMIME.put("html",  "text/html");
-    mapMIME.put("htm",   "text/html");
-    mapMIME.put("xml",   "text/xml");
-    mapMIME.put("log",   "text/plain");
-    mapMIME.put("rtf",   "application/rtf");
-    mapMIME.put("doc",   "application/msword");
-    mapMIME.put("docx",  "application/msword");
-    mapMIME.put("xls",   "application/x-msexcel");
-    mapMIME.put("xlsx",  "application/x-msexcel");
-    mapMIME.put("pdf",   "application/pdf");
-    mapMIME.put("json",  "application/json");
-    mapMIME.put("gif",   "image/gif");
-    mapMIME.put("bmp",   "image/bmp");
-    mapMIME.put("jpg",   "image/jpeg");
-    mapMIME.put("jpeg",  "image/jpeg");
-    mapMIME.put("tif",   "image/tiff");
-    mapMIME.put("tiff",  "image/tiff");
-    mapMIME.put("png",   "image/png");
-    mapMIME.put("mpg",   "video/mpeg");
-    mapMIME.put("mpeg",  "video/mpeg");
-    mapMIME.put("mpeg4", "video/mpeg");
-    mapMIME.put("mov",   "video/quicktime");
-    mapMIME.put("flv",   "video/x-flv");
-    mapMIME.put("mp3",   "audio/mp3");
-    mapMIME.put("wav",   "audio/wav");
-    mapMIME.put("wma",   "audio/wma");
-    mapMIME.put("tar",   "application/x-tar");
-    mapMIME.put("zip",   "application/x-zip-compressed");
-  }
-  
-  public static
-  String getContentType(String sExt)
-  {
-    if(sExt == null || sExt.length() == 0) {
-      return "text/plain";
-    }
-    String sResult = mapMIME.get(sExt);
-    if(sResult != null) return sResult;
-    return "text/plain";
-  }
-  
   public static
   String getContentType(File file)
   {
-    if(file == null) return "N/A";
-    String fileName  = file.getName();
-    String extension = null;
-    int dot = fileName.lastIndexOf('.');
-    if(dot >= 0 && dot < fileName.length() - 1) {
-      extension = fileName.substring(dot + 1);
+    if(file == null) return "text/plain";
+    String fileName = file.getName();
+    if(fileName == null || fileName.length() == 0) {
+      return "text/plain";
     }
-    return WebResources.getContentType(extension);
+    String result = URLConnection.guessContentTypeFromName(fileName);
+    if(result != null && result.length() > 0) {
+      return result;
+    }
+    return "text/plain";
   }
   
   public static
