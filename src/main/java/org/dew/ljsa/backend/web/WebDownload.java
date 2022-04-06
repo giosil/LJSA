@@ -145,6 +145,53 @@ class WebDownload extends HttpServlet
     }
   }
   
+  @Override
+  public 
+  void doHead(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException 
+  {
+    String pathInfo = request.getPathInfo();
+    if(pathInfo == null || pathInfo.length() == 0) {
+      response.sendError(404); // Not Found
+      return;
+    }
+    
+    int    idLog    = getIdLog(pathInfo);
+    String fileName = getFileName(pathInfo);
+    
+    boolean noSubPath = false;
+    if(!pathInfo.endsWith(idLog + "/")) {
+      noSubPath = true;
+    }
+    
+    int level = 1;
+    if(noSubPath) {
+      if(fileName != null && fileName.length() > 0) {
+        level = 2;
+      }
+    }
+    else {
+      level = 2;
+    }
+    
+    if(!WebResources.checkAuthorization(request, response, level, idLog)) return;
+    
+    boolean boFilesFromList = fileName != null && fileName.equals("*");
+    if(boFilesFromList) fileName = null;
+    
+    if(fileName != null && fileName.length() > 0) {
+      File file = getFile(idLog, fileName);
+      
+      if(file == null) {
+        response.sendError(404); // Not Found
+        return;
+      }
+      
+      response.setContentLength((int) file.length());
+      response.setContentType(WebResources.getContentType(file));
+    }
+  }
+  
   protected static
   int getIdLog(String pathInfo)
     throws ServletException

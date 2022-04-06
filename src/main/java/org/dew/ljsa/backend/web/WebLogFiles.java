@@ -116,6 +116,39 @@ class WebLogFiles extends HttpServlet
     }
   }
   
+  @Override
+  public 
+  void doHead(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException 
+  {
+    String pathInfo = request.getPathInfo();
+    String fileName = null;
+    
+    int level = 1;
+    if(pathInfo != null && pathInfo.length() > 0) {
+      fileName = getFileName(pathInfo);
+    }
+    else {
+      level = 0;
+    }
+    
+    if(!WebResources.checkAuthorization(request, response, level, 0)) {
+      return;
+    }
+    
+    if(fileName != null && fileName.length() > 0) {
+      File file = getFile(fileName);
+      if(file == null) {
+        response.sendError(404); // Not Found
+        return;
+      }
+      String sContentType = WebResources.getContentType(file);
+      
+      response.setContentLength((int) file.length());
+      response.setContentType(sContentType);
+    }
+  }
+  
   protected static
   String getFileName(String pathInfo)
   {
