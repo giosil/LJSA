@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import java.lang.reflect.Field;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -13,6 +15,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.rpc.util.Base64Coder;
 
@@ -29,6 +34,7 @@ class WHttp
   
   protected int connectTimeout = 60000;
   protected int readTimeout = 60000;
+  protected SSLSocketFactory sslSocketFactory;
   
   protected int lastStatusCode;
   
@@ -171,7 +177,15 @@ class WHttp
   public void setReadTimeout(int readTimeout) {
     this.readTimeout = readTimeout;
   }
-  
+
+  public SSLSocketFactory getSslSocketFactory() {
+    return sslSocketFactory;
+  }
+
+  public void setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
+    this.sslSocketFactory = sslSocketFactory;
+  }
+
   public
   String get()
     throws Exception
@@ -353,6 +367,48 @@ class WHttp
   }
   
   public
+  String patch(String data)
+    throws Exception
+  {
+    return http("PATCH", null, null, data);
+  }
+  
+  public
+  String patch(String url, String data)
+    throws Exception
+  {
+    return http("PATCH", url, null, data);
+  }
+  
+  public
+  String patch(Map<String, Object> parameters)
+    throws Exception
+  {
+    return http("PATCH", null, parameters, null);
+  }
+  
+  public
+  String patch(String url, Map<String, Object> parameters)
+    throws Exception
+  {
+    return http("PATCH", url, parameters, null);
+  }
+  
+  public
+  String patch(Map<String, Object> parameters, String data)
+    throws Exception
+  {
+    return http("PATCH", null, parameters, data);
+  }
+  
+  public
+  String patch(String url, Map<String, Object> parameters, String data)
+    throws Exception
+  {
+    return http("PATCH", url, parameters, data);
+  }
+  
+  public
   String delete()
     throws Exception
   {
@@ -393,9 +449,10 @@ class WHttp
       method = method.toUpperCase();
     }
     
-    boolean boNoBodyMethod = "GET".equals(method) || "HEAD".equals(method) || "DELETE".equals(method);
+    boolean noBodyMethod = "GET".equals(method) || "HEAD".equals(method) || "DELETE".equals(method);
+    boolean patchMethod  = "PATCH".equals(method);
     
-    if(boNoBodyMethod) {
+    if(noBodyMethod) {
       sURL = getCompleteURL(url, parameters);
     }
     else {
@@ -418,7 +475,30 @@ class WHttp
     
     HttpURLConnection connection = (HttpURLConnection) new URL(sURL).openConnection();
     
-    connection.setRequestMethod(method.toUpperCase());
+    if(patchMethod) {
+      // HttpURLConnection don't support PATCH method
+      try {
+        final Object target;
+        if(connection instanceof HttpsURLConnection) {
+          final Field delegate = connection.getClass().getDeclaredField("delegate");
+          delegate.setAccessible(true);
+          target = delegate.get(connection);
+        } 
+        else {
+          target = connection;
+        }
+        final Field fieldMethod = HttpURLConnection.class.getDeclaredField("method");
+        fieldMethod.setAccessible(true);
+        fieldMethod.set(target, "PATCH");
+      }
+      catch (Exception ex) {
+        connection.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+        connection.setRequestMethod("POST");
+      }
+    }
+    else {
+      connection.setRequestMethod(method);
+    }
     
     if(headers != null && !headers.isEmpty()) {
       Iterator<Map.Entry<String, Object>> iterator = headers.entrySet().iterator();
@@ -440,7 +520,7 @@ class WHttp
       connection.addRequestProperty("Authorization", "Basic " + Base64Coder.encodeString(basicAuthUsername + ":" + basicAuthPassword));
     }
     
-    if(!boNoBodyMethod) {
+    if(!noBodyMethod) {
       if(data != null && data.length() > 0) {
         if(data.startsWith("<")) {
           connection.addRequestProperty("Content-Type", "text/xml");
@@ -459,6 +539,11 @@ class WHttp
       }
     }
     
+    if(sslSocketFactory != null) {
+      if(connection instanceof HttpsURLConnection) {
+        ((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
+      }
+    }
     if(connectTimeout > 0) {
       connection.setConnectTimeout(connectTimeout);
     }
