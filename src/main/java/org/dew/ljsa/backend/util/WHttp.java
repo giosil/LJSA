@@ -613,6 +613,180 @@ class WHttp
   }
   
   public
+  byte[] httpBin(String method, String url, Map<String, Object> parameters, String data)
+    throws Exception
+  {
+    String sURL = "";
+    
+    if(method == null || method.length() < 2) {
+      method = "GET";
+    }
+    else {
+      method = method.toUpperCase();
+    }
+    
+    boolean noBodyMethod = "GET".equals(method) || "HEAD".equals(method) || "DELETE".equals(method);
+    boolean patchMethod  = "PATCH".equals(method);
+    
+    if(noBodyMethod) {
+      sURL = getCompleteURL(url, parameters);
+    }
+    else {
+      if(data != null && data.length() > 0) {
+        sURL = getCompleteURL(url, parameters);
+      }
+      else {
+        sURL = getCompleteURL(url);
+      }
+    }
+    
+    if(tracerRequest != null) {
+      try{ 
+        tracerRequest.write((method + " " + sURL).getBytes());
+        tracerRequest.write('\n');
+      } 
+      catch(Exception ex) {
+      }
+    }
+    
+    HttpURLConnection connection = (HttpURLConnection) new URL(sURL).openConnection();
+    
+    if(patchMethod) {
+      // HttpURLConnection don't support PATCH method
+      try {
+        final Object target;
+        if(connection instanceof HttpsURLConnection) {
+          final Field delegate = connection.getClass().getDeclaredField("delegate");
+          delegate.setAccessible(true);
+          target = delegate.get(connection);
+        } 
+        else {
+          target = connection;
+        }
+        final Field fieldMethod = HttpURLConnection.class.getDeclaredField("method");
+        fieldMethod.setAccessible(true);
+        fieldMethod.set(target, "PATCH");
+      }
+      catch (Exception ex) {
+        connection.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+        connection.setRequestMethod("POST");
+      }
+    }
+    else {
+      connection.setRequestMethod(method);
+    }
+    
+    if(headers != null && !headers.isEmpty()) {
+      Iterator<Map.Entry<String, Object>> iterator = headers.entrySet().iterator();
+      while(iterator.hasNext()) {
+        Map.Entry<String, Object> entry = iterator.next();
+        String key = entry.getKey();
+        if(key == null || key.length() == 0) continue;
+        String val = toString(entry.getValue(), null);
+        if(val == null) continue;
+        connection.addRequestProperty(key, val);
+      }
+    }
+    
+    if(bearer != null && bearer.length() > 0) {
+      connection.addRequestProperty("Authorization", "Bearer " + bearer);
+    }
+    else if(basicAuthUsername != null && basicAuthUsername.length() > 0) {
+      if(basicAuthPassword == null) basicAuthPassword = "";
+      connection.addRequestProperty("Authorization", "Basic " + Base64Coder.encodeString(basicAuthUsername + ":" + basicAuthPassword));
+    }
+    
+    if(!noBodyMethod) {
+      if(data != null && data.length() > 0) {
+        if(data.startsWith("<")) {
+          connection.addRequestProperty("Content-Type", "text/xml");
+        }
+        else {
+          connection.addRequestProperty("Content-Type", defaultContentType);
+        }
+      }
+      else if(parameters != null && !parameters.isEmpty()) {
+        connection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        
+        data = toQueryString(parameters);
+      }
+      if(data != null && data.length() > 0) {
+        connection.setDoOutput(true);
+      }
+    }
+    
+    if(sslSocketFactory != null) {
+      if(connection instanceof HttpsURLConnection) {
+        ((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
+      }
+    }
+    if(connectTimeout > 0) {
+      connection.setConnectTimeout(connectTimeout);
+    }
+    if(readTimeout > 0) {
+      connection.setReadTimeout(readTimeout);
+    }
+    
+    int statusCode = 0;
+    boolean error = false;
+    OutputStream out = null;
+    try {
+      if(data != null && data.length() > 0) {
+        if(tracerRequest != null) {
+          try{ 
+            tracerRequest.write(data.getBytes());
+            tracerRequest.write('\n');
+          } 
+          catch(Exception ex) {
+          }
+        }
+        
+        byte[] abData = data.getBytes(charsetName);
+        connection.addRequestProperty("Content-Length", String.valueOf(abData.length));
+        
+        out = connection.getOutputStream();
+        out.write(abData);
+        out.flush();
+        out.close();
+      }
+      
+      statusCode = connection.getResponseCode();
+      lastStatusCode = statusCode;
+      error = statusCode >= 400;
+    }
+    finally {
+      if(out != null) try{ out.close(); } catch(Exception ex) {}
+    }
+    
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try {
+      BufferedInputStream  bis = new BufferedInputStream(error ? connection.getErrorStream() : connection.getInputStream());
+      byte[] buff = new byte[1024];
+      int n;
+      while((n = bis.read(buff)) > 0) baos.write(buff, 0, n);
+      baos.flush();
+      baos.close();
+    }
+    finally {
+      if(connection != null) try{ connection.disconnect(); } catch(Exception ex) {}
+    }
+    
+    if(error) throw new Exception("HTTP " + statusCode);
+    
+    byte[] abResponse = baos.toByteArray();
+    
+    if(tracerResponse != null) {
+      try{ 
+        tracerResponse.write(abResponse); 
+      } 
+      catch(Exception ex) {
+      }
+    }
+    
+    return abResponse;
+  }
+  
+  public
   String getCompleteURL(String url)
   {
     if(url == null || url.length() == 0) {
