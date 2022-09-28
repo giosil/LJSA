@@ -353,11 +353,9 @@ namespace GUI {
                         if (flg) {
                             r[x][ISched.sSTATO] = 'A';
                             this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
-                            this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
                         }
                         else {
                             r[x][ISched.sSTATO] = 'D';
-                            this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
                             this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
                         }
                         this.tabResult.refresh();
@@ -634,10 +632,8 @@ namespace GUI {
                 let cst = WUtil.getString(result, ISched.sSTATO);
                 if(cst == 'D') {
                     this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
-                    this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
                 }
                 else {
-                    this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
                     this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
                 }
 

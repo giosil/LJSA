@@ -2186,11 +2186,9 @@ var GUI;
                         if (flg) {
                             r[x_1][GUI.ISched.sSTATO] = 'A';
                             _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
-                            _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
                         }
                         else {
                             r[x_1][GUI.ISched.sSTATO] = 'D';
-                            _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
                             _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
                         }
                         _this.tabResult.refresh();
@@ -2451,10 +2449,8 @@ var GUI;
                 var cst = WUtil.getString(result, GUI.ISched.sSTATO);
                 if (cst == 'D') {
                     _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
-                    _this.btnToggle.setText('Abilita', WUX.WIcon.THUMBS_O_UP);
                 }
                 else {
-                    _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
                     _this.btnToggle.setText('Disabilita', WUX.WIcon.THUMBS_O_DOWN);
                 }
                 _this.status = _this.iSTATUS_VIEW;
