@@ -1653,6 +1653,51 @@ declare namespace WUX {
         beforeInit(opt: DevExpress.viz.gauges.dxCircularGaugeOptions): void;
         protected componentDidMount(): void;
     }
+    class WDxTreeView extends WUX.WComponent<string, any[]> {
+        height: number;
+        width: number;
+        searchEnabled: boolean;
+        selectionMode: 'multiple' | 'single';
+        constructor(id?: string);
+        getInstance(opt?: DevExpress.ui.dxTreeViewOptions): DevExpress.ui.dxTreeView;
+        onItemClick(h: (e: {
+            component?: DevExpress.ui.dxTreeView;
+            element?: DevExpress.core.dxElement;
+            model?: any;
+            itemData?: any;
+            itemElement?: DevExpress.core.dxElement;
+            itemIndex?: number | any;
+            jQueryEvent?: JQueryEventObject;
+            event?: DevExpress.events.event;
+            node?: DevExpress.ui.dxTreeViewNode;
+        }) => any): void;
+        onSelectionChanged(h: (e: {
+            component?: DevExpress.ui.dxTreeView;
+            element?: DevExpress.core.dxElement;
+            model?: any;
+            itemData?: any;
+            itemElement?: DevExpress.core.dxElement;
+            itemIndex?: number | any;
+            jQueryEvent?: JQueryEventObject;
+            event?: DevExpress.events.event;
+            node?: DevExpress.ui.dxTreeViewNode;
+        }) => any): void;
+        onItemRendered(h: (e: {
+            component?: DevExpress.ui.dxTreeView;
+            element?: DevExpress.core.dxElement;
+            model?: any;
+            itemData?: any;
+            itemElement?: DevExpress.core.dxElement;
+            itemIndex?: number;
+            node?: DevExpress.ui.dxTreeViewNode;
+        }) => any): void;
+        getSelectedItems(): any[];
+        off(events?: string): this;
+        protected updateState(nextState: any[]): void;
+        protected updateProps(nextProps: string): void;
+        beforeInit(opt: DevExpress.ui.dxTreeViewOptions): void;
+        protected componentDidMount(): void;
+    }
 }
 declare namespace WUX {
     class WSelect2 extends WUX.WComponent implements WISelectable {
