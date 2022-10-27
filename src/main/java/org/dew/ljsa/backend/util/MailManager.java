@@ -42,24 +42,32 @@ class MailManager
     String sCfgMailSMTP = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_SMTP);
     if(sCfgMailSMTP == null || sCfgMailSMTP.length() == 0) return null;
     
-    boolean boMailSmtpAuthentication = BEConfig.getBooleanProperty(BEConfig.sLJSA_CONF_MAIL_SMTP_AU, false);
+    int     iCfgSMTPPort   = BEConfig.getIntProperty(BEConfig.sLJSA_CONF_MAIL_PORT, 0);
+    boolean boMailStartTLS = BEConfig.getBooleanProperty(BEConfig.sLJSA_CONF_MAIL_STLS, false);
+    boolean boMailSmtpAuth = BEConfig.getBooleanProperty(BEConfig.sLJSA_CONF_MAIL_SMTP_AUTH, false);
     
     Properties props = System.getProperties();
     props.put("mail.smtp.host", sCfgMailSMTP);
-    if(boMailSmtpAuthentication) {
+    if(iCfgSMTPPort > 0) {
+      props.put("mail.smtp.port", String.valueOf(iCfgSMTPPort));
+    }
+    if(boMailStartTLS) {
+      props.put("mail.smtp.starttls.enable", "true");
+    }
+    if(boMailSmtpAuth) {
       props.put("mail.smtp.auth", "true");
     }
     
-    if(boMailSmtpAuthentication) {
-      return Session.getDefaultInstance(props, new Authenticator() {
+    if(boMailSmtpAuth) {
+      return Session.getInstance(props, new Authenticator() {
         public PasswordAuthentication getPasswordAuthentication() {
           String sMailUser = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_USER);
-          String sMailPwd  = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_PWD);
+          String sMailPwd  = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_PASS);
           return new PasswordAuthentication(sMailUser, sMailPwd);
         }
       });
     }
-    return Session.getDefaultInstance(props, null);
+    return Session.getInstance(props, null);
   }
   
   public static
@@ -77,6 +85,11 @@ class MailManager
   {
     if(listRecipients == null || listRecipients.size() == 0) return;
     
+    String mailFrom = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM);
+    if(mailFrom == null || mailFrom.length() < 5 || mailFrom.indexOf('@') <= 0) {
+      return;
+    }
+    
     String sTo = "";
     for(int i = 0; i < listRecipients.size(); i++) {
       sTo += ",<" + listRecipients.get(i) + ">";
@@ -87,7 +100,7 @@ class MailManager
     if(session == null) return;
     
     Message msg = new MimeMessage(session);
-    msg.setFrom(new InternetAddress(BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM, "<ljsa@dew.org>")));
+    msg.setFrom(new InternetAddress(mailFrom));
     
     msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo, false));
     
@@ -150,6 +163,10 @@ class MailManager
     if(listRecipients == null || listRecipients.size() == 0) {
       return;
     }
+    String mailFrom = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM);
+    if(mailFrom == null || mailFrom.length() < 5 || mailFrom.indexOf('@') <= 0) {
+      return;
+    }
     
     String sTo = "";
     for(int i = 0; i < listRecipients.size(); i++) {
@@ -161,7 +178,7 @@ class MailManager
     if(session == null) return;
     
     Message msg = new MimeMessage(session);
-    msg.setFrom(new InternetAddress(BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM, "<ljsa@dew.org>")));
+    msg.setFrom(new InternetAddress(mailFrom));
     msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo, false));
     msg.setSubject(sSubject);
     msg.setText(sBody);
@@ -178,6 +195,10 @@ class MailManager
     if(listRecipients == null || listRecipients.size() == 0) {
       return;
     }
+    String mailFrom = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM);
+    if(mailFrom == null || mailFrom.length() < 5 || mailFrom.indexOf('@') <= 0) {
+      return;
+    }
     
     String sTo = "";
     for(int i = 0; i < listRecipients.size(); i++) {
@@ -189,7 +210,7 @@ class MailManager
     if(session == null) return;
     
     Message msg = new MimeMessage(session);
-    msg.setFrom(new InternetAddress(BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM, "<ljsa@dew.org>")));
+    msg.setFrom(new InternetAddress(mailFrom));
     msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo, false));
     msg.setSubject(sSubject);
     msg.setText(sBody);
@@ -239,6 +260,10 @@ class MailManager
     if(listRecipients == null || listRecipients.size() == 0) {
       return;
     }
+    String mailFrom = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM);
+    if(mailFrom == null || mailFrom.length() < 5 || mailFrom.indexOf('@') <= 0) {
+      return;
+    }
     
     if(listAttachments == null || listAttachments.size() == 0) {
       send(listRecipients, sSubject, sBody);
@@ -255,7 +280,7 @@ class MailManager
     if(session == null) return;
     
     Message msg = new MimeMessage(session);
-    msg.setFrom(new InternetAddress(BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM, "<ljsa@dew.org>")));
+    msg.setFrom(new InternetAddress(mailFrom));
     msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo, false));
     msg.setSubject(sSubject);
     msg.setHeader("X-Mailer", "LOTONtechEmail");
@@ -295,6 +320,10 @@ class MailManager
     if(listRecipients == null || listRecipients.size() == 0) {
       return;
     }
+    String mailFrom = BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM);
+    if(mailFrom == null || mailFrom.length() < 5 || mailFrom.indexOf('@') <= 0) {
+      return;
+    }
     
     if(listAttachments == null || listAttachments.size() == 0) {
       send(listRecipients, sSubject, sBody, iPriority);
@@ -311,7 +340,7 @@ class MailManager
     if(session == null) return;
     
     Message msg = new MimeMessage(session);
-    msg.setFrom(new InternetAddress(BEConfig.getProperty(BEConfig.sLJSA_CONF_MAIL_FROM, "<ljsa@dew.org>")));
+    msg.setFrom(new InternetAddress(mailFrom));
     msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo, false));
     msg.setSubject(sSubject);
     msg.setHeader("X-Mailer",   "LOTONtechEmail");

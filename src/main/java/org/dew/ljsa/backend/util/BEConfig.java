@@ -31,32 +31,35 @@ class BEConfig
   private static boolean configFileLoaded = false;
   private static String resultLoading = "OK";
   
-  public final static String sLJSA_CONF_SLEEPING     = "ljsa.sleeping";
-  public final static String sLJSA_CONF_USER         = "ljsa.user";
-  public final static String sLJSA_CONF_PWD          = "ljsa.password";
-  public final static String sLJSA_CONF_RPC_AUTH     = "ljsa.rpc.auth";
-  public final static String sLJSA_CONF_CONTEXT      = "ljsa.context";
-  public final static String sLJSA_CONF_DOWNLOAD     = "ljsa.download";
-  public final static String sLJSA_CONF_REFRESH      = "ljsa.refresh";
-  public final static String sLJSA_CONF_FOLDER       = "ljsa.folder";
-  public final static String sLJSA_CONF_REPORTS      = "ljsa.reports";
-  public final static String sLJSA_CONF_CLASSES      = "ljsa.classes";
-  public final static String sLJSA_CONF_HISTORY      = "ljsa.history";
-  public final static String sLJSA_CONF_CLEAN_CRON   = "ljsa.clean.cron";
-  public final static String sLJSA_CONF_SERVICE      = "ljsa.service";
-  public final static String sLJSA_CONF_SER_EXCLUDED = "ljsa.services_excluded";
-  public final static String sLJSA_CONF_JDBC_DRIVER  = "ljsa.jdbc.driver";
-  public final static String sLJSA_CONF_JDBC_URL     = "ljsa.jdbc.url";
-  public final static String sLJSA_CONF_JDBC_USER    = "ljsa.jdbc.user";
-  public final static String sLJSA_CONF_JDBC_PWD     = "ljsa.jdbc.password";
-  public final static String sLJSA_CONF_JDBC_IDLE    = "ljsa.jdbc.idle";
-  public final static String sLJSA_CONF_MAIL_LOOKUP  = "ljsa.mail.lookup";
-  public final static String sLJSA_CONF_MAIL_SMTP    = "ljsa.mail.smtp.host";
-  public final static String sLJSA_CONF_MAIL_POP     = "ljsa.mail.pop.host";
-  public final static String sLJSA_CONF_MAIL_FROM    = "ljsa.mail.from";
-  public final static String sLJSA_CONF_MAIL_USER    = "ljsa.mail.user";
-  public final static String sLJSA_CONF_MAIL_PWD     = "ljsa.mail.password";
-  public final static String sLJSA_CONF_MAIL_SMTP_AU = "ljsa.mail.smtp.auth";
+  public final static String sLJSA_CONF_SLEEPING       = "ljsa.sleeping";
+  public final static String sLJSA_CONF_USER           = "ljsa.user";
+  public final static String sLJSA_CONF_PWD            = "ljsa.password";
+  public final static String sLJSA_CONF_RPC_AUTH       = "ljsa.rpc.auth";
+  public final static String sLJSA_CONF_CONTEXT        = "ljsa.context";
+  public final static String sLJSA_CONF_DOWNLOAD       = "ljsa.download";
+  public final static String sLJSA_CONF_REFRESH        = "ljsa.refresh";
+  public final static String sLJSA_CONF_FOLDER         = "ljsa.folder";
+  public final static String sLJSA_CONF_REPORTS        = "ljsa.reports";
+  public final static String sLJSA_CONF_CLASSES        = "ljsa.classes";
+  public final static String sLJSA_CONF_HISTORY        = "ljsa.history";
+  public final static String sLJSA_CONF_CLEAN_CRON     = "ljsa.clean.cron";
+  public final static String sLJSA_CONF_SERVICE        = "ljsa.service";
+  public final static String sLJSA_CONF_SER_EXCLUDED   = "ljsa.services_excluded";
+  public final static String sLJSA_CONF_JDBC_DRIVER    = "ljsa.jdbc.driver";
+  public final static String sLJSA_CONF_JDBC_URL       = "ljsa.jdbc.url";
+  public final static String sLJSA_CONF_JDBC_USER      = "ljsa.jdbc.user";
+  public final static String sLJSA_CONF_JDBC_PWD       = "ljsa.jdbc.password";
+  public final static String sLJSA_CONF_JDBC_IDLE      = "ljsa.jdbc.idle";
+  public final static String sLJSA_CONF_MAIL_LOOKUP    = "ljsa.mail.lookup";
+  public final static String sLJSA_CONF_MAIL_SMTP      = "ljsa.mail.smtp.host";
+  public final static String sLJSA_CONF_MAIL_PORT      = "ljsa.mail.smtp.port";
+  public final static String sLJSA_CONF_MAIL_STLS      = "ljsa.mail.smtp.starttls.enable";
+  public final static String sLJSA_CONF_MAIL_FROM      = "ljsa.mail.from";
+  public final static String sLJSA_CONF_MAIL_USER      = "ljsa.mail.user";
+  public final static String sLJSA_CONF_MAIL_PASS      = "ljsa.mail.password";
+  public final static String sLJSA_CONF_MAIL_SMTP_AUTH = "ljsa.mail.smtp.auth";
+  public final static String sLJSA_CONF_MAIL_POP       = "ljsa.mail.pop.host";
+
   // [Remote]
   public final static String sLJSA_CONF_REMOTE_URL   = "ljsa.remote.url";
   
@@ -183,7 +186,7 @@ class BEConfig
   public static
   String getMailPassword()
   {
-    return config.getProperty(BEConfig.sLJSA_CONF_MAIL_PWD);
+    return config.getProperty(BEConfig.sLJSA_CONF_MAIL_PASS);
   }
   
   public static

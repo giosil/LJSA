@@ -282,7 +282,7 @@ class FMClient implements AsyncCallback
     if (sFile == null || sFile.length() == 0) return null;
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(encrypt(sFile));
-    parameters.add(new Integer(iRows));
+    parameters.add(iRows);
     return WUtil.toString(rpcExecute("FM.head", parameters, 0), "");
   }
 
@@ -290,7 +290,7 @@ class FMClient implements AsyncCallback
     if (sFile == null || sFile.length() == 0) return null;
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(encrypt(sFile));
-    parameters.add(new Integer(iRows));
+    parameters.add(iRows);
     return (String) rpcExecute("FM.tail", parameters, 0);
   }
 
@@ -299,7 +299,7 @@ class FMClient implements AsyncCallback
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(encrypt(sFile));
     parameters.add(sText);
-    parameters.add(new Integer(iMaxResults));
+    parameters.add(iMaxResults);
     return WUtil.toListOfMapObject(rpcExecute("FM.find", parameters, 0));
   }
 
@@ -332,10 +332,10 @@ class FMClient implements AsyncCallback
       fos = new FileOutputStream(file);
       List<Object> parameters = new ArrayList<Object>();
       parameters.add(encrypt(fmEntry.getPath()));
-      parameters.add(new Integer(1));
-      parameters.add(new Integer(iBlock));
+      parameters.add(1);
+      parameters.add(iBlock);
       for (int iPart = 1; iPart <= iParts; iPart++) {
-        parameters.set(1, new Integer(iPart));
+        parameters.set(1, iPart);
         byte[] arrayOfByte = WUtil.toArrayOfByte(rpcExecute("FM.getContent", parameters, 0), true);
         fos.write(arrayOfByte);
         int iPercentage = iPart * 100 / iParts;
@@ -355,7 +355,7 @@ class FMClient implements AsyncCallback
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(encrypt(sRemoteDirectory));
     parameters.add(encrypt(sFileName));
-    parameters.add(new Boolean(boMakeDirs));
+    parameters.add(boMakeDirs);
     return WUtil.toString(rpcExecute("FM.startUpload", parameters, 0), "");
   }
 
@@ -433,7 +433,7 @@ class FMClient implements AsyncCallback
     List<Object> parameters = new ArrayList<Object>();
     parameters.add(encrypt(sRemoteDirectory));
     parameters.add(encrypt(sFileName));
-    parameters.add(new Boolean(boMakeDirs));
+    parameters.add(boMakeDirs);
     String sTmpFile = WUtil.toString(rpcExecute("FM.startUpload", parameters, 0), "");
     // Upload content
     parameters.clear();

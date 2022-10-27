@@ -345,7 +345,7 @@ class JobClean implements Job
       }
     }
     catch(Exception ex) {
-      System.err.println("Exception in JobClean.loadLastIdDeleted: " + ex);
+      System.err.println("Exception in JobClean.loadLastIdDeleted(): " + ex);
       return null;
     }
     finally {
@@ -354,10 +354,10 @@ class JobClean implements Job
     if(sLine == null) return null;
     Integer oResult = null;
     try{
-      oResult = new Integer(sLine.trim());
+      oResult = WUtil.toInteger(sLine.trim(), null);
     }
     catch(Exception ex) {
-      System.err.println("Exception in JobClean.loadLastIdDeleted: " + ex);
+      System.err.println("Exception in JobClean.loadLastIdDeleted(): " + ex);
       return null;
     }
     psLog.println("   loadLastIdDeleted() -> " + oResult);
@@ -379,7 +379,7 @@ class JobClean implements Job
       ps.println(oLastIdDeleted.intValue());
     }
     catch(Exception ex) {
-      System.err.println("Exception in JobClean.saveLastIdDeleted: " + ex);
+      System.err.println("Exception in JobClean.saveLastIdDeleted(" + oLastIdDeleted + "): " + ex);
     }
     finally {
       if(fos != null) try{ fos.close(); } catch(Exception ex) {};

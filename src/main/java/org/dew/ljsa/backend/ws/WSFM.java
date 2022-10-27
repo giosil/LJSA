@@ -146,8 +146,8 @@ class WSFM
           }
         }
       }
-      mapResult.put("cd", new Integer(iCountDir));
-      mapResult.put("cf", new Integer(iCountFile));
+      mapResult.put("cd", iCountDir);
+      mapResult.put("cf", iCountFile);
       mapResult.put("t", "d");
     }
     else {
@@ -168,9 +168,9 @@ class WSFM
     if(sCommandLine.startsWith("./") && sCommandLine.length() > 2) {
       sCommandLine = fDirectory.getAbsolutePath() + "/" + sCommandLine.substring(2);
     }
-    StringBuffer sbResult = new StringBuffer();
+    StringBuilder sbResult = new StringBuilder();
     Runtime runtime    = Runtime.getRuntime();
-    Process process    = runtime.exec(sCommandLine, null, fDirectory);
+    Process process    = runtime.exec(new String[] { sCommandLine }, null, fDirectory);
     String sKeyProcess = getTimeStamp() + " " + sCommandLine;
     mapProcessesNotDestroyed.put(sKeyProcess, process);
     PrintWriter pw     = null;
@@ -595,7 +595,7 @@ class WSFM
         String sLineLC = sLine.toLowerCase();
         if(sLineLC.indexOf(sTextLC) >= 0) {
           Map<String, Object> ht = new HashMap<String, Object>();
-          ht.put("r", new Integer(iRow));
+          ht.put("r", iRow);
           ht.put("t", normalize(sLine));
           listResult.add(ht);
           iResults++;

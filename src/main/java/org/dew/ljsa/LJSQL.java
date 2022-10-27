@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.dew.ljsa.backend.util.BEConfig;
 import org.dew.ljsa.backend.util.ConnectionManager;
+import org.util.WUtil;
 
 /**
  * Implementazione di ALJSAJob che esegue un comando SQL.
@@ -690,13 +691,13 @@ class LJSQL extends ALJSAJob
     value = value.replace(',', '.');
     Number nValue = null;
     if(value.trim().length() == 0) {
-      try{ nValue = new Integer(0); } catch(Exception ex) {}
+      try{ nValue = 0; } catch(Exception ex) {}
     }
     else if(value.indexOf('.') > 0) {
-      try{ nValue = new Double(value); } catch(Exception ex) {}
+      try{ nValue = WUtil.toDouble(nValue, 0); } catch(Exception ex) {}
     }
     else {
-      try{ nValue = new Integer(value); } catch(Exception ex) {}
+      try{ nValue = WUtil.toInteger(nValue, 0); } catch(Exception ex) {}
     }
     if(nValue == null) return;
     
@@ -706,10 +707,10 @@ class LJSQL extends ALJSAJob
     }
     else {
       if(nTotal instanceof Double || nValue instanceof Double) {
-        nTotal = new Double(nTotal.doubleValue() + nValue.doubleValue());
+        nTotal = nTotal.doubleValue() + nValue.doubleValue();
       }
       else {
-        nTotal = new Integer(nTotal.intValue() + nValue.intValue());
+        nTotal = nTotal.intValue() + nValue.intValue();
       }
     }
     listTotals.set(iIndex, nTotal);
