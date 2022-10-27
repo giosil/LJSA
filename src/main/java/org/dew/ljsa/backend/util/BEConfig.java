@@ -1,6 +1,7 @@
 package org.dew.ljsa.backend.util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -396,5 +397,127 @@ class BEConfig
     }
     
     return true;
+  }
+  
+  public static
+  String loadTextResource(String fileName)
+    throws Exception
+  {
+    if(fileName == null || fileName.length() == 0) {
+      return null;
+    }
+    int iFileSep = fileName.indexOf('/');
+    if(iFileSep < 0) iFileSep = fileName.indexOf('\\');
+    InputStream is = null;
+    if(iFileSep < 0) {
+      URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
+      if(url == null) return null;
+      is = url.openStream();
+    }
+    else {
+      is = new FileInputStream(fileName);
+    }
+    try {
+      int n;
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      byte[] buff = new byte[1024];
+      while((n = is.read(buff)) > 0) baos.write(buff, 0, n);
+      return new String(baos.toByteArray());
+    }
+    finally {
+      if(is != null) try{ is.close(); } catch(Exception ex) {}
+    }
+  }
+  
+  public static 
+  String buildHTMLEmail(String head, String body, String foot, String ltxt, String lurl) 
+  {
+    String result = null;
+    try {
+      if(ltxt != null && ltxt.length() > 0) {
+        result = loadTextResource("template_email_link.html");
+      }
+      else {
+        result = loadTextResource("template_email.html");
+      }
+    }
+    catch(Exception ex) {
+      ex.printStackTrace();
+    }
+    
+    if(head == null) head = "";
+    if(body == null) body = "";
+    if(foot == null) foot = "";
+    if(ltxt == null) ltxt = "";
+    if(lurl == null) lurl = "";
+    
+    if(result == null || result.length() < 10) {
+      // Default implementation
+      StringBuilder sb = new StringBuilder();
+      sb.append("<!DOCTYPE html><html><body>");
+      sb.append("<h1>" + head + "</h1>");
+      sb.append(body);
+      if(ltxt != null && ltxt.length() > 0) {
+        sb.append("<p>&nbsp;</p>");
+        sb.append("<a href=\"" + lurl + "\">" + ltxt + "</a>");
+      }
+      sb.append("<p>&nbsp;</p>");
+      sb.append(foot);
+      sb.append("</body></html>");
+      return sb.toString();
+    }
+    
+    result = result.replace("[head]", head);
+    result = result.replace("[body]", body);
+    result = result.replace("[foot]", foot);
+    result = result.replace("[ltxt]", ltxt);
+    result = result.replace("[lurl]", lurl);
+    return result;
+  }
+  
+  public static 
+  String buildHTMLNewsletter(String head, String body, String foot, String ltxt, String lurl) 
+  {
+    String result = null;
+    try {
+      if(ltxt != null && ltxt.length() > 0) {
+        result = loadTextResource("template_newsletter_link.html");
+      }
+      else {
+        result = loadTextResource("template_newsletter.html");
+      }
+    }
+    catch(Exception ex) {
+      ex.printStackTrace();
+    }
+    
+    if(head == null) head = "";
+    if(body == null) body = "";
+    if(foot == null) foot = "";
+    if(ltxt == null) ltxt = "";
+    if(lurl == null) lurl = "";
+    
+    if(result == null || result.length() < 10) {
+      // Default implementation
+      StringBuilder sb = new StringBuilder();
+      sb.append("<!DOCTYPE html><html><body>");
+      sb.append("<h1>" + head + "</h1>");
+      sb.append(body);
+      if(ltxt != null && ltxt.length() > 0) {
+        sb.append("<p>&nbsp;</p>");
+        sb.append("<a href=\"" + lurl + "\">" + ltxt + "</a>");
+      }
+      sb.append("<p>&nbsp;</p>");
+      sb.append(foot);
+      sb.append("</body></html>");
+      return sb.toString();
+    }
+    
+    result = result.replace("[head]", head);
+    result = result.replace("[body]", body);
+    result = result.replace("[foot]", foot);
+    result = result.replace("[ltxt]", ltxt);
+    result = result.replace("[lurl]", lurl);
+    return result;
   }
 }
