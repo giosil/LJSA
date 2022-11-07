@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd .\src\main\webapp
+cd ./src/main/webapp
 
 echo "Clean dist folder.."
 rm -fr ./js
