@@ -1335,6 +1335,7 @@ declare namespace WUX {
             toolbarOptions?: DevExpress.ui.dxToolbarOptions;
         }) => any): void;
         scrollTo(location: any): void;
+        scrollToRow(row: number, delta?: number, timeOut?: number): void;
         clearFilter(): void;
         off(events?: string): this;
         clearSelection(): this;
